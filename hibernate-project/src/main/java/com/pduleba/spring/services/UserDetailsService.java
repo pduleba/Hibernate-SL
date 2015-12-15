@@ -1,5 +1,5 @@
 package com.pduleba.spring.services;
 
-public interface RoleService {
+public interface UserDetailsService {
 
 }

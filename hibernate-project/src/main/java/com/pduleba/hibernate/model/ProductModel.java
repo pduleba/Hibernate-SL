@@ -1,10 +1,15 @@
 package com.pduleba.hibernate.model;
 
+import java.sql.Date;
 import java.util.List;
 
 import lombok.Data;
 
-public @Data class ProductModel extends AbstractBaseModel {
+public @Data class ProductModel {
+
+	private Long id;
+
+	private Date createDate;
 
 	private String name;
 	

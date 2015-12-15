@@ -6,6 +6,6 @@ import org.springframework.stereotype.Repository;
 
 @Repository
 @Transactional
-public class CategoryDaoImpl implements CategoryDao {
+public class UserDetailsDaoImpl implements UserDetailsDao {
 
 }

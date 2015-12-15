@@ -24,6 +24,7 @@
 		<project.build.sourceEncoding>UTF-8</project.build.sourceEncoding>
 
 		<!-- Persistence Layer -->
+		<commons-dbcp2.version>2.1.1</commons-dbcp2.version>
 		<hibernate.validator.version>5.2.2.Final</hibernate.validator.version>
 		<hibernate.version>5.0.4.Final</hibernate.version>
 		<javax.transaction-api.version>1.2</javax.transaction-api.version>
@@ -80,6 +81,11 @@
 			<artifactId>javax.transaction-api</artifactId>
 			<version>${javax.transaction-api.version}</version>
 		</dependency>
+		<dependency>
+			<groupId>org.apache.commons</groupId>
+			<artifactId>commons-dbcp2</artifactId>
+			<version>${commons-dbcp2.version}</version>
+		</dependency>
 
 		<!-- Spring Core -->
 		<dependency>
@@ -114,6 +120,23 @@
 			<version>${spring.version}</version>
 		</dependency>
 
+		<!-- Spring - Data Access -->
+		<dependency>
+			<groupId>org.springframework</groupId>
+			<artifactId>spring-jdbc</artifactId>
+			<version>${spring.version}</version>
+		</dependency>
+		<dependency>
+			<groupId>org.springframework</groupId>
+			<artifactId>spring-tx</artifactId>
+			<version>${spring.version}</version>
+		</dependency>
+		<dependency>
+			<groupId>org.springframework</groupId>
+			<artifactId>spring-orm</artifactId>
+			<version>${spring.version}</version>
+		</dependency>
+
 		<!-- Java DI API - JSR-330 -->
 		<dependency>
 			<groupId>javax.inject</groupId>
@@ -127,7 +150,7 @@
 			<artifactId>javax.el-api</artifactId>
 			<version>${el-api.version}</version>
 		</dependency>
-		
+
 		<!-- Lombok -->
 		<dependency>
 			<groupId>org.projectlombok</groupId>

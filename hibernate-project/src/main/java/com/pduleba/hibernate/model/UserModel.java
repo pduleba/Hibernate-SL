@@ -2,15 +2,16 @@ package com.pduleba.hibernate.model;
 
 import static javax.persistence.CascadeType.ALL;
 import static javax.persistence.FetchType.EAGER;
-import static javax.persistence.GenerationType.SEQUENCE;
 
 import java.sql.Timestamp;
 
 import javax.persistence.Column;
 import javax.persistence.Entity;
 import javax.persistence.GeneratedValue;
+import javax.persistence.GenerationType;
 import javax.persistence.Id;
 import javax.persistence.OneToOne;
+import javax.persistence.PrimaryKeyJoinColumn;
 import javax.persistence.SequenceGenerator;
 import javax.persistence.Table;
 import javax.persistence.UniqueConstraint;
@@ -21,12 +22,12 @@ import lombok.Data;
 @Table(name = "T_USERS", uniqueConstraints = {
 		@UniqueConstraint(columnNames = "login")
 })
+@SequenceGenerator(name="users-sequence-generator", sequenceName = "USERS_SEQ", allocationSize = 1, initialValue = 0)
 public @Data class UserModel {
 
 	@Id
 	@Column(name = "id")
-	@GeneratedValue(generator="users-sequence-generator", strategy = SEQUENCE)
-	@SequenceGenerator(name="users-sequence-generator", allocationSize = 1, sequenceName = "USERS_SEQ")
+	@GeneratedValue(generator="users-sequence-generator", strategy=GenerationType.SEQUENCE)
 	private Long id;
 
 	@Column(name = "create_date")
@@ -50,7 +51,8 @@ public @Data class UserModel {
 	@Column(name = "birth_date")
 	private Timestamp birthDate;
 
-	@OneToOne(fetch=EAGER, mappedBy="assignedTo", cascade=ALL)
+	@OneToOne(fetch=EAGER, cascade=ALL, optional=false, orphanRemoval=true)
+	@PrimaryKeyJoinColumn(name="id", referencedColumnName="id")
 	private UserDetailsModel userDetails;
 	
 //	private List<OrderModel> orders;

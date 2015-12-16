@@ -62,11 +62,6 @@ public class Main {
 				UserDetailsModel details = u.getUserDetails();
 				if (Objects.nonNull(details)) {
 					LOG.info("User details {} :: id = {}, details = {}", index, details.getId(), details.getDetails());
-					UserModel assignedTo = details.getAssignedTo();
-					if (Objects.nonNull(assignedTo)) {
-						LOG.info("User assignedTo {} :: id = {}, login = {}, password = {}", index, assignedTo.getId(),
-								assignedTo.getLogin(), assignedTo.getPassword());
-					}
 				}
 			}
 		}
@@ -83,7 +78,6 @@ public class Main {
 		userDetails.setDetails(generateString(10, 2));
 		
 		user.setUserDetails(userDetails);
-		userDetails.setAssignedTo(user);
 		
 		this.controller.saveUser(user);
 	}

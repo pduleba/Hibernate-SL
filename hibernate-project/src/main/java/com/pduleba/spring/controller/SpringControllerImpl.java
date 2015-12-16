@@ -39,4 +39,9 @@ public class SpringControllerImpl implements SpringController {
 	public List<UserModel> getAllUsers() {
 		return userService.getAllUsers();
 	}
+	
+	@Override
+	public void removeAll(List<UserModel> users) {
+		userService.removeAll(users);
+	}
 }

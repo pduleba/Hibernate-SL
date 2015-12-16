@@ -34,4 +34,9 @@ public class UserDaoImpl extends HibernateDaoSupport implements UserDao {
 	public Serializable save(UserModel user) {
 		return getHibernateTemplate().save(user);
 	}
+	
+	@Override
+	public void removeAll(List<UserModel> users) {
+		getHibernateTemplate().deleteAll(users);
+	}
 }

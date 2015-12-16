@@ -24,4 +24,9 @@ public class UserServiceImpl implements UserService {
 	public Serializable save(UserModel user) {
 		return userDao.save(user);
 	}
+	
+	@Override
+	public void removeAll(List<UserModel> users) {
+		userDao.removeAll(users);
+	}
 }

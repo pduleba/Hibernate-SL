@@ -10,5 +10,7 @@ public interface UserDao {
 	List<UserModel> getAllUsers();
 
 	Serializable save(UserModel user);
+
+	void removeAll(List<UserModel> users);
 	
 }

@@ -2,6 +2,7 @@ package com.pduleba.hibernate;
 
 import java.math.BigInteger;
 import java.security.SecureRandom;
+import java.util.List;
 import java.util.Objects;
 
 import org.slf4j.Logger;
@@ -33,33 +34,57 @@ public class Main {
 	private void run() {
 		LOG.info("Starting...");
 		
+		saveUser();
+		LOG.info(" ----- CREATE complete ----- ");
+		List<UserModel> allUsers = getAllUsers();
+		LOG.info(" ----- READ complete ----- ");
+		removeAllUsers(allUsers);
+		LOG.info(" ----- DELETE complete ----- ");
+		getAllUsers();
+		LOG.info(" ----- READ complete ----- ");
+		
+		LOG.info("Complete");
+	}
+
+	private void removeAllUsers(List<UserModel> users) {
+		this.controller.removeAll(users);
+	}
+
+	private List<UserModel> getAllUsers() {
+		int index = 0;
+		List<UserModel> allUsers = this.controller.getAllUsers();
+		if (allUsers.isEmpty()) {
+			LOG.info("Users NOT FOUND");
+		} else {
+			for (UserModel u : allUsers) {
+				index++;
+				LOG.info("User {} :: id = {}, login = {}, password = {}", index, u.getId(), u.getLogin(), u.getPassword());
+				UserDetailsModel details = u.getUserDetails();
+				if (Objects.nonNull(details)) {
+					LOG.info("User details {} :: id = {}, details = {}", index, details.getId(), details.getDetails());
+				}
+			}
+		}
+		
+		return allUsers;
+	}
+
+	private void saveUser() {
 		UserModel user = new UserModel();
-		user.setLogin(generateString(32));
-		user.setPassword(generateString(16));
+		user.setLogin(generateString(128, 32));
+		user.setPassword(generateString(64, 16));
 		
 		UserDetailsModel userDetails = new UserDetailsModel();
-		userDetails.setDetails(generateString(8));
+		userDetails.setDetails(generateString(10, 2));
 		
 		user.setUserDetails(userDetails);
 		userDetails.setAssignedTo(user);
 		
 		this.controller.saveUser(user);
-		LOG.info("Saved!");
-		int index = 0;
-		for (UserModel u : this.controller.getAllUsers()) {
-			index++;
-			LOG.info("User {} :: id = {}, name = {}", index, u.getId(), u.getName());
-			UserDetailsModel details = u.getUserDetails();
-			if (Objects.nonNull(details)) {
-				LOG.info("User details {} :: id = {}, details = {}", index, details.getId(), details.getDetails());
-			}
-		}
-		
-		LOG.info("Complete");
 	}
 
-	private String generateString(int radix) {
-		return new BigInteger(130, random).toString(radix);
+	private String generateString(int bitsNum, int radix) {
+		return new BigInteger(bitsNum, random).toString(radix);
 	}
 	
 }

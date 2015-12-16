@@ -11,4 +11,6 @@ public interface UserService {
 
 	Serializable save(UserModel user);
 
+	void removeAll(List<UserModel> users);
+
 }

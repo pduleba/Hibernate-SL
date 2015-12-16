@@ -10,4 +10,6 @@ public interface SpringController {
 
 	List<UserModel> getAllUsers();
 
+	void removeAll(List<UserModel> users);
+
 }

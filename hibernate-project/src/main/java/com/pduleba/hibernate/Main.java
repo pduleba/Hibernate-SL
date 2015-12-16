@@ -38,7 +38,7 @@ public class Main {
 		LOG.info(" ----- CREATE complete ----- ");
 		List<UserModel> allUsers = getAllUsers();
 		LOG.info(" ----- READ complete ----- ");
-		removeAllUsers(allUsers);
+//		removeAllUsers(allUsers);
 		LOG.info(" ----- DELETE complete ----- ");
 		getAllUsers();
 		LOG.info(" ----- READ complete ----- ");
@@ -58,7 +58,7 @@ public class Main {
 		} else {
 			for (UserModel u : allUsers) {
 				index++;
-				LOG.info("User {} :: id = {}, login = {}, password = {}", index, u.getId(), u.getLogin(), u.getPassword());
+				LOG.info("User {} :: id = {}, name = {}", index, u.getId(), u.getName());
 				UserDetailsModel details = u.getUserDetails();
 				if (Objects.nonNull(details)) {
 					LOG.info("User details {} :: id = {}, details = {}", index, details.getId(), details.getDetails());
@@ -71,8 +71,7 @@ public class Main {
 
 	private void saveUser() {
 		UserModel user = new UserModel();
-		user.setLogin(generateString(128, 32));
-		user.setPassword(generateString(64, 16));
+		user.setName(generateString(16, 16));
 		
 		UserDetailsModel userDetails = new UserDetailsModel();
 		userDetails.setDetails(generateString(10, 2));

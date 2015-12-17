@@ -6,6 +6,7 @@ import java.util.Collection;
 import java.util.List;
 import java.util.Objects;
 
+import org.apache.commons.lang3.BooleanUtils;
 import org.hibernate.Hibernate;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
@@ -20,31 +21,33 @@ class Worker {
 	private SecureRandom random = new SecureRandom();
 	
 	void showUsers(List<UserModel> allUsers) {
-		int index = 0;
-
 		if (Objects.isNull(allUsers) || allUsers.isEmpty()) {
 			LOG.info("Users NOT FOUND");
 		} else {
+			int userIndex = 0;
+
 			for (UserModel u : allUsers) {
-				displayUser(++index, u);
+				displayUser(++userIndex, u, true);
 				showOrders(u.getOrders(), false);
 			}
 		}
 	}
 
 	void showOrders(Collection<OrderModel> orders, boolean showUsers) {
-		if (Objects.isNull(orders) || orders.isEmpty()) {
+		if (BooleanUtils.isFalse(Hibernate.isInitialized(orders))) {
+			LOG.info("Orders NOT INITIALIZED");
+		} else if (Objects.isNull(orders) || orders.isEmpty()) {
 			LOG.info("Orders NOT FOUND");
 		} else {
 			int orderIndex = 0;
 			if (Hibernate.isInitialized(orders)) {
 				for (OrderModel o : orders) {
 					++orderIndex;
-					
+					LOG.info("#> order index {}", orderIndex);
+					LOG.info("ORDER_MODEL :: id = {}, details = {}", o.getId(), o.getOrderDetails());
 					if (showUsers) {
-						displayUser(orderIndex, o.getOwner());
+						displayUser(orderIndex, o.getOwner(), false);
 					}
-					LOG.info("Order details {} :: id = {}, details = {}", orderIndex, o.getId(), o.getOrderDetails());
 				}
 			} else {
 				LOG.info("Orders not initalized");
@@ -52,9 +55,14 @@ class Worker {
 		}
 	}
 
-	private void displayUser(int index, UserModel u) {
-		if (Objects.nonNull(u)) {
-			LOG.info("User {} :: id = {}, name = {}", ++index, u.getId(), u.getName());
+	private void displayUser(int userIndex, UserModel u, boolean showIndex) {
+		if (BooleanUtils.isFalse(Hibernate.isInitialized(u))) {
+			LOG.info("Orders NOT INITIALIZED");
+		} else if (Objects.nonNull(u)) {
+			if (showIndex) {
+				LOG.info("# user index {}", userIndex);
+			} 
+			LOG.info(" USER_MODEL :: id = {}, name = {}", u.getId(), u.getName());
 		} else {
 			LOG.info("User NOT FOUND");
 		}

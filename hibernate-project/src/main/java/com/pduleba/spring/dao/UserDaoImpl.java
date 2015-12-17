@@ -5,7 +5,6 @@ import java.util.List;
 
 import javax.transaction.Transactional;
 
-import org.hibernate.Hibernate;
 import org.hibernate.SessionFactory;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
@@ -30,9 +29,9 @@ public class UserDaoImpl extends HibernateDaoSupport implements UserDao {
 	public List<UserModel> getAllUsers() {
 		
 		List<UserModel> allUsers = getHibernateTemplate().loadAll(UserModel.class);
-		for (UserModel um : allUsers) {
-			Hibernate.initialize(um.getOrders());
-		}
+//		for (UserModel um : allUsers) {
+//			Hibernate.initialize(um.getOrders());
+//		}
 
 		return allUsers;
 	}

@@ -15,7 +15,8 @@ import com.pduleba.spring.controller.SpringController;
 public class Main {
 
 	public static final Logger LOG = LoggerFactory.getLogger(Main.class);
-
+	public static final boolean DELETE_ENABLED = true;
+	
 	private SpringController controller;
 	private Worker worker;
 
@@ -30,6 +31,8 @@ public class Main {
 	}
 
 	private void run() {
+		LOG.info("Starting...");
+
 		LOG.info("######## USER CRUDS ######## ");
 		executeUsersCRUD();
 		LOG.info("######## ORDER CRUDS ######## ");
@@ -37,8 +40,6 @@ public class Main {
 	}
 
 	private void executeUsersCRUD() {
-		LOG.info("Starting...");
-
 		saveUser();
 		LOG.info(" ----- CREATE complete ----- ");
 		List<UserModel> allUsers = getAllUsers();
@@ -52,8 +53,6 @@ public class Main {
 	}
 
 	private void executeOrdersCRUD() {
-		LOG.info("Starting...");
-
 		saveOrder();
 		LOG.info(" ----- CREATE complete ----- ");
 		List<OrderModel> allOrders = getAllOrders();
@@ -67,11 +66,15 @@ public class Main {
 	}
 
 	private void removeAllUsers(List<UserModel> users) {
-		this.controller.removeUsers(users);
+		if (DELETE_ENABLED) {
+			this.controller.removeUsers(users);
+		}
 	}
 
 	private void removeAllOrders(List<OrderModel> orders) {
-		this.controller.removeOrders(orders);
+		if (DELETE_ENABLED) {
+			this.controller.removeOrders(orders);
+		}
 	}
 
 	private List<UserModel> getAllUsers() {

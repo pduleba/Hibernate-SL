@@ -29,7 +29,7 @@ public @Data class UserModel {
 	@Column(name = "name")
 	private String name;
 
-	@OneToMany(mappedBy="owner", fetch=FetchType.LAZY, cascade=CascadeType.ALL)
+	@OneToMany(mappedBy="owner", fetch=FetchType.EAGER, cascade=CascadeType.ALL)
 	private Collection<OrderModel> orders = new LinkedHashSet<>();
 
 }

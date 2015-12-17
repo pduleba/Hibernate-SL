@@ -46,7 +46,7 @@ public class UserModel {
 	}
 
 	@OneToOne(fetch = EAGER, cascade = ALL)
-	@JoinColumn(name="id", referencedColumnName = "id")
+	@JoinColumn(name="id_user_details", referencedColumnName = "id")
 	public UserDetailsModel getUserDetails() {
 		return userDetails;
 	}

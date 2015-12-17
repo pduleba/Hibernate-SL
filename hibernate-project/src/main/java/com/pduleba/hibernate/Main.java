@@ -38,7 +38,7 @@ public class Main {
 		LOG.info(" ----- CREATE complete ----- ");
 		List<UserModel> allUsers = getAllUsers();
 		LOG.info(" ----- READ complete ----- ");
-//		removeAllUsers(allUsers);
+		removeAllUsers(allUsers);
 		LOG.info(" ----- DELETE complete ----- ");
 		getAllUsers();
 		LOG.info(" ----- READ complete ----- ");

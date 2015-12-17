@@ -1,11 +1,11 @@
 package com.pduleba.hibernate.model;
 
-import static javax.persistence.CascadeType.ALL;
 import static javax.persistence.FetchType.EAGER;
 import static javax.persistence.GenerationType.SEQUENCE;
 
 import java.sql.Timestamp;
 
+import javax.persistence.CascadeType;
 import javax.persistence.Column;
 import javax.persistence.Entity;
 import javax.persistence.GeneratedValue;
@@ -50,7 +50,7 @@ public @Data class UserModel {
 	@Column(name = "birth_date")
 	private Timestamp birthDate;
 
-	@OneToOne(fetch=EAGER, mappedBy="assignedTo", cascade=ALL)
+	@OneToOne(fetch=EAGER, mappedBy="assignedTo", cascade=CascadeType.ALL)
 	private UserDetailsModel userDetails;
 	
 //	private List<OrderModel> orders;

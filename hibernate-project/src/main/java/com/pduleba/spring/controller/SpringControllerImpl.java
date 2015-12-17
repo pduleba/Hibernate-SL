@@ -7,6 +7,7 @@ import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Component;
 
+import com.pduleba.hibernate.model.OrderModel;
 import com.pduleba.hibernate.model.UserModel;
 import com.pduleba.spring.services.CategoryService;
 import com.pduleba.spring.services.OrderService;
@@ -41,7 +42,24 @@ public class SpringControllerImpl implements SpringController {
 	}
 	
 	@Override
-	public void removeAll(List<UserModel> users) {
+	public void removeUsers(List<UserModel> users) {
 		userService.removeAll(users);
 	}
+
+	@Override
+	public void saveOrder(OrderModel order) {
+		orderService.saveOrder(order);
+	}
+
+	@Override
+	public List<OrderModel> getAllOrders() {
+		return orderService.getAllOrders();
+	}
+
+	@Override
+	public void removeOrders(List<OrderModel> orders) {
+		this.orderService.removeAll(orders);
+	}
+	
+	
 }

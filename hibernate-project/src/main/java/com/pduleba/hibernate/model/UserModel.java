@@ -8,14 +8,18 @@ import javax.persistence.GeneratedValue;
 import javax.persistence.GenerationType;
 import javax.persistence.Id;
 import javax.persistence.JoinColumn;
-import javax.persistence.JoinTable;
 import javax.persistence.OneToOne;
+import javax.persistence.PrimaryKeyJoinColumn;
+import javax.persistence.SecondaryTable;
 import javax.persistence.SequenceGenerator;
 import javax.persistence.Table;
 
 @Entity
 @Table(name = "T_USERS")
 @SequenceGenerator(name = "users-sequence-generator", sequenceName = "USERS_SEQ", initialValue = 0, allocationSize = 1)
+@SecondaryTable(name="T_USER2USER_DETAILS", 
+	pkJoinColumns=@PrimaryKeyJoinColumn(name="ID_USER", referencedColumnName="id")
+)
 public class UserModel {
 
 	private Long id;
@@ -46,10 +50,7 @@ public class UserModel {
 	}
 
 	@OneToOne(fetch=FetchType.EAGER, cascade=CascadeType.ALL)
-	@JoinTable(name="T_USER2USER_DETAILS", 
-		joinColumns=@JoinColumn(name="id_user_details", referencedColumnName="id"),
-		inverseJoinColumns=@JoinColumn(name="id_user", referencedColumnName="id")
-	)
+	@JoinColumn(table="T_USER2USER_DETAILS", name="id_user_details", referencedColumnName="id")
 	public UserDetailsModel getUserDetails() {
 		return userDetails;
 	}

@@ -8,8 +8,9 @@ import javax.persistence.FetchType;
 import javax.persistence.GeneratedValue;
 import javax.persistence.Id;
 import javax.persistence.JoinColumn;
-import javax.persistence.JoinTable;
 import javax.persistence.OneToOne;
+import javax.persistence.PrimaryKeyJoinColumn;
+import javax.persistence.SecondaryTable;
 import javax.persistence.Table;
 
 import org.hibernate.annotations.GenericGenerator;
@@ -19,6 +20,9 @@ import lombok.Data;
 
 @Entity
 @Table(name="T_USER_DETAILS")
+@SecondaryTable(name="T_USER2USER_DETAILS", 
+	pkJoinColumns=@PrimaryKeyJoinColumn(name="ID_USER_DETAILS", referencedColumnName="id")
+)
 public @Data class UserDetailsModel {
 
 	@Id
@@ -39,10 +43,7 @@ public @Data class UserDetailsModel {
 	private String details;
 
 	@OneToOne(fetch=FetchType.EAGER)
-	@JoinTable(name="T_USER2USER_DETAILS", 
-		joinColumns=@JoinColumn(name="id_user", referencedColumnName="id"),
-		inverseJoinColumns=@JoinColumn(name="id_user_details", referencedColumnName="id")
-	)
+	@JoinColumn(table="T_USER2USER_DETAILS", name="ID_USER", referencedColumnName="id")
 	private UserModel assignedTo;
 	
 }

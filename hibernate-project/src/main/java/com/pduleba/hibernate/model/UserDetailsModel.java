@@ -8,6 +8,7 @@ import javax.persistence.FetchType;
 import javax.persistence.GeneratedValue;
 import javax.persistence.Id;
 import javax.persistence.JoinColumn;
+import javax.persistence.JoinTable;
 import javax.persistence.OneToOne;
 import javax.persistence.Table;
 
@@ -38,7 +39,10 @@ public @Data class UserDetailsModel {
 	private String details;
 
 	@OneToOne(fetch=FetchType.EAGER)
-	@JoinColumn(name="id")
+	@JoinTable(name="T_USER2USER_DETAILS", 
+		joinColumns=@JoinColumn(name="id_user", referencedColumnName="id"),
+		inverseJoinColumns=@JoinColumn(name="id_user_details", referencedColumnName="id")
+	)
 	private UserModel assignedTo;
 	
 }

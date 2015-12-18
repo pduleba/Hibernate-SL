@@ -4,7 +4,7 @@ import java.util.List;
 
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
-import org.springframework.context.ApplicationContext;
+import org.springframework.context.ConfigurableApplicationContext;
 import org.springframework.context.annotation.AnnotationConfigApplicationContext;
 
 import com.pduleba.configuration.SpringConfiguration;
@@ -15,28 +15,29 @@ import com.pduleba.spring.controller.SpringController;
 public class Main {
 
 	public static final Logger LOG = LoggerFactory.getLogger(Main.class);
-	public static final boolean DELETE_ENABLED = true;
+	public static final boolean DELETE_ENABLED = false;
 	
 	private SpringController controller;
-	private Worker worker;
+	private Worker worker = new Worker();
 
 	public static void main(String[] args) {
 		new Main().run();
 	}
 
 	public Main() {
-		ApplicationContext ctx = new AnnotationConfigApplicationContext(SpringConfiguration.class);
-		this.controller = ctx.getBean(SpringController.class);
-		this.worker = new Worker();
 	}
 
 	private void run() {
-		LOG.info("Starting...");
-
-		LOG.info("######## USER CRUDS ######## ");
-		executeUsersCRUD();
-		LOG.info("######## ORDER CRUDS ######## ");
-		executeOrdersCRUD();
+		try (ConfigurableApplicationContext ctx = new AnnotationConfigApplicationContext(SpringConfiguration.class)) {
+			this.controller = ctx.getBean(SpringController.class);
+			
+			LOG.info("Starting...");
+	
+			LOG.info("######## USER CRUDS ######## ");
+			executeUsersCRUD();
+			LOG.info("######## ORDER CRUDS ######## ");
+			executeOrdersCRUD();
+		}
 	}
 
 	private void executeUsersCRUD() {
@@ -99,7 +100,7 @@ public class Main {
 		for (int i = 0; i < 3; i++) {
 			order = new OrderModel();
 			order.setOrderDetails(worker.generateString(10, 2));
-			order.setOwner(user);
+//			order.setOwner(user);
 			user.getOrders().add(order);
 		}
 
@@ -112,7 +113,7 @@ public class Main {
 
 		OrderModel order = new OrderModel();
 		order.setOrderDetails(worker.generateString(10, 2));
-		order.setOwner(user);
+//		order.setOwner(user);
 		user.getOrders().add(order);
 
 		this.controller.saveOrder(order);

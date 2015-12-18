@@ -1,25 +1,17 @@
 package com.pduleba.hibernate.model;
 
-import javax.persistence.CascadeType;
 import javax.persistence.Column;
 import javax.persistence.Entity;
-import javax.persistence.FetchType;
 import javax.persistence.GeneratedValue;
 import javax.persistence.GenerationType;
 import javax.persistence.Id;
-import javax.persistence.JoinColumn;
-import javax.persistence.ManyToOne;
 import javax.persistence.SequenceGenerator;
 import javax.persistence.Table;
 
-import lombok.Data;
-import lombok.EqualsAndHashCode;
-
 @Entity
 @Table(name="T_ORDERS")
-@SequenceGenerator(name="orders-sequence-generator", sequenceName="ORDERS_SEQ", initialValue=0, allocationSize=1)
-@EqualsAndHashCode(exclude="owner")
-public @Data class OrderModel {
+@SequenceGenerator(name="orders-sequence-generator", sequenceName="ORDERS_SEQ", initialValue=1, allocationSize=1)
+public class OrderModel {
 
 	@Id
 	@Column(name="id")
@@ -28,9 +20,20 @@ public @Data class OrderModel {
 	
 	@Column(name="order_details")
 	private String orderDetails;
-	
-	@ManyToOne(cascade=CascadeType.ALL, fetch=FetchType.EAGER)
-	@JoinColumn(name="id_user")
-	private UserModel owner;
-	
+
+	public Long getId() {
+		return id;
+	}
+
+	public void setId(Long id) {
+		this.id = id;
+	}
+
+	public String getOrderDetails() {
+		return orderDetails;
+	}
+
+	public void setOrderDetails(String orderDetails) {
+		this.orderDetails = orderDetails;
+	}
 }

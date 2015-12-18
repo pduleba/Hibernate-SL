@@ -46,7 +46,7 @@ class Worker {
 					LOG.info("#> order index {}", orderIndex);
 					LOG.info("ORDER_MODEL :: id = {}, details = {}", o.getId(), o.getOrderDetails());
 					if (showUsers) {
-						displayUser(orderIndex, o.getOwner(), false);
+//						displayUser(orderIndex, o.getOwner(), false);
 					}
 				}
 			} else {

@@ -30,7 +30,7 @@ public class Main {
 	private void run() {
 		try (ConfigurableApplicationContext ctx = new AnnotationConfigApplicationContext(SpringConfiguration.class)) {
 			this.controller = ctx.getBean(SpringController.class);
-			
+
 			LOG.info("Starting...");
 	
 			LOG.info("######## USER CRUDS ######## ");

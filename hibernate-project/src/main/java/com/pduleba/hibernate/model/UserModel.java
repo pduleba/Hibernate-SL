@@ -17,7 +17,7 @@ import lombok.Data;
 )
 @SequenceGenerator(name = "users-sequence-generator", sequenceName = "USERS_SEQ", initialValue = 1, allocationSize = 1)
 public @Data class UserModel {
-
+	
 	@Id
 	@Column(name = "id")
 	@GeneratedValue(generator = "users-sequence-generator", strategy = GenerationType.SEQUENCE)

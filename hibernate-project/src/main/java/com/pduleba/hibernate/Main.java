@@ -15,7 +15,6 @@ import com.pduleba.spring.controller.SpringController;
 public class Main {
 
 	public static final Logger LOG = LoggerFactory.getLogger(Main.class);
-	public static final boolean DELETE_ENABLED = false;
 	
 	private SpringController controller;
 	private Worker worker = new Worker();
@@ -67,15 +66,11 @@ public class Main {
 	}
 
 	private void removeAllUsers(List<UserModel> users) {
-		if (DELETE_ENABLED) {
-			this.controller.removeUsers(users);
-		}
+		this.controller.removeUsers(users);
 	}
 
 	private void removeAllOrders(List<OrderModel> orders) {
-		if (DELETE_ENABLED) {
-			this.controller.removeOrders(orders);
-		}
+		this.controller.removeOrders(orders);
 	}
 
 	private List<UserModel> getAllUsers() {

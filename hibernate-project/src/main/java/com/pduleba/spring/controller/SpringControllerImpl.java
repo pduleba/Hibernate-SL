@@ -5,6 +5,7 @@ import java.util.List;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.beans.factory.annotation.Value;
 import org.springframework.stereotype.Component;
 
 import com.pduleba.hibernate.model.OrderModel;
@@ -31,6 +32,9 @@ public class SpringControllerImpl implements SpringController {
 	@Autowired
 	private CategoryService categoryService;
 	
+	@Value(value="${application.remove.enabled}")
+	private boolean deleteEnabled = true;
+	
 	@Override
 	public void saveUser(UserModel user) {
 		userService.save(user);
@@ -43,7 +47,9 @@ public class SpringControllerImpl implements SpringController {
 	
 	@Override
 	public void removeUsers(List<UserModel> users) {
-		userService.removeAll(users);
+		if (deleteEnabled) {
+			userService.removeAll(users);
+		}
 	}
 
 	@Override
@@ -58,7 +64,9 @@ public class SpringControllerImpl implements SpringController {
 
 	@Override
 	public void removeOrders(List<OrderModel> orders) {
-		this.orderService.removeAll(orders);
+		if (deleteEnabled) {
+			this.orderService.removeAll(orders);
+		}
 	}
 	
 	

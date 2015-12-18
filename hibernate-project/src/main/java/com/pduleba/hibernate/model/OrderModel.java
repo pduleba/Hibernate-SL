@@ -37,12 +37,7 @@ public @Data class OrderModel {
 	private String orderDetails;
 
 	@ManyToOne(fetch=FetchType.EAGER, cascade=CascadeType.ALL)
-	@JoinColumn(
-			name="t_user2orders", 
-			
-			joinColumns = {@JoinColumn(name="id_order")},
-			inverseJoinColumns = {@JoinColumn(name="id_user")}
-		)
+	@JoinColumn(table="t_user2orders", name="id_user", referencedColumnName="id")
 	private UserModel user;
 
 }

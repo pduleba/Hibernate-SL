@@ -95,7 +95,7 @@ public class Main {
 		for (int i = 0; i < 3; i++) {
 			order = new OrderModel();
 			order.setOrderDetails(worker.generateString(10, 2));
-			order.setUser(user);
+//			order.setUser(user);
 			user.getOrders().add(order);
 		}
 
@@ -108,7 +108,7 @@ public class Main {
 
 		OrderModel order = new OrderModel();
 		order.setOrderDetails(worker.generateString(10, 2));
-		order.setUser(user);
+//		order.setUser(user);
 		user.getOrders().add(order);
 
 		this.controller.saveOrder(order);

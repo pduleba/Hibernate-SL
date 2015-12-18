@@ -3,7 +3,6 @@ package com.pduleba.hibernate;
 import java.math.BigInteger;
 import java.security.SecureRandom;
 import java.util.Collection;
-import java.util.List;
 import java.util.Objects;
 
 import org.apache.commons.lang3.BooleanUtils;
@@ -12,7 +11,7 @@ import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
 import com.pduleba.hibernate.model.OrderModel;
-import com.pduleba.hibernate.model.UserModel;
+import com.pduleba.hibernate.model.ProductModel;
 
 class Worker {
 	
@@ -20,51 +19,66 @@ class Worker {
 
 	private SecureRandom random = new SecureRandom();
 	
-	void showUsers(List<UserModel> allUsers) {
-		if (Objects.isNull(allUsers) || allUsers.isEmpty()) {
-			LOG.info("Users NOT FOUND");
+	void showProducts(Collection<ProductModel> products) {
+		showProducts(products, true);
+	}	
+	
+	void showProducts(Collection<ProductModel> products, boolean showOrders) {
+		if (BooleanUtils.isFalse(Hibernate.isInitialized(products))) {
+			LOG.info("Products -> NOT INITIALIZED");
+		} else if (Objects.isNull(products) || products.isEmpty()) {
+			LOG.info("Products -> NOT FOUND");
 		} else {
-			int userIndex = 0;
-
-			for (UserModel u : allUsers) {
-				displayUser(++userIndex, u, true);
-				showOrders(u.getOrders(), false);
-			}
-		}
-	}
-
-	void showOrders(Collection<OrderModel> orders, boolean showUsers) {
-		if (BooleanUtils.isFalse(Hibernate.isInitialized(orders))) {
-			LOG.info("Orders NOT INITIALIZED");
-		} else if (Objects.isNull(orders) || orders.isEmpty()) {
-			LOG.info("Orders NOT FOUND");
-		} else {
-			int orderIndex = 0;
-			if (Hibernate.isInitialized(orders)) {
-				for (OrderModel o : orders) {
-					++orderIndex;
-					LOG.info("#> order index {}", orderIndex);
-					LOG.info("ORDER_MODEL :: id = {}, details = {}", o.getId(), o.getOrderDetails());
-					if (showUsers) {
-//						displayUser(orderIndex, o.getOwner(), false);
-					}
+			int index = 0;
+			for (ProductModel p : products) {
+				LOG.info("#> product {} ", ++index);
+				displayProduct(p);
+				if (showOrders) {
+					showOrders(p.getOrders(), false);
 				}
-			} else {
-				LOG.info("Orders not initalized");
+				LOG.info("-----");
+			}
+		}
+	}
+	void showOrders(Collection<OrderModel> orders) {
+		showOrders(orders, true);
+	}
+
+	void showOrders(Collection<OrderModel> orders, boolean showProducts) {
+		if (BooleanUtils.isFalse(Hibernate.isInitialized(orders))) {
+			LOG.info("Orders -> NOT INITIALIZED");
+		} else if (Objects.isNull(orders) || orders.isEmpty()) {
+			LOG.info("Orders -> NOT FOUND");
+		} else {
+			int index = 0;
+			for (OrderModel o : orders) {
+				LOG.info("#> order {} ", ++index);
+				displayOrder(o);
+				if (showProducts) {
+					showProducts(o.getProducts(), false);
+				}
+				LOG.info("-----");
 			}
 		}
 	}
 
-	private void displayUser(int userIndex, UserModel u, boolean showIndex) {
-		if (BooleanUtils.isFalse(Hibernate.isInitialized(u))) {
-			LOG.info("Orders NOT INITIALIZED");
-		} else if (Objects.nonNull(u)) {
-			if (showIndex) {
-				LOG.info("# user index {}", userIndex);
-			} 
-			LOG.info(" USER_MODEL :: id = {}, name = {}", u.getId(), u.getName());
+	private void displayProduct(ProductModel p) {
+		if (BooleanUtils.isFalse(Hibernate.isInitialized(p))) {
+			LOG.info("PRODUCT_MODEL :: NOT INITIALIZED");
+		} else if (Objects.nonNull(p)) {
+			LOG.info("PRODUCT_MODEL :: id = {}, name = {}", p.getId(), p.getName());
 		} else {
-			LOG.info("User NOT FOUND");
+			LOG.info("PRODUCT_MODEL :: NOT FOUND");
+		}
+	}
+
+	private void displayOrder(OrderModel o) {
+		if (BooleanUtils.isFalse(Hibernate.isInitialized(o))) {
+			LOG.info("ORDER_MODEL :: NOT INITIALIZED");
+		} else if (Objects.nonNull(o)) {
+			LOG.info("ORDER_MODEL :: id = {}, order details = {}", o.getId(), o.getOrderDetails());
+		} else {
+			LOG.info("ORDER_MODEL :: NOT FOUND");
 		}
 	}
 

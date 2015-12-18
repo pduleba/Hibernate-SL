@@ -10,31 +10,27 @@ import javax.persistence.FetchType;
 import javax.persistence.GeneratedValue;
 import javax.persistence.GenerationType;
 import javax.persistence.Id;
-import javax.persistence.JoinColumn;
-import javax.persistence.OneToMany;
+import javax.persistence.ManyToMany;
 import javax.persistence.SequenceGenerator;
 import javax.persistence.Table;
-import javax.persistence.UniqueConstraint;
 
 import lombok.Data;
+import lombok.EqualsAndHashCode;
 
 @Entity
-@Table(name = "T_USERS",uniqueConstraints = {
-		@UniqueConstraint(columnNames = "ID")}
-)
-@SequenceGenerator(name = "users-sequence-generator", sequenceName = "USERS_SEQ", initialValue = 1, allocationSize = 1)
-public @Data class UserModel {
+@Table(name = "T_PRODUCTS")
+@SequenceGenerator(name = "products-sequence-generator", sequenceName = "PRODUCTS_SEQ", initialValue = 1, allocationSize = 1)
+@EqualsAndHashCode(exclude="orders")
+public @Data class ProductModel {
 
 	@Id
 	@Column(name = "id")
-	@GeneratedValue(generator = "users-sequence-generator", strategy = GenerationType.SEQUENCE)
+	@GeneratedValue(generator = "products-sequence-generator", strategy = GenerationType.SEQUENCE)
 	private Long id;
 	
 	@Column(name = "name")
 	private String name;
 
-	@OneToMany(cascade = CascadeType.ALL, fetch = FetchType.EAGER)
-	@JoinColumn(name="id_user", referencedColumnName="id")
+	@ManyToMany(cascade=CascadeType.ALL, fetch=FetchType.EAGER, mappedBy="products")
 	private Collection<OrderModel> orders = new LinkedHashSet<>();
-
 }

@@ -9,7 +9,7 @@ import org.springframework.beans.factory.annotation.Value;
 import org.springframework.stereotype.Component;
 
 import com.pduleba.hibernate.model.OrderModel;
-import com.pduleba.hibernate.model.UserModel;
+import com.pduleba.hibernate.model.ProductModel;
 import com.pduleba.spring.services.CategoryService;
 import com.pduleba.spring.services.OrderService;
 import com.pduleba.spring.services.ProductService;
@@ -36,19 +36,19 @@ public class SpringControllerImpl implements SpringController {
 	private boolean deleteEnabled = true;
 	
 	@Override
-	public void saveUser(UserModel user) {
-		userService.save(user);
+	public void saveProduct(ProductModel product) {
+		productService.save(product);
 	}
 	
 	@Override
-	public List<UserModel> getAllUsers() {
-		return userService.getAllUsers();
+	public List<ProductModel> getAllProducts() {
+		return productService.getAllProducts();
 	}
 	
 	@Override
-	public void removeUsers(List<UserModel> users) {
+	public void removeProducts(List<ProductModel> products) {
 		if (deleteEnabled) {
-			userService.removeAll(users);
+			productService.removeAll(products);
 		}
 	}
 

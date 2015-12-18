@@ -9,7 +9,7 @@ import org.springframework.context.annotation.AnnotationConfigApplicationContext
 
 import com.pduleba.configuration.SpringConfiguration;
 import com.pduleba.hibernate.model.OrderModel;
-import com.pduleba.hibernate.model.UserModel;
+import com.pduleba.hibernate.model.ProductModel;
 import com.pduleba.spring.controller.SpringController;
 
 public class Main {
@@ -32,21 +32,21 @@ public class Main {
 			
 			LOG.info("Starting...");
 	
-			LOG.info("######## USER CRUDS ######## ");
-			executeUsersCRUD();
+			LOG.info("######## PRODUCT CRUDS ######## ");
+			executeProductsCRUD();
 			LOG.info("######## ORDER CRUDS ######## ");
 			executeOrdersCRUD();
 		}
 	}
 
-	private void executeUsersCRUD() {
-		saveUser();
+	private void executeProductsCRUD() {
+		saveProduct();
 		LOG.info(" ----- CREATE complete ----- ");
-		List<UserModel> allUsers = getAllUsers();
+		List<ProductModel> allProducts = getAllProducts();
 		LOG.info(" ----- READ complete ----- ");
-		removeAllUsers(allUsers);
+		removeAllProducts(allProducts);
 		LOG.info(" ----- DELETE complete ----- ");
-		getAllUsers();
+		getAllProducts();
 		LOG.info(" ----- READ complete ----- ");
 
 		LOG.info("Complete");
@@ -65,19 +65,19 @@ public class Main {
 		LOG.info("Complete");
 	}
 
-	private void removeAllUsers(List<UserModel> users) {
-		this.controller.removeUsers(users);
+	private void removeAllProducts(List<ProductModel> products) {
+		this.controller.removeProducts(products);
 	}
 
 	private void removeAllOrders(List<OrderModel> orders) {
 		this.controller.removeOrders(orders);
 	}
 
-	private List<UserModel> getAllUsers() {
-		List<UserModel> allUsers = this.controller.getAllUsers();
-		worker.showUsers(allUsers);
+	private List<ProductModel> getAllProducts() {
+		List<ProductModel> allProducts = this.controller.getAllProducts();
+		worker.showProducts(allProducts);
 
-		return allUsers;
+		return allProducts;
 	}
 
 	private List<OrderModel> getAllOrders() {
@@ -87,29 +87,29 @@ public class Main {
 		return allOrders;
 	}
 
-	private void saveUser() {
-		UserModel user = new UserModel();
-		user.setName(worker.generateString(16, 16));
+	private void saveProduct() {
+		ProductModel product = new ProductModel();
+		product.setName(worker.generateString(16, 16));
 
 		OrderModel order = null;
 		for (int i = 0; i < 3; i++) {
 			order = new OrderModel();
 			order.setOrderDetails(worker.generateString(10, 2));
-//			order.setUser(user);
-			user.getOrders().add(order);
+			order.getProducts().add(product);
+			product.getOrders().add(order);
 		}
 
-		this.controller.saveUser(user);
+		this.controller.saveProduct(product);
 	}
 
 	private void saveOrder() {
-		UserModel user = new UserModel();
-		user.setName(worker.generateString(16, 16));
+		ProductModel product = new ProductModel();
+		product.setName(worker.generateString(16, 16));
 
 		OrderModel order = new OrderModel();
 		order.setOrderDetails(worker.generateString(10, 2));
-//		order.setUser(user);
-		user.getOrders().add(order);
+		order.getProducts().add(product);
+		product.getOrders().add(order);
 
 		this.controller.saveOrder(order);
 	}

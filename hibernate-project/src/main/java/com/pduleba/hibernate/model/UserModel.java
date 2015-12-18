@@ -1,16 +1,10 @@
 package com.pduleba.hibernate.model;
 
-import java.util.Collection;
-import java.util.LinkedHashSet;
-
-import javax.persistence.CascadeType;
 import javax.persistence.Column;
 import javax.persistence.Entity;
-import javax.persistence.FetchType;
 import javax.persistence.GeneratedValue;
 import javax.persistence.GenerationType;
 import javax.persistence.Id;
-import javax.persistence.OneToMany;
 import javax.persistence.SequenceGenerator;
 import javax.persistence.Table;
 import javax.persistence.UniqueConstraint;
@@ -31,8 +25,5 @@ public @Data class UserModel {
 	
 	@Column(name = "name")
 	private String name;
-
-	@OneToMany(cascade = CascadeType.ALL, fetch = FetchType.EAGER, mappedBy="user")
-	private Collection<OrderModel> orders = new LinkedHashSet<>();
 
 }

@@ -28,7 +28,7 @@ class Worker {
 
 			for (UserModel u : allUsers) {
 				displayUser(++userIndex, u, true);
-				showOrders(u.getOrders(), false);
+//				showOrders(u.getOrders(), false);
 			}
 		}
 	}

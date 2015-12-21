@@ -105,29 +105,29 @@ class Worker {
 	public Pair<Collection<ProductModel>, Collection<OrderModel>> getProductsAndOrders() {
 		String dateId = getDateId();
 		
-		ProductModel p1 = getProduct(getName("bow", dateId));
-		ProductModel p2 = getProduct(getName("car", dateId));
-		ProductModel p3 = getProduct(getName("pen", dateId));
+		ProductModel car = getProduct(getName("car", dateId));
+		ProductModel bow = getProduct(getName("bow", dateId));
+		ProductModel pen = getProduct(getName("pen", dateId));
 
-		OrderModel o1 = getOrder(getName("p1 + p2", dateId));
-		o1.getProducts().add(p2);
-		p2.getOrders().add(o1);
-		o1.getProducts().add(p1);
-		p1.getOrders().add(o1);
+		OrderModel o1 = getOrder(getName("car + bow", dateId));
+		o1.getProducts().add(car);
+		car.getOrders().add(o1);
+		o1.getProducts().add(bow);
+		bow.getOrders().add(o1);
 		
-		OrderModel o2 = getOrder(getName("p2 + p3", dateId));
-		o2.getProducts().add(p2);
-		p2.getOrders().add(o2);
-		o2.getProducts().add(p3);
-		p3.getOrders().add(o2);
+		OrderModel o2 = getOrder(getName("car + pen", dateId));
+		o2.getProducts().add(car);
+		car.getOrders().add(o2);
+		o2.getProducts().add(pen);
+		pen.getOrders().add(o2);
 
-		OrderModel o3 = getOrder(getName("p1 + p3", dateId));
-		o3.getProducts().add(p3);
-		p3.getOrders().add(o3);
-		o3.getProducts().add(p1);
-		p1.getOrders().add(o3);
+		OrderModel o3 = getOrder(getName("bow + pen", dateId));
+		o3.getProducts().add(bow);
+		bow.getOrders().add(o3);
+		o3.getProducts().add(pen);
+		pen.getOrders().add(o3);
 		
-		Collection<ProductModel> products = Arrays.asList(p1, p2, p3);
+		Collection<ProductModel> products = Arrays.asList(bow, car, pen);
 		Collection<OrderModel> orders = Arrays.asList(o1, o2, o3);
 		
 		return Pair.of(products, orders);

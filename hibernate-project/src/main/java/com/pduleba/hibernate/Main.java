@@ -88,7 +88,7 @@ public class Main {
 
 	private List<OrderModel> getAllOrders() {
 		List<OrderModel> allOrders = this.controller.getAllOrders();
-		worker.showOrders(allOrders, true);
+		worker.showOrders(allOrders);
 
 		return allOrders;
 	}

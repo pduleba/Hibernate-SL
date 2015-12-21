@@ -23,9 +23,9 @@ class Worker {
 	
 	void showProducts(Collection<ProductModel> products) {
 		showProducts(products, true);
-	}	
+	}
 	
-	void showProducts(Collection<ProductModel> products, boolean showOrders) {
+	void showProducts(Collection<ProductModel> products, boolean showDelimiter) {
 		if (BooleanUtils.isFalse(Hibernate.isInitialized(products))) {
 			LOG.info("Products -> NOT INITIALIZED");
 		} else if (Objects.isNull(products) || products.isEmpty()) {
@@ -35,18 +35,14 @@ class Worker {
 			for (ProductModel p : products) {
 				LOG.info("#> product {} ", ++index);
 				displayProduct(p);
-				if (showOrders) {
-					showOrders(p.getOrders(), false);
+				if (showDelimiter) {
 					LOG.info("-----");
 				}
 			}
 		}
 	}
-	void showOrders(Collection<OrderModel> orders) {
-		showOrders(orders, true);
-	}
 
-	void showOrders(Collection<OrderModel> orders, boolean showProducts) {
+	void showOrders(Collection<OrderModel> orders) {
 		if (BooleanUtils.isFalse(Hibernate.isInitialized(orders))) {
 			LOG.info("Orders -> NOT INITIALIZED");
 		} else if (Objects.isNull(orders) || orders.isEmpty()) {
@@ -56,10 +52,8 @@ class Worker {
 			for (OrderModel o : orders) {
 				LOG.info("#> order {} ", ++index);
 				displayOrder(o);
-				if (showProducts) {
-					showProducts(o.getProducts(), false);
-					LOG.info("-----");
-				}
+				showProducts(o.getProducts(), false);
+				LOG.info("-----");
 			}
 		}
 	}
@@ -111,21 +105,15 @@ class Worker {
 
 		OrderModel o1 = getOrder(getName("car + bow", dateId));
 		o1.getProducts().add(car);
-		car.getOrders().add(o1);
 		o1.getProducts().add(bow);
-		bow.getOrders().add(o1);
 		
 		OrderModel o2 = getOrder(getName("car + pen", dateId));
 		o2.getProducts().add(car);
-		car.getOrders().add(o2);
 		o2.getProducts().add(pen);
-		pen.getOrders().add(o2);
 
 		OrderModel o3 = getOrder(getName("bow + pen", dateId));
 		o3.getProducts().add(bow);
-		bow.getOrders().add(o3);
 		o3.getProducts().add(pen);
-		pen.getOrders().add(o3);
 		
 		Collection<ProductModel> products = Arrays.asList(bow, car, pen);
 		Collection<OrderModel> orders = Arrays.asList(o1, o2, o3);

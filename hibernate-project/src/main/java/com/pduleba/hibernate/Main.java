@@ -1,5 +1,6 @@
 package com.pduleba.hibernate;
 
+import java.util.Collection;
 import java.util.List;
 
 import org.slf4j.Logger;
@@ -40,7 +41,7 @@ public class Main {
 	}
 
 	private void executeProductsCRUD() {
-		saveProduct();
+		saveProducts();
 		LOG.info(" ----- CREATE complete ----- ");
 		List<ProductModel> allProducts = getAllProducts();
 		LOG.info(" ----- READ complete ----- ");
@@ -87,31 +88,14 @@ public class Main {
 		return allOrders;
 	}
 
-	private void saveProduct() {
-		ProductModel product = new ProductModel();
-		product.setName(worker.generateString(16, 16));
-
-		OrderModel order = null;
-		for (int i = 0; i < 3; i++) {
-			order = new OrderModel();
-			order.setOrderDetails(worker.generateString(10, 2));
-			order.getProducts().add(product);
-			product.getOrders().add(order);
-		}
-
-		this.controller.saveProduct(product);
+	private void saveProducts() {
+		Collection<ProductModel> products = worker.getProductsAndOrders().getLeft();
+		this.controller.saveProducts(products);
 	}
 
 	private void saveOrder() {
-		ProductModel product = new ProductModel();
-		product.setName(worker.generateString(16, 16));
-
-		OrderModel order = new OrderModel();
-		order.setOrderDetails(worker.generateString(10, 2));
-		order.getProducts().add(product);
-		product.getOrders().add(order);
-
-		this.controller.saveOrder(order);
+		Collection<OrderModel> orders = worker.getProductsAndOrders().getRight();
+		this.controller.saveOrders(orders);
 	}
 
 }

@@ -1,5 +1,6 @@
 package com.pduleba.spring.services;
 
+import java.util.Collection;
 import java.util.List;
 
 import org.springframework.beans.factory.annotation.Autowired;
@@ -25,7 +26,7 @@ public class OrderServiceImpl implements OrderService {
 	}
 	
 	@Override
-	public void saveOrder(OrderModel order) {
-		orderDao.saveOrder(order);
+	public void saveOrders(Collection<OrderModel> orders) {
+		orderDao.saveOrders(orders);
 	}
 }

@@ -1,6 +1,6 @@
 package com.pduleba.spring.dao;
 
-import java.io.Serializable;
+import java.util.Collection;
 import java.util.List;
 
 import com.pduleba.hibernate.model.ProductModel;
@@ -9,7 +9,7 @@ public interface ProductDao {
 
 	List<ProductModel> getAllProducts();
 
-	Serializable save(ProductModel product);
+	public void saveAll(Collection<ProductModel> products);
 
 	void removeAll(List<ProductModel> products);
 

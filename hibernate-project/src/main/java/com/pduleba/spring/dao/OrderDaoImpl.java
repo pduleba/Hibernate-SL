@@ -1,5 +1,6 @@
 package com.pduleba.spring.dao;
 
+import java.util.Collection;
 import java.util.List;
 
 import javax.transaction.Transactional;
@@ -31,7 +32,9 @@ public class OrderDaoImpl extends HibernateDaoSupport implements OrderDao {
 	}
 	
 	@Override
-	public void saveOrder(OrderModel order) {
-		getHibernateTemplate().save(order);
+	public void saveOrders(Collection<OrderModel> orders) {
+		for (OrderModel order : orders) {
+			getHibernateTemplate().save(order);
+		}
 	}
 }

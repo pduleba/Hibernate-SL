@@ -1,5 +1,6 @@
 package com.pduleba.spring.controller;
 
+import java.util.Collection;
 import java.util.List;
 
 import org.slf4j.Logger;
@@ -36,8 +37,8 @@ public class SpringControllerImpl implements SpringController {
 	private boolean deleteEnabled = true;
 	
 	@Override
-	public void saveProduct(ProductModel product) {
-		productService.save(product);
+	public void saveProducts(Collection<ProductModel> products) {
+		productService.saveAll(products);
 	}
 	
 	@Override
@@ -53,8 +54,8 @@ public class SpringControllerImpl implements SpringController {
 	}
 
 	@Override
-	public void saveOrder(OrderModel order) {
-		orderService.saveOrder(order);
+	public void saveOrders(Collection<OrderModel> orders) {
+		orderService.saveOrders(orders);
 	}
 
 	@Override

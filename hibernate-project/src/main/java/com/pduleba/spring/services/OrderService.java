@@ -1,5 +1,6 @@
 package com.pduleba.spring.services;
 
+import java.util.Collection;
 import java.util.List;
 
 import com.pduleba.hibernate.model.OrderModel;
@@ -10,6 +11,6 @@ public interface OrderService {
 
 	List<OrderModel> getAllOrders();
 
-	void saveOrder(OrderModel order);
+	void saveOrders(Collection<OrderModel> orders);
 
 }

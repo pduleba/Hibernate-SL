@@ -1,5 +1,6 @@
 package com.pduleba.spring.services;
 
+import java.util.Collection;
 import java.util.List;
 
 import org.springframework.beans.factory.annotation.Autowired;
@@ -15,8 +16,8 @@ public class ProductServiceImpl implements ProductService {
 	private ProductDao productDao;
 
 	@Override
-	public void save(ProductModel product) {
-		productDao.save(product);
+	public void saveAll(Collection<ProductModel> products) {
+		productDao.saveAll(products);
 	}
 
 	@Override

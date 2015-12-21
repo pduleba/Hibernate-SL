@@ -1,6 +1,6 @@
 package com.pduleba.spring.dao;
 
-import java.io.Serializable;
+import java.util.Collection;
 import java.util.List;
 
 import javax.transaction.Transactional;
@@ -31,8 +31,10 @@ public class ProductDaoImpl extends HibernateDaoSupport implements ProductDao {
 	}
 
 	@Override
-	public Serializable save(ProductModel product) {
-		return getHibernateTemplate().save(product);
+	public void saveAll(Collection<ProductModel> products) {
+		for (ProductModel product : products) {
+			getHibernateTemplate().save(product);
+		}
 	}
 
 	@Override

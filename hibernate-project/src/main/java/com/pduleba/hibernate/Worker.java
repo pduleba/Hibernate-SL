@@ -37,8 +37,8 @@ class Worker {
 				displayProduct(p);
 				if (showOrders) {
 					showOrders(p.getOrders(), false);
+					LOG.info("-----");
 				}
-				LOG.info("-----");
 			}
 		}
 	}
@@ -58,8 +58,8 @@ class Worker {
 				displayOrder(o);
 				if (showProducts) {
 					showProducts(o.getProducts(), false);
+					LOG.info("-----");
 				}
-				LOG.info("-----");
 			}
 		}
 	}

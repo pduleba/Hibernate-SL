@@ -22,7 +22,7 @@ import org.springframework.orm.hibernate5.LocalSessionFactoryBean;
 import org.springframework.transaction.PlatformTransactionManager;
 import org.springframework.transaction.annotation.EnableTransactionManagement;
 
-import com.pduleba.hibernate.model.ProductModel;
+import com.pduleba.hibernate.model.UserModel;
 import com.pduleba.spring.ApplicationInitializationPackageMarker;
 
 @Configuration
@@ -57,7 +57,7 @@ public class SpringConfiguration implements ApplicationPropertiesConfiguration {
 		LocalSessionFactoryBean sessionFactory = new LocalSessionFactoryBean();
 		
 		sessionFactory.setDataSource(dataSource);
-		sessionFactory.setPackagesToScan(ProductModel.class.getPackage().getName());
+		sessionFactory.setPackagesToScan(UserModel.class.getPackage().getName());
 		sessionFactory.setHibernateProperties(getHibernateProperties());
 		
 		return sessionFactory;

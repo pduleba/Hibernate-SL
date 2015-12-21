@@ -13,124 +13,128 @@ import org.hibernate.Hibernate;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
-import com.pduleba.hibernate.model.OrderModel;
-import com.pduleba.hibernate.model.ProductModel;
+import com.pduleba.hibernate.model.QuestionModel;
+import com.pduleba.hibernate.model.UserModel;
 
 class Worker {
 	
 	public static final Logger LOG = LoggerFactory.getLogger(Worker.class);
 	private final static DateTimeFormatter FORMAT = DateTimeFormatter.ofPattern("HH:mm:ss");
 	
-	void showProducts(Collection<ProductModel> products) {
-		showProducts(products, true);
+	void showQuestions(Collection<QuestionModel> questions) {
+		showQuestions(questions, true);
 	}	
 	
-	void showProducts(Collection<ProductModel> products, boolean showOrders) {
-		if (BooleanUtils.isFalse(Hibernate.isInitialized(products))) {
-			LOG.info("Products -> NOT INITIALIZED");
-		} else if (Objects.isNull(products) || products.isEmpty()) {
-			LOG.info("Products -> NOT FOUND");
+	void showQuestions(Collection<QuestionModel> questions, boolean showUsers) {
+		if (BooleanUtils.isFalse(Hibernate.isInitialized(questions))) {
+			LOG.info("Questions -> NOT INITIALIZED");
+		} else if (Objects.isNull(questions) || questions.isEmpty()) {
+			LOG.info("Questions -> NOT FOUND");
 		} else {
 			int index = 0;
-			for (ProductModel p : products) {
-				LOG.info("#> product {} ", ++index);
-				displayProduct(p);
-				if (showOrders) {
-					showOrders(p.getOrders(), false);
+			for (QuestionModel p : questions) {
+				LOG.info("#> question {} ", ++index);
+				displayQuestion(p);
+				if (showUsers) {
+					showUsers(p.getUsers(), false);
 					LOG.info("-----");
 				}
 			}
 		}
 	}
-	void showOrders(Collection<OrderModel> orders) {
-		showOrders(orders, true);
+	void showUsers(Collection<UserModel> users) {
+		showUsers(users, true);
 	}
 
-	void showOrders(Collection<OrderModel> orders, boolean showProducts) {
-		if (BooleanUtils.isFalse(Hibernate.isInitialized(orders))) {
-			LOG.info("Orders -> NOT INITIALIZED");
-		} else if (Objects.isNull(orders) || orders.isEmpty()) {
-			LOG.info("Orders -> NOT FOUND");
+	void showUsers(Collection<UserModel> users, boolean showQuestions) {
+		if (BooleanUtils.isFalse(Hibernate.isInitialized(users))) {
+			LOG.info("Users -> NOT INITIALIZED");
+		} else if (Objects.isNull(users) || users.isEmpty()) {
+			LOG.info("Users -> NOT FOUND");
 		} else {
 			int index = 0;
-			for (OrderModel o : orders) {
-				LOG.info("#> order {} ", ++index);
-				displayOrder(o);
-				if (showProducts) {
-					showProducts(o.getProducts(), false);
+			for (UserModel o : users) {
+				LOG.info("#> user {} ", ++index);
+				displayUser(o);
+				if (showQuestions) {
+					showQuestions(o.getQuestions(), false);
 					LOG.info("-----");
 				}
 			}
 		}
 	}
 
-	private void displayProduct(ProductModel p) {
-		if (BooleanUtils.isFalse(Hibernate.isInitialized(p))) {
-			LOG.info("PRODUCT_MODEL :: NOT INITIALIZED");
-		} else if (Objects.nonNull(p)) {
-			LOG.info("PRODUCT_MODEL :: id = {}, name = {}", p.getId(), p.getName());
+	private void displayQuestion(QuestionModel q) {
+		if (BooleanUtils.isFalse(Hibernate.isInitialized(q))) {
+			LOG.info("QUESTION_MODEL :: NOT INITIALIZED");
+		} else if (Objects.nonNull(q)) {
+			LOG.info("QUESTION_MODEL :: id = {}, query = {}, dateId = {}", q.getId(), q.getQuery(), q.getDateId());
 		} else {
-			LOG.info("PRODUCT_MODEL :: NOT FOUND");
+			LOG.info("QUESTION_MODEL :: NOT FOUND");
 		}
 	}
 
-	private void displayOrder(OrderModel o) {
-		if (BooleanUtils.isFalse(Hibernate.isInitialized(o))) {
-			LOG.info("ORDER_MODEL :: NOT INITIALIZED");
-		} else if (Objects.nonNull(o)) {
-			LOG.info("ORDER_MODEL :: id = {}, order details = {}", o.getId(), o.getOrderDetails());
+	private void displayUser(UserModel u) {
+		if (BooleanUtils.isFalse(Hibernate.isInitialized(u))) {
+			LOG.info("USER_MODEL :: NOT INITIALIZED");
+		} else if (Objects.nonNull(u)) {
+			LOG.info("USER_MODEL :: id = {}, name = {}, sourname = {}, dateId = {}", u.getId(), u.getName(),
+					u.getSurname(), u.getDateId());
 		} else {
-			LOG.info("ORDER_MODEL :: NOT FOUND");
+			LOG.info("USER_MODEL :: NOT FOUND");
 		}
 	}
 
-	private ProductModel getProduct(String productName) {
-		ProductModel product = new ProductModel();
-		product.setName(productName);
+	private QuestionModel getQuestion(String query, String dateId) {
+		QuestionModel question = new QuestionModel();
+		question.setQuery(query);
+		question.setDateId(dateId);
 		
-		return product;
+		return question;
 	}
 
-	private OrderModel getOrder(String orderName) {
-		OrderModel order = new OrderModel();
-		order.setOrderDetails(orderName);
+	private UserModel getUser(String name, String surname, String dateId) {
+		UserModel user = new UserModel();
+		user.setName(name);
+		user.setSurname(surname);
+		user.setDateId(dateId);
 		
-		return order;
+		return user;
 	}
 	
 	private String getDateId() {
 		return FORMAT.format(LocalTime.now());
 	}
 	
-	public Pair<Collection<ProductModel>, Collection<OrderModel>> getProductsAndOrders() {
+	public Pair<Collection<QuestionModel>, Collection<UserModel>> getQuestionsAndUsers() {
 		String dateId = getDateId();
 		
-		ProductModel car = getProduct(getName("car", dateId));
-		ProductModel bow = getProduct(getName("bow", dateId));
-		ProductModel pen = getProduct(getName("pen", dateId));
+		QuestionModel what = getQuestion("What?", dateId);
+		QuestionModel where = getQuestion("Where?", dateId);
+		QuestionModel when = getQuestion("When?", dateId);
 
-		OrderModel o1 = getOrder(getName("car + bow", dateId));
-		o1.getProducts().add(car);
-		car.getOrders().add(o1);
-		o1.getProducts().add(bow);
-		bow.getOrders().add(o1);
+		UserModel u1 = getUser("what", "where", dateId);
+		u1.getQuestions().add(what);
+		what.getUsers().add(u1);
+		u1.getQuestions().add(where);
+		where.getUsers().add(u1);
 		
-		OrderModel o2 = getOrder(getName("car + pen", dateId));
-		o2.getProducts().add(car);
-		car.getOrders().add(o2);
-		o2.getProducts().add(pen);
-		pen.getOrders().add(o2);
+		UserModel u2 = getUser("what", "when", dateId);
+		u2.getQuestions().add(what);
+		what.getUsers().add(u2);
+		u2.getQuestions().add(when);
+		when.getUsers().add(u2);
 
-		OrderModel o3 = getOrder(getName("bow + pen", dateId));
-		o3.getProducts().add(bow);
-		bow.getOrders().add(o3);
-		o3.getProducts().add(pen);
-		pen.getOrders().add(o3);
+		UserModel u3 = getUser("where", "when", dateId);
+		u3.getQuestions().add(where);
+		where.getUsers().add(u3);
+		u3.getQuestions().add(when);
+		when.getUsers().add(u3);
 		
-		Collection<ProductModel> products = Arrays.asList(bow, car, pen);
-		Collection<OrderModel> orders = Arrays.asList(o1, o2, o3);
+		Collection<QuestionModel> questions = Arrays.asList(where, what, when);
+		Collection<UserModel> users = Arrays.asList(u1, u2, u3);
 		
-		return Pair.of(products, orders);
+		return Pair.of(questions, users);
 	}
 
 	private String getName(String name, String dateId) {

@@ -9,8 +9,8 @@ import org.springframework.context.ConfigurableApplicationContext;
 import org.springframework.context.annotation.AnnotationConfigApplicationContext;
 
 import com.pduleba.configuration.SpringConfiguration;
-import com.pduleba.hibernate.model.OrderModel;
-import com.pduleba.hibernate.model.ProductModel;
+import com.pduleba.hibernate.model.QuestionModel;
+import com.pduleba.hibernate.model.UserModel;
 import com.pduleba.spring.controller.SpringController;
 
 public class Main {
@@ -34,73 +34,73 @@ public class Main {
 			LOG.info("Starting...");
 	
 			LOG.info("######## PRODUCT CRUDS ######## ");
-			executeProductsCRUD();
+			executeQuestionsCRUD();
 			try {
 				Thread.sleep(1000);
 			} catch (InterruptedException e) {
 				LOG.error("Thread.sleep() problem :: {}", e.getMessage(), e);
 			}
 			LOG.info("######## ORDER CRUDS ######## ");
-			executeOrdersCRUD();
+			executeUsersCRUD();
 		}
 	}
 
-	private void executeProductsCRUD() {
-		saveProducts();
+	private void executeQuestionsCRUD() {
+		saveQuestions();
 		LOG.info(" ----- CREATE complete ----- ");
-		List<ProductModel> allProducts = getAllProducts();
+		List<QuestionModel> allQuestions = getAllQuestions();
 		LOG.info(" ----- READ complete ----- ");
-		removeAllProducts(allProducts);
+		removeAllQuestions(allQuestions);
 		LOG.info(" ----- DELETE complete ----- ");
-		getAllProducts();
+		getAllQuestions();
 		LOG.info(" ----- READ complete ----- ");
 
 		LOG.info("Complete");
 	}
 
-	private void executeOrdersCRUD() {
-		saveOrder();
+	private void executeUsersCRUD() {
+		saveUser();
 		LOG.info(" ----- CREATE complete ----- ");
-		List<OrderModel> allOrders = getAllOrders();
+		List<UserModel> allUsers = getAllUsers();
 		LOG.info(" ----- READ complete ----- ");
-		removeAllOrders(allOrders);
+		removeAllUsers(allUsers);
 		LOG.info(" ----- DELETE complete ----- ");
-		getAllOrders();
+		getAllUsers();
 		LOG.info(" ----- READ complete ----- ");
 
 		LOG.info("Complete");
 	}
 
-	private void removeAllProducts(List<ProductModel> products) {
-		this.controller.removeProducts(products);
+	private void removeAllQuestions(List<QuestionModel> questions) {
+		this.controller.removeQuestions(questions);
 	}
 
-	private void removeAllOrders(List<OrderModel> orders) {
-		this.controller.removeOrders(orders);
+	private void removeAllUsers(List<UserModel> users) {
+		this.controller.removeUsers(users);
 	}
 
-	private List<ProductModel> getAllProducts() {
-		List<ProductModel> allProducts = this.controller.getAllProducts();
-		worker.showProducts(allProducts);
+	private List<QuestionModel> getAllQuestions() {
+		List<QuestionModel> allQuestions = this.controller.getAllQuestions();
+		worker.showQuestions(allQuestions);
 
-		return allProducts;
+		return allQuestions;
 	}
 
-	private List<OrderModel> getAllOrders() {
-		List<OrderModel> allOrders = this.controller.getAllOrders();
-		worker.showOrders(allOrders, true);
+	private List<UserModel> getAllUsers() {
+		List<UserModel> allUsers = this.controller.getAllUsers();
+		worker.showUsers(allUsers, true);
 
-		return allOrders;
+		return allUsers;
 	}
 
-	private void saveProducts() {
-		Collection<ProductModel> products = worker.getProductsAndOrders().getLeft();
-		this.controller.saveProducts(products);
+	private void saveQuestions() {
+		Collection<QuestionModel> questions = worker.getQuestionsAndUsers().getLeft();
+		this.controller.saveQuestions(questions);
 	}
 
-	private void saveOrder() {
-		Collection<OrderModel> orders = worker.getProductsAndOrders().getRight();
-		this.controller.saveOrders(orders);
+	private void saveUser() {
+		Collection<UserModel> users = worker.getQuestionsAndUsers().getRight();
+		this.controller.saveUsers(users);
 	}
 
 }

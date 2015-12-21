@@ -9,12 +9,9 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.stereotype.Component;
 
-import com.pduleba.hibernate.model.OrderModel;
-import com.pduleba.hibernate.model.ProductModel;
-import com.pduleba.spring.services.CategoryService;
-import com.pduleba.spring.services.OrderService;
-import com.pduleba.spring.services.ProductService;
-import com.pduleba.spring.services.UserDetailsService;
+import com.pduleba.hibernate.model.QuestionModel;
+import com.pduleba.hibernate.model.UserModel;
+import com.pduleba.spring.services.QuestionService;
 import com.pduleba.spring.services.UserService;
 
 @Component
@@ -23,50 +20,45 @@ public class SpringControllerImpl implements SpringController {
 	public static final Logger LOG = LoggerFactory.getLogger(SpringControllerImpl.class);
 	
 	@Autowired
-	private UserDetailsService userDetailsService;
-	@Autowired
 	private UserService userService;
+	
 	@Autowired
-	private OrderService orderService;
-	@Autowired
-	private ProductService productService;
-	@Autowired
-	private CategoryService categoryService;
+	private QuestionService questionService;
 	
 	@Value(value="${application.remove.enabled}")
 	private boolean deleteEnabled = true;
 	
 	@Override
-	public void saveProducts(Collection<ProductModel> products) {
-		productService.saveAll(products);
+	public void saveQuestions(Collection<QuestionModel> questions) {
+		questionService.saveAll(questions);
 	}
 	
 	@Override
-	public List<ProductModel> getAllProducts() {
-		return productService.getAllProducts();
+	public List<QuestionModel> getAllQuestions() {
+		return questionService.getAllQuestions();
 	}
 	
 	@Override
-	public void removeProducts(List<ProductModel> products) {
+	public void removeQuestions(List<QuestionModel> questions) {
 		if (deleteEnabled) {
-			productService.removeAll(products);
+			questionService.removeAll(questions);
 		}
 	}
 
 	@Override
-	public void saveOrders(Collection<OrderModel> orders) {
-		orderService.saveOrders(orders);
+	public void saveUsers(Collection<UserModel> users) {
+		userService.saveUsers(users);
 	}
 
 	@Override
-	public List<OrderModel> getAllOrders() {
-		return orderService.getAllOrders();
+	public List<UserModel> getAllUsers() {
+		return userService.getAllUsers();
 	}
 
 	@Override
-	public void removeOrders(List<OrderModel> orders) {
+	public void removeUsers(List<UserModel> users) {
 		if (deleteEnabled) {
-			this.orderService.removeAll(orders);
+			this.userService.removeAll(users);
 		}
 	}
 	

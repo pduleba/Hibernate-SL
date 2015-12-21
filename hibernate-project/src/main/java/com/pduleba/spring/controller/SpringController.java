@@ -3,17 +3,17 @@ package com.pduleba.spring.controller;
 import java.util.Collection;
 import java.util.List;
 
-import com.pduleba.hibernate.model.OrderModel;
-import com.pduleba.hibernate.model.ProductModel;
+import com.pduleba.hibernate.model.QuestionModel;
+import com.pduleba.hibernate.model.UserModel;
 
 public interface SpringController {
 
-	void saveProducts(Collection<ProductModel> products);
-	List<ProductModel> getAllProducts();
-	void removeProducts(List<ProductModel> products);
+	void saveQuestions(Collection<QuestionModel> questions);
+	List<QuestionModel> getAllQuestions();
+	void removeQuestions(List<QuestionModel> questions);
 
-	void saveOrders(Collection<OrderModel> orders);
-	List<OrderModel> getAllOrders();
-	void removeOrders(List<OrderModel> orders);
+	void saveUsers(Collection<UserModel> users);
+	List<UserModel> getAllUsers();
+	void removeUsers(List<UserModel> users);
 
 }

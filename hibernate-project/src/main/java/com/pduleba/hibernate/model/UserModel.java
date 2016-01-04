@@ -43,6 +43,7 @@ public @Data class UserModel {
 		
 		answer.setUser(this);
 		answer.setQuestion(question);
+		answer.setAccepted(accepted);
 		
 		question.getAnswers().add(answer);
 			this.getAnswers().add(answer);

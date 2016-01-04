@@ -11,26 +11,17 @@ import org.apache.commons.lang3.tuple.Pair;
 import org.hibernate.Hibernate;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
-import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Component;
 
 import com.pduleba.hibernate.model.QuestionModel;
 import com.pduleba.hibernate.model.User2QuestionModel;
 import com.pduleba.hibernate.model.UserModel;
-import com.pduleba.spring.dao.QuestionDao;
-import com.pduleba.spring.dao.UserDao;
 
 @Component
 class WorkerServiceImpl implements WorkerService {
 	
 	public static final Logger LOG = LoggerFactory.getLogger(WorkerServiceImpl.class);
 	private final static DateTimeFormatter FORMAT = DateTimeFormatter.ofPattern("HH:mm:ss");
-	
-	@Autowired
-	private QuestionDao questionDao;
-	
-	@Autowired
-	private UserDao userDao;
 	
 	@Override
 	public void showQuestions(Collection<QuestionModel> questions) {
@@ -138,12 +129,6 @@ class WorkerServiceImpl implements WorkerService {
 
 		Collection<QuestionModel> questions = Arrays.asList(where, what, when);
 		Collection<UserModel> users = Arrays.asList(u1, u2, u3);
-		
-		// -----------------------------------------------------------------------
-		// WARNING : entities of @ManyToMany have to be saved for @EmbeddedId !!! 
-		// -----------------------------------------------------------------------
-//		userDao.saveAll(users);
-//		questionDao.saveAll(questions);
 		
 		u1.addQuestion(what, true);
 		u1.addQuestion(where, true);

@@ -19,7 +19,7 @@ import lombok.EqualsAndHashCode;
 
 @Entity
 @Table(name="T_QUESTIONS")
-@EqualsAndHashCode(exclude = "users")
+@EqualsAndHashCode(exclude = "answers")
 public @Data class QuestionModel {
 
 	@Id

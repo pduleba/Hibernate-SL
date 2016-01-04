@@ -140,7 +140,7 @@ class WorkerServiceImpl implements WorkerService {
 		Collection<UserModel> users = Arrays.asList(u1, u2, u3);
 		
 		// -----------------------------------------------------------------------
-		// WARNING : entities of @ManyToMany have to be saved for @EmbeddedId !!!
+		// WARNING : entities of @ManyToMany have to be saved for @EmbeddedId !!! 
 		// -----------------------------------------------------------------------
 		userDao.saveAll(users);
 		questionDao.saveAll(questions);

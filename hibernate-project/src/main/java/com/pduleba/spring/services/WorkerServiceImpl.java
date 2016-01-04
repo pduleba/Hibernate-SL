@@ -43,7 +43,7 @@ class WorkerServiceImpl implements WorkerService {
 			for (QuestionModel p : questions) {
 				LOG.info("#> question {} ", ++index);
 				displayQuestion(p);
-				showAnswers(p.getUsers());
+				showAnswers(p.getAnswers());
 				LOG.info("-----");
 			}
 		}
@@ -60,7 +60,7 @@ class WorkerServiceImpl implements WorkerService {
 			for (UserModel o : users) {
 				LOG.info("#> user {} ", ++index);
 				displayUser(o);
-				showAnswers(o.getQuestions());
+				showAnswers(o.getAnswers());
 				LOG.info("-----");
 			}
 		}
@@ -142,8 +142,8 @@ class WorkerServiceImpl implements WorkerService {
 		// -----------------------------------------------------------------------
 		// WARNING : entities of @ManyToMany have to be saved for @EmbeddedId !!! 
 		// -----------------------------------------------------------------------
-		userDao.saveAll(users);
-		questionDao.saveAll(questions);
+//		userDao.saveAll(users);
+//		questionDao.saveAll(questions);
 		
 		u1.addQuestion(what, true);
 		u1.addQuestion(where, true);

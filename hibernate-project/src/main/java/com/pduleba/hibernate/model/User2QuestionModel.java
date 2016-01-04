@@ -1,46 +1,38 @@
 package com.pduleba.hibernate.model;
 
-import javax.persistence.AssociationOverride;
-import javax.persistence.AssociationOverrides;
+import javax.persistence.CascadeType;
 import javax.persistence.Column;
-import javax.persistence.EmbeddedId;
 import javax.persistence.Entity;
+import javax.persistence.GeneratedValue;
+import javax.persistence.GenerationType;
+import javax.persistence.Id;
 import javax.persistence.JoinColumn;
+import javax.persistence.ManyToOne;
+import javax.persistence.SequenceGenerator;
 import javax.persistence.Table;
-import javax.persistence.Transient;
 
 import lombok.Data;
+import lombok.EqualsAndHashCode;
 
 @Entity
 @Table(name = "T_USER2QUESTION_ANSWER")
-@AssociationOverrides({
-    @AssociationOverride(name = "pk.user",
-        joinColumns = @JoinColumn(name = "ID_USER")),
-    @AssociationOverride(name = "pk.question",
-        joinColumns = @JoinColumn(name = "ID_QUESTION")) })
+@EqualsAndHashCode(exclude = {"user", "question"})
 public @Data class User2QuestionModel {
 
-	@EmbeddedId
-	private User2QuestionID pk = new User2QuestionID();
-
+	@Id
+	@GeneratedValue(generator="user2question-sequence-generator", strategy=GenerationType.SEQUENCE)
+	@SequenceGenerator(name="user2question-sequence-generator", sequenceName = "USER_2_QUESTION_SEQ", allocationSize=1, initialValue=1)
+	@Column(name = "id")
+	private Long id;
+	
+	@ManyToOne(cascade = CascadeType.ALL)
+	@JoinColumn(name = "ID_USER")
+	private UserModel user;
+	
+	@ManyToOne(cascade = CascadeType.ALL)
+	@JoinColumn(name = "ID_QUESTION")
+	private QuestionModel question;
+	
 	@Column(name = "ACCEPTED")
 	private Boolean accepted;
-
-	@Transient
-	public UserModel getUser() {
-		return pk.getUser();
-	}
-
-	public void setUser(UserModel user) {
-		pk.setUser(user);
-	}
-
-	@Transient
-	public QuestionModel getQuestion() {
-		return pk.getQuestion();
-	}
-
-	public void setQuestion(QuestionModel question) {
-		pk.setQuestion(question);
-	}
 }

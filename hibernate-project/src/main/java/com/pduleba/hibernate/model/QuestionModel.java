@@ -34,6 +34,6 @@ public @Data class QuestionModel {
 	@Column(name = "DATE_ID")
 	private String dateId;
 
-	@OneToMany(mappedBy="pk.question", cascade = CascadeType.ALL, fetch = FetchType.EAGER)
-	private Collection<User2QuestionModel> users = new LinkedHashSet<>();
+	@OneToMany(mappedBy="question", cascade = CascadeType.ALL, fetch = FetchType.EAGER)
+	private Collection<User2QuestionModel> answers = new LinkedHashSet<>();
 }

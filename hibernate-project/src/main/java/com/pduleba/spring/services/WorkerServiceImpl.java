@@ -148,9 +148,9 @@ class WorkerServiceImpl implements WorkerService {
 		Collection<QuestionModel> questions = Arrays.asList(where, what, when);
 		Collection<UserModel> users = Arrays.asList(u1, u2, u3);
 
-		// ------------------------------------------------------------------
-		// WARNING : entities of @ManyToMany have to be saved !!!
-		// ------------------------------------------------------------------
+		// -----------------------------------------------------------------------
+		// WARNING : entities of @ManyToMany have to be saved for @IdClass !!!
+		// -----------------------------------------------------------------------
 		userDao.saveAll(users);
 		questionDao.saveAll(questions);
 

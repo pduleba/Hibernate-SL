@@ -1,6 +1,5 @@
 package com.pduleba.hibernate;
 
-import java.text.MessageFormat;
 import java.time.LocalTime;
 import java.time.format.DateTimeFormatter;
 import java.util.Arrays;
@@ -13,6 +12,7 @@ import org.hibernate.Hibernate;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
+import com.pduleba.hibernate.model.AnswerModel;
 import com.pduleba.hibernate.model.QuestionModel;
 import com.pduleba.hibernate.model.UserModel;
 
@@ -22,10 +22,6 @@ class Worker {
 	private final static DateTimeFormatter FORMAT = DateTimeFormatter.ofPattern("HH:mm:ss");
 	
 	void showQuestions(Collection<QuestionModel> questions) {
-		showQuestions(questions, true);
-	}	
-	
-	void showQuestions(Collection<QuestionModel> questions, boolean showUsers) {
 		if (BooleanUtils.isFalse(Hibernate.isInitialized(questions))) {
 			LOG.info("Questions -> NOT INITIALIZED");
 		} else if (Objects.isNull(questions) || questions.isEmpty()) {
@@ -35,18 +31,13 @@ class Worker {
 			for (QuestionModel p : questions) {
 				LOG.info("#> question {} ", ++index);
 				displayQuestion(p);
-				if (showUsers) {
-					showUsers(p.getUsers(), false);
-					LOG.info("-----");
-				}
+				showAnswers(p.getAnswers());
+				LOG.info("-----");
 			}
 		}
 	}
-	void showUsers(Collection<UserModel> users) {
-		showUsers(users, true);
-	}
 
-	void showUsers(Collection<UserModel> users, boolean showQuestions) {
+	void showUsers(Collection<UserModel> users) {
 		if (BooleanUtils.isFalse(Hibernate.isInitialized(users))) {
 			LOG.info("Users -> NOT INITIALIZED");
 		} else if (Objects.isNull(users) || users.isEmpty()) {
@@ -56,14 +47,28 @@ class Worker {
 			for (UserModel o : users) {
 				LOG.info("#> user {} ", ++index);
 				displayUser(o);
-				if (showQuestions) {
-					showQuestions(o.getQuestions(), false);
-					LOG.info("-----");
-				}
+				showAnswers(o.getAnswers());
+				LOG.info("-----");
 			}
 		}
 	}
 
+	private void showAnswers(Collection<AnswerModel> answers) {
+		if (BooleanUtils.isFalse(Hibernate.isInitialized(answers))) {
+			LOG.info("Answers -> NOT INITIALIZED");
+		} else if (Objects.isNull(answers) || answers.isEmpty()) {
+			LOG.info("Answers -> NOT FOUND");
+		} else {
+			int index = 0;
+			for (AnswerModel o : answers) {
+				LOG.info("#>> answer {} :: accepted {} ", ++index, o.getAccepted());
+				displayUser(o.getUser());
+				displayQuestion(o.getQuestion());
+				LOG.info("-----");
+			}
+		}		
+	}
+	
 	private void displayQuestion(QuestionModel q) {
 		if (BooleanUtils.isFalse(Hibernate.isInitialized(q))) {
 			LOG.info("QUESTION_MODEL :: NOT INITIALIZED");
@@ -114,30 +119,20 @@ class Worker {
 		QuestionModel when = getQuestion("When?", dateId);
 
 		UserModel u1 = getUser("what", "where", dateId);
-		u1.getQuestions().add(what);
-		what.getUsers().add(u1);
-		u1.getQuestions().add(where);
-		where.getUsers().add(u1);
+		u1.addQuestion(what, true);
+		u1.addQuestion(where, true);
 		
 		UserModel u2 = getUser("what", "when", dateId);
-		u2.getQuestions().add(what);
-		what.getUsers().add(u2);
-		u2.getQuestions().add(when);
-		when.getUsers().add(u2);
+		u2.addQuestion(what, false);
+		u2.addQuestion(when, true);
 
 		UserModel u3 = getUser("where", "when", dateId);
-		u3.getQuestions().add(where);
-		where.getUsers().add(u3);
-		u3.getQuestions().add(when);
-		when.getUsers().add(u3);
+		u3.addQuestion(where, false);
+		u3.addQuestion(when, false);
 		
 		Collection<QuestionModel> questions = Arrays.asList(where, what, when);
 		Collection<UserModel> users = Arrays.asList(u1, u2, u3);
 		
 		return Pair.of(questions, users);
-	}
-
-	private String getName(String name, String dateId) {
-		return MessageFormat.format("{0}-{1}", name, dateId);
 	}
 }

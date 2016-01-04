@@ -59,7 +59,7 @@ public class Main {
 	}
 
 	private void executeUsersCRUD() {
-		saveUser();
+		saveUsers();
 		LOG.info(" ----- CREATE complete ----- ");
 		List<UserModel> allUsers = getAllUsers();
 		LOG.info(" ----- READ complete ----- ");
@@ -88,7 +88,7 @@ public class Main {
 
 	private List<UserModel> getAllUsers() {
 		List<UserModel> allUsers = this.controller.getAllUsers();
-		worker.showUsers(allUsers, true);
+		worker.showUsers(allUsers);
 
 		return allUsers;
 	}
@@ -98,7 +98,7 @@ public class Main {
 		this.controller.saveQuestions(questions);
 	}
 
-	private void saveUser() {
+	private void saveUsers() {
 		Collection<UserModel> users = worker.getQuestionsAndUsers().getRight();
 		this.controller.saveUsers(users);
 	}

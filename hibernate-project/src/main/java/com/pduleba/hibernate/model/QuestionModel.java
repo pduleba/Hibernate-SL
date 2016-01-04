@@ -3,8 +3,10 @@ package com.pduleba.hibernate.model;
 import java.util.Collection;
 import java.util.LinkedHashSet;
 
+import javax.persistence.CascadeType;
 import javax.persistence.Column;
 import javax.persistence.Entity;
+import javax.persistence.FetchType;
 import javax.persistence.GeneratedValue;
 import javax.persistence.GenerationType;
 import javax.persistence.Id;
@@ -13,11 +15,9 @@ import javax.persistence.SequenceGenerator;
 import javax.persistence.Table;
 
 import lombok.Data;
-import lombok.EqualsAndHashCode;
 
 @Entity
 @Table(name="T_QUESTIONS")
-@EqualsAndHashCode(exclude="users")
 public @Data class QuestionModel {
 
 	@Id
@@ -29,9 +29,9 @@ public @Data class QuestionModel {
 	@Column(name = "QUERY")
 	private String query;
 	
-	@Column(name="DATE_ID")
+	@Column(name = "DATE_ID")
 	private String dateId;
 
-	@OneToMany(mappedBy="user") // field of @IdClass 
-	private Collection<UserModel> users = new LinkedHashSet<>();
+	@OneToMany(mappedBy="user", cascade = CascadeType.ALL, fetch = FetchType.EAGER) // field of @IdClass 
+	private Collection<AnswerModel> answers = new LinkedHashSet<>();
 }

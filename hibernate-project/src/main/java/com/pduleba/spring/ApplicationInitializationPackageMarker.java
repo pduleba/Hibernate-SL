@@ -1,5 +1,5 @@
 package com.pduleba.spring;
 
-public class ApplicationInitializationPackageMarker {
+public final class ApplicationInitializationPackageMarker {
 
 }

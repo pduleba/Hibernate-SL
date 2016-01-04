@@ -1,4 +1,4 @@
-package com.pduleba.hibernate;
+package com.pduleba.spring.services;
 
 import java.time.LocalTime;
 import java.time.format.DateTimeFormatter;
@@ -11,17 +11,29 @@ import org.apache.commons.lang3.tuple.Pair;
 import org.hibernate.Hibernate;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
+import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.stereotype.Component;
 
-import com.pduleba.hibernate.model.AnswerModel;
 import com.pduleba.hibernate.model.QuestionModel;
+import com.pduleba.hibernate.model.User2QuestionModel;
 import com.pduleba.hibernate.model.UserModel;
+import com.pduleba.spring.dao.QuestionDao;
+import com.pduleba.spring.dao.UserDao;
 
-class Worker {
+@Component
+class WorkerServiceImpl implements WorkerService {
 	
-	public static final Logger LOG = LoggerFactory.getLogger(Worker.class);
+	public static final Logger LOG = LoggerFactory.getLogger(WorkerServiceImpl.class);
 	private final static DateTimeFormatter FORMAT = DateTimeFormatter.ofPattern("HH:mm:ss");
 	
-	void showQuestions(Collection<QuestionModel> questions) {
+	@Autowired
+	private QuestionDao questionDao;
+	
+	@Autowired
+	private UserDao userDao;
+	
+	@Override
+	public void showQuestions(Collection<QuestionModel> questions) {
 		if (BooleanUtils.isFalse(Hibernate.isInitialized(questions))) {
 			LOG.info("Questions -> NOT INITIALIZED");
 		} else if (Objects.isNull(questions) || questions.isEmpty()) {
@@ -31,13 +43,14 @@ class Worker {
 			for (QuestionModel p : questions) {
 				LOG.info("#> question {} ", ++index);
 				displayQuestion(p);
-				showAnswers(p.getAnswers());
+				showAnswers(p.getUsers());
 				LOG.info("-----");
 			}
 		}
 	}
 
-	void showUsers(Collection<UserModel> users) {
+	@Override
+	public void showUsers(Collection<UserModel> users) {
 		if (BooleanUtils.isFalse(Hibernate.isInitialized(users))) {
 			LOG.info("Users -> NOT INITIALIZED");
 		} else if (Objects.isNull(users) || users.isEmpty()) {
@@ -47,20 +60,20 @@ class Worker {
 			for (UserModel o : users) {
 				LOG.info("#> user {} ", ++index);
 				displayUser(o);
-				showAnswers(o.getAnswers());
+				showAnswers(o.getQuestions());
 				LOG.info("-----");
 			}
 		}
 	}
 
-	private void showAnswers(Collection<AnswerModel> answers) {
+	private void showAnswers(Collection<User2QuestionModel> answers) {
 		if (BooleanUtils.isFalse(Hibernate.isInitialized(answers))) {
 			LOG.info("Answers -> NOT INITIALIZED");
 		} else if (Objects.isNull(answers) || answers.isEmpty()) {
 			LOG.info("Answers -> NOT FOUND");
 		} else {
 			int index = 0;
-			for (AnswerModel o : answers) {
+			for (User2QuestionModel o : answers) {
 				LOG.info("#>> answer {} :: accepted {} ", ++index, o.getAccepted());
 				displayUser(o.getUser());
 				displayQuestion(o.getQuestion());
@@ -111,6 +124,7 @@ class Worker {
 		return FORMAT.format(LocalTime.now());
 	}
 	
+	@Override
 	public Pair<Collection<QuestionModel>, Collection<UserModel>> getQuestionsAndUsers() {
 		String dateId = getDateId();
 		
@@ -119,19 +133,24 @@ class Worker {
 		QuestionModel when = getQuestion("When?", dateId);
 
 		UserModel u1 = getUser("what", "where", dateId);
+		UserModel u2 = getUser("what", "when", dateId);
+		UserModel u3 = getUser("where", "when", dateId);
+
+		Collection<QuestionModel> questions = Arrays.asList(where, what, when);
+		Collection<UserModel> users = Arrays.asList(u1, u2, u3);
+		
+		// @EmbeddedId requires keys to be saved
+		userDao.saveAll(users);
+		questionDao.saveAll(questions);
+		
 		u1.addQuestion(what, true);
 		u1.addQuestion(where, true);
 		
-		UserModel u2 = getUser("what", "when", dateId);
 		u2.addQuestion(what, false);
 		u2.addQuestion(when, true);
 
-		UserModel u3 = getUser("where", "when", dateId);
 		u3.addQuestion(where, false);
 		u3.addQuestion(when, false);
-		
-		Collection<QuestionModel> questions = Arrays.asList(where, what, when);
-		Collection<UserModel> users = Arrays.asList(u1, u2, u3);
 		
 		return Pair.of(questions, users);
 	}

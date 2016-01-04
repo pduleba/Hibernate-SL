@@ -24,7 +24,7 @@ public class UserDaoImpl extends HibernateDaoSupport implements UserDao {
 	@Override
 	public void saveAll(Collection<UserModel> users) {
 		for (UserModel user : users) {
-			getHibernateTemplate().save(user);
+			getHibernateTemplate().saveOrUpdate(user);
 		}
 	}
 

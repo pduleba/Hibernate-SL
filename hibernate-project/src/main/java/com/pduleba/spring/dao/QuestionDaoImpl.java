@@ -33,7 +33,7 @@ public class QuestionDaoImpl extends HibernateDaoSupport implements QuestionDao 
 	@Override
 	public void saveAll(Collection<QuestionModel> questions) {
 		for (QuestionModel question : questions) {
-			getHibernateTemplate().save(question);
+			getHibernateTemplate().saveOrUpdate(question);
 		}
 	}
 

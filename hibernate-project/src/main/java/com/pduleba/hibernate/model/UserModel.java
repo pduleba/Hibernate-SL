@@ -15,9 +15,11 @@ import javax.persistence.SequenceGenerator;
 import javax.persistence.Table;
 
 import lombok.Data;
+import lombok.EqualsAndHashCode;
 
 @Entity
 @Table(name = "T_USERS")
+@EqualsAndHashCode(exclude = "questions")
 public @Data class UserModel {
 
 	@Id
@@ -35,19 +37,17 @@ public @Data class UserModel {
 	@Column(name="DATE_ID")
 	private String dateId;
 
-	@OneToMany(mappedBy="question", cascade = CascadeType.ALL, fetch = FetchType.EAGER) // field of @IdClass 
-	private Collection<AnswerModel> answers = new LinkedHashSet<>();
+	@OneToMany(mappedBy="pk.user", cascade = CascadeType.ALL, fetch = FetchType.EAGER)
+	private Collection<User2QuestionModel> questions = new LinkedHashSet<>();
 
 	public void addQuestion(QuestionModel question, boolean accepted) {
-		AnswerModel answer = new AnswerModel();
+		User2QuestionModel u2q = new User2QuestionModel();
 		
-		answer.setQuestion(question);
-		answer.setQuestionId(question.getId());
-		answer.setUser(this);
-		answer.setUserId(this.getId());
-		answer.setAccepted(accepted);
+		u2q.setUser(this);
+		u2q.setQuestion(question);
 		
-		this.answers.add(answer);
-		question.getAnswers().add(answer);
+		question.getUsers().add(u2q);
+		questions.add(u2q);
 	}
+
 }

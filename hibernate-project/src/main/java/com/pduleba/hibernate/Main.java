@@ -36,7 +36,7 @@ public class Main {
 			LOG.info("Starting...");
 	
 			LOG.info("######## PRODUCT CRUDS ######## ");
-//			executeQuestionsCRUD();
+			executeQuestionsCRUD();
 			LOG.info("######## ORDER CRUDS ######## ");
 			executeUsersCRUD();
 		}

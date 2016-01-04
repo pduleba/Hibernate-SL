@@ -1,4 +1,4 @@
-package com.pduleba.hibernate;
+package com.pduleba.spring.services;
 
 import java.time.LocalTime;
 import java.time.format.DateTimeFormatter;
@@ -11,17 +11,32 @@ import org.apache.commons.lang3.tuple.Pair;
 import org.hibernate.Hibernate;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
+import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.stereotype.Component;
 
 import com.pduleba.hibernate.model.AnswerModel;
 import com.pduleba.hibernate.model.QuestionModel;
 import com.pduleba.hibernate.model.UserModel;
+import com.pduleba.spring.dao.QuestionDao;
+import com.pduleba.spring.dao.UserDao;
 
-class Worker {
+@Component
+class WorkerServiceImpl implements WorkerService {
 	
-	public static final Logger LOG = LoggerFactory.getLogger(Worker.class);
+	public static final Logger LOG = LoggerFactory.getLogger(WorkerServiceImpl.class);
 	private final static DateTimeFormatter FORMAT = DateTimeFormatter.ofPattern("HH:mm:ss");
 	
-	void showQuestions(Collection<QuestionModel> questions) {
+	@Autowired
+	private QuestionDao questionDao;
+	
+	@Autowired
+	private UserDao userDao;
+	
+	/* (non-Javadoc)
+	 * @see com.pduleba.spring.services.WorkerService#showQuestions(java.util.Collection)
+	 */
+	@Override
+	public void showQuestions(Collection<QuestionModel> questions) {
 		if (BooleanUtils.isFalse(Hibernate.isInitialized(questions))) {
 			LOG.info("Questions -> NOT INITIALIZED");
 		} else if (Objects.isNull(questions) || questions.isEmpty()) {
@@ -37,7 +52,11 @@ class Worker {
 		}
 	}
 
-	void showUsers(Collection<UserModel> users) {
+	/* (non-Javadoc)
+	 * @see com.pduleba.spring.services.WorkerService#showUsers(java.util.Collection)
+	 */
+	@Override
+	public void showUsers(Collection<UserModel> users) {
 		if (BooleanUtils.isFalse(Hibernate.isInitialized(users))) {
 			LOG.info("Users -> NOT INITIALIZED");
 		} else if (Objects.isNull(users) || users.isEmpty()) {
@@ -111,6 +130,10 @@ class Worker {
 		return FORMAT.format(LocalTime.now());
 	}
 	
+	/* (non-Javadoc)
+	 * @see com.pduleba.spring.services.WorkerService#getQuestionsAndUsers()
+	 */
+	@Override
 	public Pair<Collection<QuestionModel>, Collection<UserModel>> getQuestionsAndUsers() {
 		String dateId = getDateId();
 		
@@ -119,19 +142,26 @@ class Worker {
 		QuestionModel when = getQuestion("When?", dateId);
 
 		UserModel u1 = getUser("what", "where", dateId);
-		u1.addQuestion(what, true);
-		u1.addQuestion(where, true);
-		
 		UserModel u2 = getUser("what", "when", dateId);
-		u2.addQuestion(what, false);
-		u2.addQuestion(when, true);
-
 		UserModel u3 = getUser("where", "when", dateId);
-		u3.addQuestion(where, false);
-		u3.addQuestion(when, false);
 		
 		Collection<QuestionModel> questions = Arrays.asList(where, what, when);
 		Collection<UserModel> users = Arrays.asList(u1, u2, u3);
+
+		// ------------------------------------------------------------------
+		// WARNING : entities of @ManyToMany have to be saved !!!
+		// ------------------------------------------------------------------
+		userDao.saveAll(users);
+		questionDao.saveAll(questions);
+
+		u1.addQuestion(what, true);
+		u1.addQuestion(where, true);
+		
+		u2.addQuestion(what, false);
+		u2.addQuestion(when, true);
+
+		u3.addQuestion(where, false);
+		u3.addQuestion(when, false);
 		
 		return Pair.of(questions, users);
 	}

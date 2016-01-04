@@ -12,13 +12,14 @@ import com.pduleba.configuration.SpringConfiguration;
 import com.pduleba.hibernate.model.QuestionModel;
 import com.pduleba.hibernate.model.UserModel;
 import com.pduleba.spring.controller.SpringController;
+import com.pduleba.spring.services.WorkerService;
 
 public class Main {
 
 	public static final Logger LOG = LoggerFactory.getLogger(Main.class);
 	
 	private SpringController controller;
-	private Worker worker = new Worker();
+	private WorkerService worker;
 
 	public static void main(String[] args) {
 		new Main().run();
@@ -30,6 +31,7 @@ public class Main {
 	private void run() {
 		try (ConfigurableApplicationContext ctx = new AnnotationConfigApplicationContext(SpringConfiguration.class)) {
 			this.controller = ctx.getBean(SpringController.class);
+			this.worker = ctx.getBean(WorkerService.class);
 			
 			LOG.info("Starting...");
 	

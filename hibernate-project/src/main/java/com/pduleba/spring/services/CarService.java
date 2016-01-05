@@ -1,14 +1,16 @@
-package com.pduleba.spring.controller;
+package com.pduleba.spring.services;
 
 import java.util.Collection;
 import java.util.List;
 
 import com.pduleba.hibernate.model.CarModel;
 
-public interface SpringController {
+public interface CarService {
 
 	void saveCars(Collection<CarModel> cars);
+
 	List<CarModel> getAllCars();
-	void removeCars(List<CarModel> cars);
+
+	void removeAll(List<CarModel> cars);
 
 }

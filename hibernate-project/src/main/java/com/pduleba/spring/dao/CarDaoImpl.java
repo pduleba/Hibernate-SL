@@ -10,32 +10,32 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.orm.hibernate5.support.HibernateDaoSupport;
 import org.springframework.stereotype.Repository;
 
-import com.pduleba.hibernate.model.UserModel;
+import com.pduleba.hibernate.model.CarModel;
 
 @Repository
 @Transactional
-public class UserDaoImpl extends HibernateDaoSupport implements UserDao {
+public class CarDaoImpl extends HibernateDaoSupport implements CarDao {
 	
 	@Autowired
-	public UserDaoImpl(SessionFactory sessionFactory) {
+	public CarDaoImpl(SessionFactory sessionFactory) {
 		setSessionFactory(sessionFactory);
 	}
 
 	@Override
-	public void saveAll(Collection<UserModel> users) {
-		for (UserModel user : users) {
-			getHibernateTemplate().saveOrUpdate(user);
+	public void saveAll(Collection<CarModel> cars) {
+		for (CarModel car : cars) {
+			getHibernateTemplate().saveOrUpdate(car);
 		}
 	}
 
 	@Override
-	public List<UserModel> getAllUsers() {
-		return getHibernateTemplate().loadAll(UserModel.class);
+	public List<CarModel> getAllCars() {
+		return getHibernateTemplate().loadAll(CarModel.class);
 	}
 
 	@Override
-	public void removeAll(List<UserModel> users) {
-		getHibernateTemplate().deleteAll(users);
+	public void removeAll(List<CarModel> cars) {
+		getHibernateTemplate().deleteAll(cars);
 	}
 
 }

@@ -9,8 +9,7 @@ import org.springframework.context.ConfigurableApplicationContext;
 import org.springframework.context.annotation.AnnotationConfigApplicationContext;
 
 import com.pduleba.configuration.SpringConfiguration;
-import com.pduleba.hibernate.model.QuestionModel;
-import com.pduleba.hibernate.model.UserModel;
+import com.pduleba.hibernate.model.CarModel;
 import com.pduleba.spring.controller.SpringController;
 import com.pduleba.spring.services.WorkerService;
 
@@ -35,69 +34,38 @@ public class Main {
 			
 			LOG.info("Starting...");
 	
-			LOG.info("######## PRODUCT CRUDS ######## ");
-			executeQuestionsCRUD();
-			LOG.info("######## ORDER CRUDS ######## ");
-			executeUsersCRUD();
+			LOG.info("######## CRUDS ######## ");
+			executeCarsCRUD();
 		}
 	}
 
-	private void executeQuestionsCRUD() {
-		saveQuestions();
+	private void executeCarsCRUD() {
+		saveCars();
 		LOG.info(" ----- CREATE complete ----- ");
-		List<QuestionModel> allQuestions = getAllQuestions();
+		List<CarModel> allCars = getAllCars();
 		LOG.info(" ----- READ complete ----- ");
-		removeAllQuestions(allQuestions);
+		removeAllCars(allCars);
 		LOG.info(" ----- DELETE complete ----- ");
-		getAllQuestions();
+		getAllCars();
 		LOG.info(" ----- READ complete ----- ");
 
 		LOG.info("Complete");
 	}
 
-	private void executeUsersCRUD() {
-		saveUsers();
-		LOG.info(" ----- CREATE complete ----- ");
-		List<UserModel> allUsers = getAllUsers();
-		LOG.info(" ----- READ complete ----- ");
-		removeAllUsers(allUsers);
-		LOG.info(" ----- DELETE complete ----- ");
-		getAllUsers();
-		LOG.info(" ----- READ complete ----- ");
-
-		LOG.info("Complete");
+	private void removeAllCars(List<CarModel> cars) {
+		this.controller.removeCars(cars);
 	}
 
-	private void removeAllQuestions(List<QuestionModel> questions) {
-		this.controller.removeQuestions(questions);
+	private List<CarModel> getAllCars() {
+		List<CarModel> cars = this.controller.getAllCars();
+		worker.showCars(cars);
+
+		return cars;
 	}
 
-	private void removeAllUsers(List<UserModel> users) {
-		this.controller.removeUsers(users);
-	}
-
-	private List<QuestionModel> getAllQuestions() {
-		List<QuestionModel> allQuestions = this.controller.getAllQuestions();
-		worker.showQuestions(allQuestions);
-
-		return allQuestions;
-	}
-
-	private List<UserModel> getAllUsers() {
-		List<UserModel> allUsers = this.controller.getAllUsers();
-		worker.showUsers(allUsers);
-
-		return allUsers;
-	}
-
-	private void saveQuestions() {
-		Collection<QuestionModel> questions = worker.getQuestionsAndUsers().getLeft();
-		this.controller.saveQuestions(questions);
-	}
-
-	private void saveUsers() {
-		Collection<UserModel> users = worker.getQuestionsAndUsers().getRight();
-		this.controller.saveUsers(users);
+	private void saveCars() {
+		Collection<CarModel> cars = worker.getCars();
+		this.controller.saveCars(cars);
 	}
 
 }

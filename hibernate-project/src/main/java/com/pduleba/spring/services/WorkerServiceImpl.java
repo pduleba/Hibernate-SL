@@ -43,9 +43,9 @@ class WorkerServiceImpl implements WorkerService {
 	public Collection<CarModel> getCars() {
 		String dateId = getDateId();
 
-		CarModel c1 = new CarModel("audi", "black", "2.0", "sedan", dateId);
-		CarModel c2 = new CarModel("fiat", "red", "1.1", "combi", dateId);
-		CarModel c3 = new CarModel("seat", "blue", "1.9", "coupe", dateId);
+		CarModel c1 = new CarModel("audi", dateId);
+		CarModel c2 = new CarModel("fiat", dateId);
+		CarModel c3 = new CarModel("seat", dateId);
 
 		return Arrays.asList(c1, c2, c3);
 	}

@@ -1,4 +1,4 @@
-activeProfiles=mysql
+activeProfiles=oracle, pduleba, oracle
 eclipse.preferences.version=1
 resolveWorkspaceProjects=true
 version=1

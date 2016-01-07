@@ -27,7 +27,7 @@ import com.pduleba.spring.ApplicationInitializationPackageMarker;
 
 @Configuration
 @ComponentScan(basePackageClasses=ApplicationInitializationPackageMarker.class)
-@PropertySource({"classpath:/config/application.properties", "classpath:/connection.properties"})
+@PropertySource("classpath:/config/application.properties")
 @EnableTransactionManagement
 public class SpringConfiguration implements ApplicationPropertiesConfiguration {
 

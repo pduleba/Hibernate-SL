@@ -24,7 +24,7 @@ public @Data class CarModel {
 
 	@Id
 	@Column(name = "ID")
-	@GeneratedValue(generator = "car-table-generator", strategy = GenerationType.SEQUENCE)
+	@GeneratedValue(generator = "car-table-generator", strategy = GenerationType.TABLE)
 	@TableGenerator(name = "car-table-generator", table = "T_ID_GENERATOR", pkColumnName = "ID_GENERATOR", 
 		pkColumnValue = "T_CAR_GENERATOR", valueColumnName = "COUNT", allocationSize = 1, initialValue = 1)
 	private Long id;

@@ -5,8 +5,9 @@ import javax.persistence.Entity;
 import javax.persistence.GeneratedValue;
 import javax.persistence.GenerationType;
 import javax.persistence.Id;
-import javax.persistence.SequenceGenerator;
+import javax.persistence.Index;
 import javax.persistence.Table;
+import javax.persistence.TableGenerator;
 
 import lombok.Data;
 import lombok.NoArgsConstructor;
@@ -24,13 +25,15 @@ public @Data class CarModel {
 
 	@Id
 	@Column(name = "ID")
-	@GeneratedValue(generator = "car-sequence-generator", strategy = GenerationType.SEQUENCE)
-	@SequenceGenerator(name = "car-sequence-generator", sequenceName = "CAR_SEQ", initialValue = 1, allocationSize = 1)
+	@GeneratedValue(generator = "car-table-generator", strategy = GenerationType.SEQUENCE)
+	@TableGenerator(name = "car-table-generator", table = "T_ID_GENERATOR", pkColumnName = "ID_GENERATOR", 
+		pkColumnValue = "T_CAR_GENERATOR", valueColumnName = "COUNT", allocationSize = 1, initialValue = 1,
+		indexes = {@Index(columnList = "ID_GENERATOR")})
 	private Long id;
-	
+
 	@Column(name = "NAME")
 	private String name;
-	
+
 	@Column(name = "DATE_ID")
 	private String dateId;
 

@@ -6,7 +6,6 @@ import javax.persistence.GeneratedValue;
 import javax.persistence.GenerationType;
 import javax.persistence.Id;
 import javax.persistence.Table;
-import javax.persistence.TableGenerator;
 
 import lombok.Data;
 import lombok.NoArgsConstructor;
@@ -24,9 +23,7 @@ public @Data class CarModel {
 
 	@Id
 	@Column(name = "ID")
-	@GeneratedValue(generator = "car-table-generator", strategy = GenerationType.SEQUENCE)
-	@TableGenerator(name = "car-table-generator", table = "T_ID_GENERATOR", pkColumnName = "ID_GENERATOR", 
-		pkColumnValue = "T_CAR_GENERATOR", valueColumnName = "COUNT", allocationSize = 1, initialValue = 1)
+	@GeneratedValue(strategy = GenerationType.IDENTITY)
 	private Long id;
 
 	@Column(name = "NAME")

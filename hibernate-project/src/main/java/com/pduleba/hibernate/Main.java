@@ -7,6 +7,7 @@ import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.context.ConfigurableApplicationContext;
 import org.springframework.context.annotation.AnnotationConfigApplicationContext;
+import org.springframework.core.io.ClassPathResource;
 
 import com.pduleba.configuration.SpringConfiguration;
 import com.pduleba.hibernate.model.CarModel;
@@ -28,6 +29,9 @@ public class Main {
 	}
 
 	private void run() {
+		ClassPathResource log4jResource = new ClassPathResource("classpath:/config/log4j.properties");
+		System.setProperty("log4j.configurationFile", log4jResource.getPath());
+		
 		try (ConfigurableApplicationContext ctx = new AnnotationConfigApplicationContext(SpringConfiguration.class)) {
 			this.controller = ctx.getBean(SpringController.class);
 			this.worker = ctx.getBean(WorkerService.class);

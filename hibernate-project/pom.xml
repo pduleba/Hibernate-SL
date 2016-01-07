@@ -45,6 +45,16 @@
 	</properties>
 
 	<build>
+		<resources>
+			<resource>
+				<directory>${basedir}/src/main/resources</directory>
+				<excludes>
+					<exclude>config/*</exclude>
+					<exclude>dev/*</exclude>
+				</excludes>
+			</resource>
+		</resources>
+
 		<plugins>
 			<plugin>
 				<groupId>org.apache.maven.plugins</groupId>
@@ -57,6 +67,37 @@
 			</plugin>
 		</plugins>
 	</build>
+
+	<profiles>
+		<profile>
+			<id>oracle</id>
+			<build>
+				<resources>
+					<resource>
+						<directory>${basedir}/src/main/resources/config/oracle</directory>
+						<targetPath>${basedir}/src/main/resources/config</targetPath>
+						<includes>
+							<include>*.properties</include>
+						</includes>
+					</resource>
+				</resources>
+			</build>
+		</profile>
+		<profile>
+			<id>mysql</id>
+			<build>
+				<resources>
+					<resource>
+						<directory>${basedir}/src/main/resources/config/mysql</directory>
+						<targetPath>${basedir}/src/main/resources/config</targetPath>
+						<includes>
+							<include>*.properties</include>
+						</includes>
+					</resource>
+				</resources>
+			</build>
+		</profile>
+	</profiles>
 
 	<dependencies>
 		<!-- Oracle Driver -->

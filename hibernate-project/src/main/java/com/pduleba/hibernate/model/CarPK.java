@@ -8,7 +8,7 @@ public @Data class CarPK implements Serializable {
 
 	private static final long serialVersionUID = -8942935027275183098L;
 
-	private long id;
+	private Long id;
 	
 	private String name;
 }

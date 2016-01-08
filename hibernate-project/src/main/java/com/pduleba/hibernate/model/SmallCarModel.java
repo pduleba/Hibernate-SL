@@ -13,7 +13,7 @@ import lombok.ToString;
 @NoArgsConstructor
 public class SmallCarModel extends AbstractCarModel {
 
-	public SmallCarModel(String name, String dateId, String partName) {
+	public SmallCarModel(String name, String partName, String dateId) {
 		super(name, dateId);
 		this.partName = partName;
 	}

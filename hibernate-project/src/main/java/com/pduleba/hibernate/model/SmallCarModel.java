@@ -1,7 +1,6 @@
 package com.pduleba.hibernate.model;
 
 import javax.persistence.Column;
-import javax.persistence.DiscriminatorValue;
 import javax.persistence.Entity;
 import javax.persistence.Table;
 
@@ -10,7 +9,6 @@ import lombok.ToString;
 
 @Entity
 @Table(name = "T_SMALL_CAR")									// <- required for this strategy kind 
-@DiscriminatorValue(value = "SmallCarModel")					// <- Discriminator Value
 @ToString(callSuper = true)
 @NoArgsConstructor
 public class SmallCarModel extends AbstractCarModel {

@@ -1,9 +1,6 @@
 package com.pduleba.hibernate.model;
 
-import static javax.persistence.DiscriminatorType.STRING;
-
 import javax.persistence.Column;
-import javax.persistence.DiscriminatorColumn;
 import javax.persistence.Entity;
 import javax.persistence.GeneratedValue;
 import javax.persistence.GenerationType;
@@ -13,17 +10,13 @@ import javax.persistence.InheritanceType;
 import javax.persistence.SequenceGenerator;
 import javax.persistence.Table;
 
-import org.hibernate.annotations.DiscriminatorOptions;
-
 import lombok.Data;
 import lombok.NoArgsConstructor;
 
 @Entity
 @Table(name = "T_CAR")
 @NoArgsConstructor
-@Inheritance(strategy = InheritanceType.JOINED)														// Inheritance strategy type definition
-@DiscriminatorColumn(discriminatorType = STRING, name = "CLASS_NAME_DISCRIMINATOR", length = 100) 	// Inheritance discriminator column definition
-@DiscriminatorOptions(force = true)																	// Force discriminator value definition on sub-classess
+@Inheritance(strategy = InheritanceType.TABLE_PER_CLASS)											// Inheritance strategy type definition
 public @Data abstract class AbstractCarModel implements CarModel {
 
 	public AbstractCarModel(String name, String dateId) {

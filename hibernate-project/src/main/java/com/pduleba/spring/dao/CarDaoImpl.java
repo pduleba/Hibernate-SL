@@ -10,7 +10,7 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.orm.hibernate5.support.HibernateDaoSupport;
 import org.springframework.stereotype.Repository;
 
-import com.pduleba.hibernate.model.CarModel;
+import com.pduleba.hibernate.model.AbstractCarModel;
 
 @Repository
 @Transactional
@@ -22,19 +22,19 @@ public class CarDaoImpl extends HibernateDaoSupport implements CarDao {
 	}
 
 	@Override
-	public void saveAll(Collection<CarModel> cars) {
-		for (CarModel car : cars) {
+	public void saveAll(Collection<AbstractCarModel> cars) {
+		for (AbstractCarModel car : cars) {
 			getHibernateTemplate().saveOrUpdate(car);
 		}
 	}
 
 	@Override
-	public List<CarModel> getAllCars() {
-		return getHibernateTemplate().loadAll(CarModel.class);
+	public List<AbstractCarModel> getAllCars() {
+		return getHibernateTemplate().loadAll(AbstractCarModel.class);
 	}
 
 	@Override
-	public void removeAll(List<CarModel> cars) {
+	public void removeAll(List<AbstractCarModel> cars) {
 		getHibernateTemplate().deleteAll(cars);
 	}
 

@@ -12,7 +12,11 @@ import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.stereotype.Component;
 
+import com.pduleba.hibernate.model.AbstractCarModel;
 import com.pduleba.hibernate.model.CarModel;
+import com.pduleba.hibernate.model.LargeCarModel;
+import com.pduleba.hibernate.model.SmallCarModel;
+import com.pduleba.hibernate.model.SportCarModel;
 
 @Component
 class WorkerServiceImpl implements WorkerService {
@@ -21,7 +25,7 @@ class WorkerServiceImpl implements WorkerService {
 	private final static DateTimeFormatter FORMAT = DateTimeFormatter.ofPattern("HH:mm:ss");
 
 	@Override
-	public void showCars(Collection<CarModel> cars) {
+	public void showCars(Collection<AbstractCarModel> cars) {
 		if (BooleanUtils.isFalse(Hibernate.isInitialized(cars))) {
 			LOG.info("Cars -> NOT INITIALIZED");
 		} else if (Objects.isNull(cars) || cars.isEmpty()) {
@@ -40,12 +44,12 @@ class WorkerServiceImpl implements WorkerService {
 	}
 	
 	@Override
-	public Collection<CarModel> getCars() {
+	public Collection<AbstractCarModel> getCars() {
 		String dateId = getDateId();
 
-		CarModel c1 = new CarModel("audi", dateId);
-		CarModel c2 = new CarModel("fiat", dateId);
-		CarModel c3 = new CarModel("seat", dateId);
+		AbstractCarModel c1 = new SportCarModel("Porshe", dateId);
+		AbstractCarModel c2 = new SmallCarModel("G-Wiz", "wheel", dateId);
+		AbstractCarModel c3 = new LargeCarModel("Autosan", 10L, 20L, dateId);
 
 		return Arrays.asList(c1, c2, c3);
 	}

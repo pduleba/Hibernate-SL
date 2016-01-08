@@ -3,14 +3,14 @@ package com.pduleba.spring.services;
 import java.util.Collection;
 import java.util.List;
 
-import com.pduleba.hibernate.model.CarModel;
+import com.pduleba.hibernate.model.AbstractCarModel;
 
 public interface CarService {
 
-	void saveCars(Collection<CarModel> cars);
+	void saveCars(Collection<AbstractCarModel> cars);
 
-	List<CarModel> getAllCars();
+	List<AbstractCarModel> getAllCars();
 
-	void removeAll(List<CarModel> cars);
+	void removeAll(List<AbstractCarModel> cars);
 
 }

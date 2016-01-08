@@ -2,12 +2,12 @@ package com.pduleba.spring.services;
 
 import java.util.Collection;
 
-import com.pduleba.hibernate.model.CarModel;
+import com.pduleba.hibernate.model.AbstractCarModel;
 
 public interface WorkerService {
 
-	void showCars(Collection<CarModel> Cars);
+	void showCars(Collection<AbstractCarModel> Cars);
 
-	Collection<CarModel> getCars();
+	Collection<AbstractCarModel> getCars();
 
 }

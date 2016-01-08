@@ -19,9 +19,9 @@ import lombok.Data;
 import lombok.NoArgsConstructor;
 
 @Entity
-@Table(name = "T_CAR_SINGLE_TABLE_STRATEGY")
+@Table(name = "T_CAR")
 @NoArgsConstructor
-@Inheritance(strategy = InheritanceType.SINGLE_TABLE)												// Inheritance strategy type definition
+@Inheritance(strategy = InheritanceType.JOINED)														// Inheritance strategy type definition
 @DiscriminatorColumn(discriminatorType = STRING, name = "CLASS_NAME_DISCRIMINATOR", length = 100) 	// Inheritance discriminator column definition
 @DiscriminatorOptions(force = true)																	// Force discriminator value definition on sub-classess
 public @Data abstract class AbstractCarModel implements CarModel {

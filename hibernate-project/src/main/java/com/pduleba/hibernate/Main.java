@@ -1,8 +1,12 @@
 package com.pduleba.hibernate;
 
+import java.io.IOException;
+import java.security.InvalidParameterException;
+import java.text.MessageFormat;
 import java.util.Collection;
 import java.util.List;
 
+import org.apache.log4j.PropertyConfigurator;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.context.ConfigurableApplicationContext;
@@ -29,8 +33,7 @@ public class Main {
 	}
 
 	private void run() {
-		ClassPathResource log4jResource = new ClassPathResource("classpath:/config/log4j.properties");
-		System.setProperty("log4j.configurationFile", log4jResource.getPath());
+		configureLogger();
 		
 		try (ConfigurableApplicationContext ctx = new AnnotationConfigApplicationContext(SpringConfiguration.class)) {
 			this.controller = ctx.getBean(SpringController.class);
@@ -40,6 +43,16 @@ public class Main {
 	
 			LOG.info("######## CRUDS ######## ");
 			executeCarsCRUD();
+		}
+	}
+	
+	private void configureLogger() {
+		final String LOG4J_CLASSPATH_LOCATION = "/config/log4j.properties";
+		ClassPathResource log4jResource = new ClassPathResource(LOG4J_CLASSPATH_LOCATION);
+		try {
+			PropertyConfigurator.configure(log4jResource.getURL());
+		} catch (IOException e) {
+			throw new InvalidParameterException(MessageFormat.format("Argument ''{0}'' not found!", LOG4J_CLASSPATH_LOCATION));
 		}
 	}
 

@@ -30,7 +30,10 @@
 		<hibernate.validator.version>5.2.2.Final</hibernate.validator.version>
 		<hibernate.version>5.0.4.Final</hibernate.version>
 		<javax.transaction-api.version>1.2</javax.transaction-api.version>
+		<!-- profile specific -->
 		<oracle.driver.version>11.2.0.4</oracle.driver.version>
+		<mysql.driver.version>5.1.38</mysql.driver.version>
+		
 		<!-- Business Layer -->
 		<el-api.version>3.0.0</el-api.version>
 		<javax.inject.version>1</javax.inject.version>
@@ -44,6 +47,7 @@
 
 		<!-- Maven dependencies -->
 		<maven-compiler-plugin.version>3.3</maven-compiler-plugin.version>
+		<properties-maven-plugin.version>1.0.0</properties-maven-plugin.version>
 	</properties>
 
 	<build>
@@ -52,7 +56,7 @@
 				<plugin>
 					<groupId>org.codehaus.mojo</groupId>
 					<artifactId>properties-maven-plugin</artifactId>
-					<version>1.0.0</version>
+					<version>${properties-maven-plugin.version}</version>
 					<executions>
 						<execution>
 							<id>read-properties</id>
@@ -71,28 +75,22 @@
 			</plugins>
 		</pluginManagement>
 
-		<!-- <resources>
+		<!-- <resources> <resource> <directory>${basedir}/src/main/resources</directory> 
+			<excludes> <exclude>config/*</exclude> <exclude>dev/*</exclude> </excludes> 
+			</resource> </resources> -->
+
+		<resources>
 			<resource>
-				<directory>${basedir}/src/main/resources</directory>
+				<directory>${resource.directory}</directory>
+				<filtering>true</filtering>
+				<includes>
+					<include>**/config/*.*</include>
+				</includes>
 				<excludes>
-					<exclude>config/*</exclude>
-					<exclude>dev/*</exclude>
+					<exclude>**/config/database/*</exclude>
 				</excludes>
 			</resource>
-		</resources> -->
-		
-		<resources>
-            <resource>
-                <directory>${resource.directory}</directory>
-                <filtering>true</filtering>
-                <includes>
-                	<include>**/config/*.*</include>
-                </includes>
-                <excludes>
-                	<exclude>**/config/database/*</exclude>
-                </excludes>
-            </resource>
-        </resources>
+		</resources>
 
 		<plugins>
 			<plugin>
@@ -121,6 +119,13 @@
 					</plugin>
 				</plugins>
 			</build>
+			<dependencies>
+				<dependency>
+					<groupId>com.oracle</groupId>
+					<artifactId>ojdbc6</artifactId>
+					<version>${oracle.driver.version}</version>
+				</dependency>
+			</dependencies>
 		</profile>
 		<profile>
 			<id>mysql</id>
@@ -128,27 +133,24 @@
 				<active.profile>mysql</active.profile>
 			</properties>
 			<build>
-				<resources>
-					<resource>
-						<directory>${basedir}/src/main/resources/config/${profile.name}</directory>
-						<targetPath>${basedir}/src/main/resources/config</targetPath>
-						<includes>
-							<include>*.properties</include>
-						</includes>
-					</resource>
-				</resources>
+				<plugins>
+					<plugin>
+						<groupId>org.codehaus.mojo</groupId>
+						<artifactId>properties-maven-plugin</artifactId>
+					</plugin>
+				</plugins>
 			</build>
+			<dependencies>
+				<dependency>
+					<groupId>mysql</groupId>
+					<artifactId>mysql-connector-java</artifactId>
+					<version>${mysql.driver.version}</version>
+				</dependency>
+			</dependencies>
 		</profile>
 	</profiles>
 
 	<dependencies>
-		<!-- Oracle Driver -->
-		<dependency>
-			<groupId>com.oracle</groupId>
-			<artifactId>ojdbc6</artifactId>
-			<version>${oracle.driver.version}</version>
-		</dependency>
-
 		<!-- Hibernate -->
 		<dependency>
 			<groupId>org.hibernate</groupId>

@@ -14,7 +14,6 @@ import org.springframework.stereotype.Component;
 
 import com.pduleba.hibernate.model.CarModel;
 import com.pduleba.hibernate.model.EngineModel;
-import com.pduleba.hibernate.model.LocationModel;
 
 @Component
 class WorkerServiceImpl implements WorkerService {
@@ -46,8 +45,7 @@ class WorkerServiceImpl implements WorkerService {
 		String dateId = getDateId();
 
 		EngineModel e = new EngineModel("gasoline", 1);
-		LocationModel l = new LocationModel(90, 90);
-		CarModel c = new CarModel("Audi", e, l, dateId);
+		CarModel c = new CarModel("Audi", e, dateId);
 
 		return Arrays.asList(c);
 	}

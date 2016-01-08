@@ -12,10 +12,10 @@ import lombok.NoArgsConstructor;
 @AllArgsConstructor
 public @Data class EngineModel {
 
-	@Column(name = "ENGINE_TYPE")
+	@Column(name = "TYPE")
 	private String type;
 	
-	@Column(name = "ENGINE_SIZE")
+	@Column(name = "SIZE")
 	private Integer size;
 
 }

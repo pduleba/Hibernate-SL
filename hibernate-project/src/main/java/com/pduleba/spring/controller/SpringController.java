@@ -3,12 +3,12 @@ package com.pduleba.spring.controller;
 import java.util.Collection;
 import java.util.List;
 
-import com.pduleba.hibernate.model.AbstractCarModel;
+import com.pduleba.hibernate.model.CarModel;
 
 public interface SpringController {
 
-	void saveCars(Collection<AbstractCarModel> cars);
-	List<AbstractCarModel> getAllCars();
-	void removeCars(List<AbstractCarModel> cars);
+	void saveCars(Collection<CarModel> cars);
+	List<CarModel> getAllCars();
+	void removeCars(List<CarModel> cars);
 
 }

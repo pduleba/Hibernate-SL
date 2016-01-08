@@ -3,13 +3,13 @@ package com.pduleba.spring.dao;
 import java.util.Collection;
 import java.util.List;
 
-import com.pduleba.hibernate.model.AbstractCarModel;
+import com.pduleba.hibernate.model.CarModel;
 
 public interface CarDao {
 
-	List<AbstractCarModel> getAllCars();
+	List<CarModel> getAllCars();
 
-	void saveAll(Collection<AbstractCarModel> cars);
+	void saveAll(Collection<CarModel> cars);
 
-	void removeAll(List<AbstractCarModel> cars);
+	void removeAll(List<CarModel> cars);
 }

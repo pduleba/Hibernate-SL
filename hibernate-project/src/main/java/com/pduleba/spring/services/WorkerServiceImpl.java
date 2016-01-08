@@ -12,10 +12,9 @@ import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.stereotype.Component;
 
-import com.pduleba.hibernate.model.AbstractCarModel;
-import com.pduleba.hibernate.model.LargeCarModel;
-import com.pduleba.hibernate.model.SmallCarModel;
-import com.pduleba.hibernate.model.SportCarModel;
+import com.pduleba.hibernate.model.CarModel;
+import com.pduleba.hibernate.model.EngineModel;
+import com.pduleba.hibernate.model.LocationModel;
 
 @Component
 class WorkerServiceImpl implements WorkerService {
@@ -24,14 +23,14 @@ class WorkerServiceImpl implements WorkerService {
 	private final static DateTimeFormatter FORMAT = DateTimeFormatter.ofPattern("HH:mm:ss");
 
 	@Override
-	public void showCars(Collection<AbstractCarModel> cars) {
+	public void showCars(Collection<CarModel> cars) {
 		if (BooleanUtils.isFalse(Hibernate.isInitialized(cars))) {
 			LOG.info("Cars -> NOT INITIALIZED");
 		} else if (Objects.isNull(cars) || cars.isEmpty()) {
 			LOG.info("Cars -> NOT FOUND");
 		} else {
 			int index = 0;
-			for (AbstractCarModel car : cars) {
+			for (CarModel car : cars) {
 				LOG.info("#> car {} :: {}", ++index, car);
 			}
 			LOG.info("-----");
@@ -43,13 +42,13 @@ class WorkerServiceImpl implements WorkerService {
 	}
 	
 	@Override
-	public Collection<AbstractCarModel> getCars() {
+	public Collection<CarModel> getCars() {
 		String dateId = getDateId();
 
-		AbstractCarModel c1 = new SportCarModel("Porshe", dateId);
-		AbstractCarModel c2 = new SmallCarModel("G-Wiz", "wheel", dateId);
-		AbstractCarModel c3 = new LargeCarModel("Autosan", 10L, 20L, dateId);
+		EngineModel e = new EngineModel("gasoline", 1);
+		LocationModel l = new LocationModel(90, 90);
+		CarModel c = new CarModel("Audi", e, l, dateId);
 
-		return Arrays.asList(c1, c2, c3);
+		return Arrays.asList(c);
 	}
 }

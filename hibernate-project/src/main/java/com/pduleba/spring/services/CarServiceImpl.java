@@ -6,7 +6,7 @@ import java.util.List;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
-import com.pduleba.hibernate.model.AbstractCarModel;
+import com.pduleba.hibernate.model.CarModel;
 import com.pduleba.spring.dao.CarDao;
 
 @Service
@@ -16,17 +16,17 @@ public class CarServiceImpl implements CarService {
 	private CarDao carDao;
 
 	@Override
-	public void saveCars(Collection<AbstractCarModel> cars) {
+	public void saveCars(Collection<CarModel> cars) {
 		carDao.saveAll(cars);
 	}
 
 	@Override
-	public List<AbstractCarModel> getAllCars() {
+	public List<CarModel> getAllCars() {
 		return carDao.getAllCars();
 	}
 
 	@Override
-	public void removeAll(List<AbstractCarModel> cars) {
+	public void removeAll(List<CarModel> cars) {
 		carDao.removeAll(cars);
 	}
 	

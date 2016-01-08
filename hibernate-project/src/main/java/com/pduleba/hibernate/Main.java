@@ -14,7 +14,7 @@ import org.springframework.context.annotation.AnnotationConfigApplicationContext
 import org.springframework.core.io.ClassPathResource;
 
 import com.pduleba.configuration.SpringConfiguration;
-import com.pduleba.hibernate.model.AbstractCarModel;
+import com.pduleba.hibernate.model.CarModel;
 import com.pduleba.spring.controller.SpringController;
 import com.pduleba.spring.services.WorkerService;
 
@@ -59,7 +59,7 @@ public class Main {
 	private void executeCarsCRUD() {
 		saveCars();
 		LOG.info(" ----- CREATE complete ----- ");
-		List<AbstractCarModel> allCars = getAllCars();
+		List<CarModel> allCars = getAllCars();
 		LOG.info(" ----- READ complete ----- ");
 		removeAllCars(allCars);
 		LOG.info(" ----- DELETE complete ----- ");
@@ -69,19 +69,19 @@ public class Main {
 		LOG.info("Complete");
 	}
 
-	private void removeAllCars(List<AbstractCarModel> cars) {
+	private void removeAllCars(List<CarModel> cars) {
 		this.controller.removeCars(cars);
 	}
 
-	private List<AbstractCarModel> getAllCars() {
-		List<AbstractCarModel> cars = this.controller.getAllCars();
+	private List<CarModel> getAllCars() {
+		List<CarModel> cars = this.controller.getAllCars();
 		worker.showCars(cars);
 
 		return cars;
 	}
 
 	private void saveCars() {
-		Collection<AbstractCarModel> cars = worker.getCars();
+		Collection<CarModel> cars = worker.getCars();
 		this.controller.saveCars(cars);
 	}
 

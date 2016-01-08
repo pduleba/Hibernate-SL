@@ -9,7 +9,7 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.stereotype.Component;
 
-import com.pduleba.hibernate.model.AbstractCarModel;
+import com.pduleba.hibernate.model.CarModel;
 import com.pduleba.spring.services.CarService;
 
 @Component
@@ -24,17 +24,17 @@ public class SpringControllerImpl implements SpringController {
 	private boolean deleteEnabled = true;
 
 	@Override
-	public void saveCars(Collection<AbstractCarModel> users) {
+	public void saveCars(Collection<CarModel> users) {
 		carService.saveCars(users);
 	}
 
 	@Override
-	public List<AbstractCarModel> getAllCars() {
+	public List<CarModel> getAllCars() {
 		return carService.getAllCars();
 	}
 
 	@Override
-	public void removeCars(List<AbstractCarModel> users) {
+	public void removeCars(List<CarModel> users) {
 		if (deleteEnabled) {
 			this.carService.removeAll(users);
 		}

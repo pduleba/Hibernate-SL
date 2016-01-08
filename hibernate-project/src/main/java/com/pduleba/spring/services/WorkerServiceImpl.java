@@ -13,7 +13,6 @@ import org.slf4j.LoggerFactory;
 import org.springframework.stereotype.Component;
 
 import com.pduleba.hibernate.model.AbstractCarModel;
-import com.pduleba.hibernate.model.CarModel;
 import com.pduleba.hibernate.model.LargeCarModel;
 import com.pduleba.hibernate.model.SmallCarModel;
 import com.pduleba.hibernate.model.SportCarModel;
@@ -32,7 +31,7 @@ class WorkerServiceImpl implements WorkerService {
 			LOG.info("Cars -> NOT FOUND");
 		} else {
 			int index = 0;
-			for (CarModel car : cars) {
+			for (AbstractCarModel car : cars) {
 				LOG.info("#> car {} :: {}", ++index, car);
 			}
 			LOG.info("-----");

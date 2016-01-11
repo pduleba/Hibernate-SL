@@ -1,15 +1,13 @@
 package com.pduleba.hibernate.model;
 
-import javax.persistence.AttributeOverride;
-import javax.persistence.AttributeOverrides;
 import javax.persistence.Column;
-import javax.persistence.Embedded;
 import javax.persistence.Entity;
 import javax.persistence.GeneratedValue;
 import javax.persistence.GenerationType;
 import javax.persistence.Id;
 import javax.persistence.SequenceGenerator;
 import javax.persistence.Table;
+import javax.persistence.Version;
 
 import lombok.Data;
 import lombok.NoArgsConstructor;
@@ -19,11 +17,10 @@ import lombok.NoArgsConstructor;
 @NoArgsConstructor
 public @Data class CarModel {
 
-	public CarModel(String name, EngineModel engine, String dateId) {
+	public CarModel(String name, String dateId) {
 		super();
 		this.name = name;
 		this.dateId = dateId;
-		this.engine = engine;
 	}
 
 	@Id
@@ -37,11 +34,8 @@ public @Data class CarModel {
 	@Column(name = "DATE_ID")
 	private String dateId;
 	
-	@Embedded
-	@AttributeOverrides({ 
-		@AttributeOverride(name = "type", column = @Column(name = "ENGINE_TYPE") ),				// <-- Sharing and overriding
-		@AttributeOverride(name = "size", column = @Column(name = "ENGINE_SIZE") ) 				// <-- Sharing and overriding
-	})
-	private EngineModel engine;
-
+	@Version
+	@Column(name = "VERSION")
+	private long version;
+	
 }

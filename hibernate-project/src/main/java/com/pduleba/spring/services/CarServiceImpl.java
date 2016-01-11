@@ -1,8 +1,5 @@
 package com.pduleba.spring.services;
 
-import java.util.Collection;
-import java.util.List;
-
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
@@ -16,19 +13,22 @@ public class CarServiceImpl implements CarService {
 	private CarDao carDao;
 
 	@Override
-	public void saveCars(Collection<CarModel> cars) {
-		carDao.saveAll(cars);
+	public void create(CarModel car) {
+		carDao.create(car);
 	}
 
 	@Override
-	public List<CarModel> getAllCars() {
-		return carDao.getAllCars();
+	public CarModel read(long carId) {
+		return carDao.read(carId);
 	}
 
 	@Override
-	public void removeAll(List<CarModel> cars) {
-		carDao.removeAll(cars);
+	public void update(CarModel car) {
+		carDao.update(car);
 	}
-	
-	
+
+	@Override
+	public void delete(CarModel car) {
+		carDao.delete(car);
+	}
 }

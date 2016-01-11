@@ -1,13 +1,17 @@
 package com.pduleba.spring.services;
 
-import java.util.Collection;
-
 import com.pduleba.hibernate.model.CarModel;
 
 public interface WorkerService {
 
-	void showCars(Collection<CarModel> Cars);
+	enum Mode {
+		CREATE,
+		READ,
+		UPDATE,
+		DELETE
+	}
+	
+	CarModel getCar();
 
-	Collection<CarModel> getCars();
-
+	void showCar(CarModel car, Mode mode);
 }

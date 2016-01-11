@@ -1,8 +1,5 @@
 package com.pduleba.spring.controller;
 
-import java.util.Collection;
-import java.util.List;
-
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -24,19 +21,24 @@ public class SpringControllerImpl implements SpringController {
 	private boolean deleteEnabled = true;
 
 	@Override
-	public void saveCars(Collection<CarModel> users) {
-		carService.saveCars(users);
+	public void create(CarModel car) {
+		carService.create(car);
 	}
 
 	@Override
-	public List<CarModel> getAllCars() {
-		return carService.getAllCars();
+	public CarModel read(long carId) {
+		return carService.read(carId);
 	}
 
 	@Override
-	public void removeCars(List<CarModel> users) {
+	public void update(CarModel car) {
+		this.carService.update(car);
+	}
+
+	@Override
+	public void delete(CarModel car) {
 		if (deleteEnabled) {
-			this.carService.removeAll(users);
+			this.carService.delete(car);
 		}
 	}
 	

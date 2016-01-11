@@ -1,15 +1,15 @@
 package com.pduleba.spring.dao;
 
-import java.util.Collection;
-import java.util.List;
-
 import com.pduleba.hibernate.model.CarModel;
 
 public interface CarDao {
 
-	List<CarModel> getAllCars();
+	void create(CarModel car);
 
-	void saveAll(Collection<CarModel> cars);
+	CarModel read(long carId);
 
-	void removeAll(List<CarModel> cars);
+	void update(CarModel car);
+
+	void delete(CarModel car);
+	
 }

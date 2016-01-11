@@ -1,8 +1,5 @@
 package com.pduleba.spring.dao;
 
-import java.util.Collection;
-import java.util.List;
-
 import javax.transaction.Transactional;
 
 import org.hibernate.SessionFactory;
@@ -22,20 +19,23 @@ public class CarDaoImpl extends HibernateDaoSupport implements CarDao {
 	}
 
 	@Override
-	public void saveAll(Collection<CarModel> cars) {
-		for (CarModel car : cars) {
-			getHibernateTemplate().saveOrUpdate(car);
-		}
+	public void create(CarModel car) {
+		getHibernateTemplate().save(car);
 	}
 
 	@Override
-	public List<CarModel> getAllCars() {
-		return getHibernateTemplate().loadAll(CarModel.class);
+	public CarModel read(long carId) {
+		return getHibernateTemplate().get(CarModel.class, carId);
 	}
 
 	@Override
-	public void removeAll(List<CarModel> cars) {
-		getHibernateTemplate().deleteAll(cars);
+	public void update(CarModel car) {
+		getHibernateTemplate().update(car);
+	}
+
+	@Override
+	public void delete(CarModel car) {
+		getHibernateTemplate().delete(car);
 	}
 
 }

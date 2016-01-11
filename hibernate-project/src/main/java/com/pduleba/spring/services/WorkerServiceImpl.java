@@ -2,8 +2,6 @@ package com.pduleba.spring.services;
 
 import java.time.LocalTime;
 import java.time.format.DateTimeFormatter;
-import java.util.Arrays;
-import java.util.Collection;
 import java.util.Objects;
 
 import org.apache.commons.lang3.BooleanUtils;
@@ -13,7 +11,6 @@ import org.slf4j.LoggerFactory;
 import org.springframework.stereotype.Component;
 
 import com.pduleba.hibernate.model.CarModel;
-import com.pduleba.hibernate.model.EngineModel;
 
 @Component
 class WorkerServiceImpl implements WorkerService {
@@ -22,17 +19,13 @@ class WorkerServiceImpl implements WorkerService {
 	private final static DateTimeFormatter FORMAT = DateTimeFormatter.ofPattern("HH:mm:ss");
 
 	@Override
-	public void showCars(Collection<CarModel> cars) {
-		if (BooleanUtils.isFalse(Hibernate.isInitialized(cars))) {
-			LOG.info("Cars -> NOT INITIALIZED");
-		} else if (Objects.isNull(cars) || cars.isEmpty()) {
-			LOG.info("Cars -> NOT FOUND");
+	public void showCar(CarModel car, Mode mode) {
+		if (BooleanUtils.isFalse(Hibernate.isInitialized(car))) {
+			LOG.info("Car {} :: NOT INITIALIZED", mode);
+		} else if (Objects.isNull(car)) {
+			LOG.info("Car {} :: NOT FOUND", mode);
 		} else {
-			int index = 0;
-			for (CarModel car : cars) {
-				LOG.info("#> car {} :: {}", ++index, car);
-			}
-			LOG.info("-----");
+			LOG.info("Car {} :: {}", car);
 		}
 	}
 	
@@ -41,12 +34,7 @@ class WorkerServiceImpl implements WorkerService {
 	}
 	
 	@Override
-	public Collection<CarModel> getCars() {
-		String dateId = getDateId();
-
-		EngineModel e = new EngineModel("gasoline", 1);
-		CarModel c = new CarModel("Audi", e, dateId);
-
-		return Arrays.asList(c);
+	public CarModel getCar() {
+		return new CarModel("Audi", getDateId());
 	}
 }

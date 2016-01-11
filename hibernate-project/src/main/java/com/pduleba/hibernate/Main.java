@@ -3,8 +3,6 @@ package com.pduleba.hibernate;
 import java.io.IOException;
 import java.security.InvalidParameterException;
 import java.text.MessageFormat;
-import java.util.Collection;
-import java.util.List;
 
 import org.apache.log4j.PropertyConfigurator;
 import org.slf4j.Logger;
@@ -17,6 +15,7 @@ import com.pduleba.configuration.SpringConfiguration;
 import com.pduleba.hibernate.model.CarModel;
 import com.pduleba.spring.controller.SpringController;
 import com.pduleba.spring.services.WorkerService;
+import com.pduleba.spring.services.WorkerService.Mode;
 
 public class Main {
 
@@ -57,32 +56,41 @@ public class Main {
 	}
 
 	private void executeCarsCRUD() {
-		saveCars();
-		LOG.info(" ----- CREATE complete ----- ");
-		List<CarModel> allCars = getAllCars();
-		LOG.info(" ----- READ complete ----- ");
-		removeAllCars(allCars);
-		LOG.info(" ----- DELETE complete ----- ");
-		getAllCars();
-		LOG.info(" ----- READ complete ----- ");
+		CarModel transientCar = worker.getCar();
+		
+		LOG.info(" ----- CREATE ----- ");
+		create(transientCar);
+		LOG.info(" ----- READ ----- ");
+		CarModel persisted = read(transientCar.getId());
+		LOG.info(" ----- UPDATE ----- ");
+		update(persisted);
+		LOG.info(" ----- DELETE ----- ");
+		delete(persisted);
 
 		LOG.info("Complete");
 	}
 
-	private void removeAllCars(List<CarModel> cars) {
-		this.controller.removeCars(cars);
+	private void create(CarModel car) {
+		this.worker.showCar(car, Mode.CREATE);
+		this.controller.create(car);
 	}
 
-	private List<CarModel> getAllCars() {
-		List<CarModel> cars = this.controller.getAllCars();
-		worker.showCars(cars);
+	private CarModel read(long carId) {
+		CarModel car = this.controller.read(carId);
+		this.worker.showCar(car, Mode.READ);
 
-		return cars;
+		return car;
 	}
 
-	private void saveCars() {
-		Collection<CarModel> cars = worker.getCars();
-		this.controller.saveCars(cars);
+	private void update(final CarModel car) {
+		car.setName(null);
+		
+		this.controller.update(car);
+		this.worker.showCar(car, Mode.UPDATE);
 	}
 
+	private void delete(CarModel car) {
+		this.controller.delete(car);
+		this.worker.showCar(car, Mode.DELETE);
+	}
 }

@@ -7,7 +7,6 @@ import java.util.LinkedList;
 import java.util.List;
 import java.util.Objects;
 import java.util.concurrent.CountDownLatch;
-import java.util.concurrent.CyclicBarrier;
 
 import javax.persistence.LockModeType;
 
@@ -21,6 +20,7 @@ import org.slf4j.LoggerFactory;
 import org.springframework.context.ConfigurableApplicationContext;
 import org.springframework.context.annotation.AnnotationConfigApplicationContext;
 import org.springframework.core.io.ClassPathResource;
+import org.springframework.orm.hibernate5.HibernateOptimisticLockingFailureException;
 
 import com.pduleba.configuration.SpringConfiguration;
 import com.pduleba.hibernate.model.CarModel;
@@ -64,14 +64,16 @@ public class Main {
 	}
 	
 	private void start() {
-		final int[] TIMEOUTS = {0, 1000, 2000, 3000, 4000};
-		final int THREADS_NUMBER = TIMEOUTS.length;
-		// synchronizes all threads to wait each other to reach start point
-		final CyclicBarrier startPoint = new CyclicBarrier(THREADS_NUMBER);
+		final int THREADS_NUMBER = 2;
+		final int LONG_RUNNING_ACTION_SLEEP_TIME = 400;
+		final int LONG_RUNNING_ACTION_TIME = 400;
+		
 		// synchronizes all threads to be ready to start
-		final CountDownLatch readyToGo = new CountDownLatch(THREADS_NUMBER);
+		final CountDownLatch readyFlag = new CountDownLatch(THREADS_NUMBER);
 		// synchronizes all threads to start at same time
-		final CountDownLatch readySetGoFlag = new CountDownLatch(5);
+		final CountDownLatch startFlag = new CountDownLatch(1);
+		// synchronizes all threads complete
+		final CountDownLatch completeFlag = new CountDownLatch(THREADS_NUMBER);
 		
 		JPAThread thread = null;
 		String threadName;
@@ -79,29 +81,33 @@ public class Main {
 		CarModel persisted = create();
 		long carId = persisted.getId();
 		
-		for (int i = 0; i < TIMEOUTS.length; i++) {
+		for (int i = 0; i < THREADS_NUMBER; i++) {
 			threadName = MessageFormat.format("thread-{0}", i);
-			thread = new JPAThread(threadName, TIMEOUTS[i], carId, readySetGoFlag, readyToGo, startPoint);
+			thread = new JPAThread(threadName, carId, readyFlag, startFlag, completeFlag);
 			thread.start();
 			threads.add(thread);
 		}
 
-		try {
-			readyToGo.await();
-		} catch (InterruptedException e) {
-			LOG.error("Error", e);
-			return;
+		await(readyFlag);
+
+		// lock entity so children will will not be able to update it 
+		lock(persisted, LockMode.PESSIMISTIC_WRITE);
+		startFlag.countDown();
+		
+		await(completeFlag);
+
+		// simulate long duration update
+		int loops = 1000/LONG_RUNNING_ACTION_SLEEP_TIME * LONG_RUNNING_ACTION_TIME;
+		while (loops > 0) {
+			LOG.info("{}", loops);
+			sleep(LONG_RUNNING_ACTION_SLEEP_TIME);
+			loops--;
 		}
 		
-		lock(persisted, LockMode.OPTIMISTIC);
+		// unlock children so they can try to update entity ( the should wait - due to pessimistic lock on DB)
 		update(persisted, Thread.currentThread().getName());
 
-		while (readySetGoFlag.getCount() > 0) {
-			LOG.info("{}", readySetGoFlag.getCount());
-			readySetGoFlag.countDown();
-			sleep(1000);
-		}
-
+		// wait for child threads
 		try {
 			for (JPAThread t : threads) {
 				t.join();
@@ -115,6 +121,16 @@ public class Main {
 		LOG.info("Complete");
 	}
 
+	private void await(final CountDownLatch readyFlag) {
+		try {
+			// wait for all children signal 'Ready to go' - entity to update has been selected
+			readyFlag.await();
+		} catch (InterruptedException e) {
+			LOG.error("Error", e);
+			return;
+		}
+	}
+
 	private void sleep(long timeout) {
 		try {
 			Thread.sleep(timeout);
@@ -125,31 +141,25 @@ public class Main {
 	
 	private CarModel create() {
 		CarModel car = worker.getCar();
-		
-		LOG.info(" ----- CREATE ----- ");
 		this.controller.create(car);
-		
 		return car;
 	}
 
 	private CarModel read(long carId) {
-		LOG.info(" ----- READ ----- ");
+		LOG.info("Reading...");
 		CarModel car = this.controller.read(carId);
-		showCar(car, WorkerService.Mode.AFTER__READ);
 
 		return car;
 	}
 
 	private void update(final CarModel car, String newName) {
-		LOG.info(" ----- UPDATE ----- ");
-		car.setName(newName);
-		
-		showCar(car, WorkerService.Mode.BEFORE_UPDATE);
+		LOG.info("Updating... :: {}", car);
 		try {
+			car.setName(newName);
 			this.controller.update(car);
-			showCar(car, WorkerService.Mode.AFTER__UPDATE);
-		} catch (Exception e) {
-			LOG.error("Optymistic Lock Exception :: lock found");
+			LOG.info("Updating... COMPLETE :: {}", car);
+		} catch (HibernateOptimisticLockingFailureException e) {				// <---- Lock Handling
+			LOG.error("Lock Exception :: lock found");
 		}
 	}
 
@@ -167,7 +177,7 @@ public class Main {
 		lock(car, LockModeConverter.convertToLockMode(lockMode));
 	}
 	
-	public void showCar(CarModel car, WorkerService.Mode mode) {
+	private void showCar(CarModel car, WorkerService.Mode mode) {
 		if (BooleanUtils.isFalse(Hibernate.isInitialized(car))) {
 			LOG.info("{} :: NOT INITIALIZED", mode);
 		} else if (Objects.isNull(car)) {
@@ -179,53 +189,39 @@ public class Main {
 	
 	class JPAThread extends Thread {
 
-		private int waitTime;
 		private long carId;
-		private CyclicBarrier startPoint;
-		private CountDownLatch readyToGo;
-		private CountDownLatch readySteadyGo;
+		private CountDownLatch readyFlag;
+		private CountDownLatch startFlag;
+		private CountDownLatch completeFlag;
 
-		public JPAThread(String name, int waitTime, long carId, CountDownLatch readySteadyGo,
-				CountDownLatch readyToGo, CyclicBarrier startPoint) {
+		public JPAThread(String name, long carId, CountDownLatch readyFlag, CountDownLatch startFlag,
+				CountDownLatch completeFlag) {
 			super(name);
-			this.waitTime = waitTime;
 			this.carId = carId;
-			this.startPoint = startPoint;
-			this.readyToGo = readyToGo;
-			this.readySteadyGo = readySteadyGo;
+			this.readyFlag = readyFlag;
+			this.startFlag = startFlag;
+			this.completeFlag = completeFlag;
 		}
 
 		@Override
 		public void run() {
-
-			try {
-				LOG.info("Waiting for other childs on start point");
-				startPoint.await();
-			} catch (Exception e) {
-				LOG.warn("Unable to wait for other childs on start point");
-				return;
-			}
 			
 			CarModel persisted = read(carId);
-			readyToGo.countDown();
+			readyFlag.countDown();
 			
 			try {
 				LOG.info("Waiting for main thread to let me start");
-				readySteadyGo.await();
+				startFlag.await();
 			} catch (Exception e) {
-				LOG.warn("Unable to wait for main thread to let me start");
+				LOG.warn("Unable to wait for main thread to let me start", e);
 				return;
 			}
 			
-			try {
-				Thread.sleep(waitTime);
-			} catch (InterruptedException e) {
-				LOG.warn("Unable to wait for a duration of {} ms", waitTime);
-				return;
-			}
-			
-			LOG.info("Updating persisted object");
 			update(persisted, getName());
+			
+			// allow main thread to release lock
+			LOG.info("Complete");
+			completeFlag.countDown();
 		}
 	}
 }

@@ -5,10 +5,17 @@ import java.security.InvalidParameterException;
 import java.text.MessageFormat;
 import java.util.LinkedList;
 import java.util.List;
+import java.util.Objects;
 import java.util.concurrent.CountDownLatch;
 import java.util.concurrent.CyclicBarrier;
 
+import javax.persistence.LockModeType;
+
+import org.apache.commons.lang3.BooleanUtils;
 import org.apache.log4j.PropertyConfigurator;
+import org.hibernate.Hibernate;
+import org.hibernate.LockMode;
+import org.hibernate.internal.util.LockModeConverter;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.context.ConfigurableApplicationContext;
@@ -19,7 +26,6 @@ import com.pduleba.configuration.SpringConfiguration;
 import com.pduleba.hibernate.model.CarModel;
 import com.pduleba.spring.controller.SpringController;
 import com.pduleba.spring.services.WorkerService;
-import com.pduleba.spring.services.WorkerService.Mode;
 
 public class Main {
 
@@ -58,11 +64,14 @@ public class Main {
 	}
 	
 	private void start() {
-		final int[] TIMEOUTS = {2000, 0};
-		// this will cause to all thread to wait on start point
-		final CyclicBarrier startPoint = new CyclicBarrier(TIMEOUTS.length);
-		// this will start all thread waiting on start point
-		final CountDownLatch readySetGoFlag = new CountDownLatch(1);
+		final int[] TIMEOUTS = {0, 1000, 2000, 3000, 4000};
+		final int THREADS_NUMBER = TIMEOUTS.length;
+		// synchronizes all threads to wait each other to reach start point
+		final CyclicBarrier startPoint = new CyclicBarrier(THREADS_NUMBER);
+		// synchronizes all threads to be ready to start
+		final CountDownLatch readyToGo = new CountDownLatch(THREADS_NUMBER);
+		// synchronizes all threads to start at same time
+		final CountDownLatch readySetGoFlag = new CountDownLatch(5);
 		
 		JPAThread thread = null;
 		String threadName;
@@ -72,13 +81,27 @@ public class Main {
 		
 		for (int i = 0; i < TIMEOUTS.length; i++) {
 			threadName = MessageFormat.format("thread-{0}", i);
-			thread = new JPAThread(threadName, TIMEOUTS[i], carId, readySetGoFlag, startPoint);
+			thread = new JPAThread(threadName, TIMEOUTS[i], carId, readySetGoFlag, readyToGo, startPoint);
 			thread.start();
 			threads.add(thread);
 		}
 
-		readySetGoFlag.countDown();
+		try {
+			readyToGo.await();
+		} catch (InterruptedException e) {
+			LOG.error("Error", e);
+			return;
+		}
 		
+		lock(persisted, LockMode.OPTIMISTIC);
+		update(persisted, Thread.currentThread().getName());
+
+		while (readySetGoFlag.getCount() > 0) {
+			LOG.info("{}", readySetGoFlag.getCount());
+			readySetGoFlag.countDown();
+			sleep(1000);
+		}
+
 		try {
 			for (JPAThread t : threads) {
 				t.join();
@@ -86,16 +109,24 @@ public class Main {
 			threads.clear();
 		} catch (InterruptedException e) {
 			LOG.error("Unable to join", e);
+			return;
 		}
 		
 		LOG.info("Complete");
+	}
+
+	private void sleep(long timeout) {
+		try {
+			Thread.sleep(timeout);
+		} catch (InterruptedException e) {
+			LOG.error("Error on sleep", e);
+		}
 	}
 	
 	private CarModel create() {
 		CarModel car = worker.getCar();
 		
 		LOG.info(" ----- CREATE ----- ");
-		this.worker.showCar(car, Mode.CREATE);
 		this.controller.create(car);
 		
 		return car;
@@ -104,17 +135,22 @@ public class Main {
 	private CarModel read(long carId) {
 		LOG.info(" ----- READ ----- ");
 		CarModel car = this.controller.read(carId);
-		this.worker.showCar(car, Mode.READ);
+		showCar(car, WorkerService.Mode.AFTER__READ);
 
 		return car;
 	}
 
-	private void update(final CarModel car) {
+	private void update(final CarModel car, String newName) {
 		LOG.info(" ----- UPDATE ----- ");
-		car.setName(null);
+		car.setName(newName);
 		
-		this.controller.update(car);
-		this.worker.showCar(car, Mode.UPDATE);
+		showCar(car, WorkerService.Mode.BEFORE_UPDATE);
+		try {
+			this.controller.update(car);
+			showCar(car, WorkerService.Mode.AFTER__UPDATE);
+		} catch (Exception e) {
+			LOG.error("Optymistic Lock Exception :: lock found");
+		}
 	}
 
 //	private void delete(CarModel car) {
@@ -123,23 +159,45 @@ public class Main {
 //		this.worker.showCar(car, Mode.DELETE);
 //	}
 
+	private void lock(final CarModel car, LockMode lockMode) {
+		this.controller.lock(car, lockMode);
+	}
+	
+	private void lock(final CarModel car, LockModeType lockMode) {
+		lock(car, LockModeConverter.convertToLockMode(lockMode));
+	}
+	
+	public void showCar(CarModel car, WorkerService.Mode mode) {
+		if (BooleanUtils.isFalse(Hibernate.isInitialized(car))) {
+			LOG.info("{} :: NOT INITIALIZED", mode);
+		} else if (Objects.isNull(car)) {
+			LOG.info("{} :: NOT FOUND", mode);
+		} else {
+			LOG.info("{} :: {}", mode, car);
+		}
+	}
+	
 	class JPAThread extends Thread {
 
 		private int waitTime;
 		private long carId;
-		private CountDownLatch flag;
 		private CyclicBarrier startPoint;
+		private CountDownLatch readyToGo;
+		private CountDownLatch readySteadyGo;
 
-		public JPAThread(String name, int waitTime, long carId, CountDownLatch flag, CyclicBarrier startPoint) {
+		public JPAThread(String name, int waitTime, long carId, CountDownLatch readySteadyGo,
+				CountDownLatch readyToGo, CyclicBarrier startPoint) {
 			super(name);
 			this.waitTime = waitTime;
 			this.carId = carId;
-			this.flag = flag;
 			this.startPoint = startPoint;
+			this.readyToGo = readyToGo;
+			this.readySteadyGo = readySteadyGo;
 		}
 
 		@Override
 		public void run() {
+
 			try {
 				LOG.info("Waiting for other childs on start point");
 				startPoint.await();
@@ -148,17 +206,16 @@ public class Main {
 				return;
 			}
 			
+			CarModel persisted = read(carId);
+			readyToGo.countDown();
+			
 			try {
 				LOG.info("Waiting for main thread to let me start");
-				flag.await();
+				readySteadyGo.await();
 			} catch (Exception e) {
 				LOG.warn("Unable to wait for main thread to let me start");
 				return;
 			}
-
-			LOG.info("Reading persisted object by id {}", carId);
-			
-			CarModel persisted = read(carId);
 			
 			try {
 				Thread.sleep(waitTime);
@@ -168,7 +225,7 @@ public class Main {
 			}
 			
 			LOG.info("Updating persisted object");
-			update(persisted);
+			update(persisted, getName());
 		}
 	}
 }

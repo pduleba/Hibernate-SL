@@ -2,6 +2,7 @@ package com.pduleba.spring.dao;
 
 import javax.transaction.Transactional;
 
+import org.hibernate.LockMode;
 import org.hibernate.SessionFactory;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.orm.hibernate5.support.HibernateDaoSupport;
@@ -38,4 +39,8 @@ public class CarDaoImpl extends HibernateDaoSupport implements CarDao {
 		getHibernateTemplate().delete(car);
 	}
 
+	@Override
+	public void lock(CarModel car, LockMode lockMode) {
+		getHibernateTemplate().lock(car, lockMode);
+	}
 }

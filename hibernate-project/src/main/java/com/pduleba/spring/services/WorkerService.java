@@ -5,13 +5,11 @@ import com.pduleba.hibernate.model.CarModel;
 public interface WorkerService {
 
 	enum Mode {
-		CREATE,
-		READ,
-		UPDATE,
-		DELETE
+		BEFORE_READ,
+		AFTER__READ,
+		BEFORE_UPDATE,
+		AFTER__UPDATE
 	}
 	
 	CarModel getCar();
-
-	void showCar(CarModel car, Mode mode);
 }

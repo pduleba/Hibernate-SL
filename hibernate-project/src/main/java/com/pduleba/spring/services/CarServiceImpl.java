@@ -1,5 +1,6 @@
 package com.pduleba.spring.services;
 
+import org.hibernate.LockMode;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
@@ -30,5 +31,10 @@ public class CarServiceImpl implements CarService {
 	@Override
 	public void delete(CarModel car) {
 		carDao.delete(car);
+	}
+	
+	@Override
+	public void lock(CarModel car, LockMode lockMode) {
+		carDao.lock(car, lockMode);
 	}
 }

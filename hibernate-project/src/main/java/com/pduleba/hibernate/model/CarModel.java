@@ -1,15 +1,12 @@
 package com.pduleba.hibernate.model;
 
 import javax.persistence.Column;
-import javax.persistence.Convert;
 import javax.persistence.Entity;
 import javax.persistence.GeneratedValue;
 import javax.persistence.GenerationType;
 import javax.persistence.Id;
 import javax.persistence.SequenceGenerator;
 import javax.persistence.Table;
-
-import com.pduleba.converters.BooleanConverter;
 
 import lombok.Data;
 import lombok.NoArgsConstructor;
@@ -37,8 +34,7 @@ public @Data class CarModel {
 	@Column(name = "DATE_ID")
 	private String dateId;
 	
-	@Convert(converter = BooleanConverter.class)
-	@Column(name = "ACTIVE")
+	@Column(name = "ACTIVE", insertable = false, updatable = false)
 	private Boolean active;
 	
 }

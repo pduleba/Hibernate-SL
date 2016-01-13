@@ -1,11 +1,11 @@
 package com.pduleba.spring.services;
 
-import org.hibernate.LockMode;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
 import com.pduleba.hibernate.model.CarModel;
 import com.pduleba.spring.dao.CarDao;
+import com.pduleba.utils.LockDetails;
 
 @Service
 public class CarServiceImpl implements CarService {
@@ -34,7 +34,7 @@ public class CarServiceImpl implements CarService {
 	}
 	
 	@Override
-	public void lock(CarModel car, LockMode lockMode) {
-		carDao.lock(car, lockMode);
+	public void lock(CarModel car, LockDetails lockDetails) {
+		carDao.lock(car, lockDetails);
 	}
 }

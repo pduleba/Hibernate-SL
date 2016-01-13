@@ -1,6 +1,5 @@
 package com.pduleba.spring.controller;
 
-import org.hibernate.LockMode;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -9,6 +8,7 @@ import org.springframework.stereotype.Component;
 
 import com.pduleba.hibernate.model.CarModel;
 import com.pduleba.spring.services.CarService;
+import com.pduleba.utils.LockDetails;
 
 @Component
 public class SpringControllerImpl implements SpringController {
@@ -44,7 +44,7 @@ public class SpringControllerImpl implements SpringController {
 	}
 	
 	@Override
-	public void lock(CarModel car, LockMode lockMode) {
-		carService.lock(car, lockMode);
+	public void lock(CarModel car, LockDetails lockDetails) {
+		carService.lock(car, lockDetails);
 	}
 }

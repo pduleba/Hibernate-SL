@@ -1,8 +1,7 @@
 package com.pduleba.spring.dao;
 
-import org.hibernate.LockMode;
-
 import com.pduleba.hibernate.model.CarModel;
+import com.pduleba.utils.LockDetails;
 
 public interface CarDao {
 
@@ -14,6 +13,6 @@ public interface CarDao {
 
 	void delete(CarModel car);
 
-	void lock(CarModel car, LockMode lockMode);
+	void lock(CarModel car, LockDetails lockDetails);
 	
 }

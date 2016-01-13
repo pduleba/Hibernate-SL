@@ -1,8 +1,7 @@
 package com.pduleba.spring.controller;
 
-import org.hibernate.LockMode;
-
 import com.pduleba.hibernate.model.CarModel;
+import com.pduleba.utils.LockDetails;
 
 public interface SpringController {
 
@@ -11,6 +10,6 @@ public interface SpringController {
 	void update(CarModel car);
 	void delete(CarModel car);
 	
-	void lock(CarModel car, LockMode lockMode);
+	void lock(CarModel car, LockDetails lockDetails);
 
 }

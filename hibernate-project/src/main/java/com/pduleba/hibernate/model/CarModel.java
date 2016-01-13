@@ -7,7 +7,6 @@ import javax.persistence.GenerationType;
 import javax.persistence.Id;
 import javax.persistence.SequenceGenerator;
 import javax.persistence.Table;
-import javax.persistence.Version;
 
 import lombok.Data;
 import lombok.NoArgsConstructor;
@@ -15,6 +14,8 @@ import lombok.NoArgsConstructor;
 @Entity
 @Table(name = "T_CAR")
 @NoArgsConstructor
+//@OptimisticLocking(type = OptimisticLockType.ALL)
+//@DynamicUpdate
 public @Data class CarModel {
 
 	public CarModel(String name, String dateId) {
@@ -33,9 +34,5 @@ public @Data class CarModel {
 
 	@Column(name = "DATE_ID")
 	private String dateId;
-	
-	@Version
-	@Column(name = "VERSION")
-	private long version;
 	
 }

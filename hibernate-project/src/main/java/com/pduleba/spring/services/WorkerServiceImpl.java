@@ -21,6 +21,6 @@ class WorkerServiceImpl implements WorkerService {
 	
 	@Override
 	public CarModel getCar() {
-		return new CarModel("Audi", getDateId());
+		return new CarModel("Audi", getDateId(), Math.random() > 0.5d);
 	}
 }

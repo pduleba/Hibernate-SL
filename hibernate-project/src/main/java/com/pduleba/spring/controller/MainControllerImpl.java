@@ -8,12 +8,11 @@ import org.springframework.stereotype.Component;
 
 import com.pduleba.hibernate.model.CarModel;
 import com.pduleba.spring.services.CarService;
-import com.pduleba.utils.LockDetails;
 
 @Component
-public class SpringControllerImpl implements SpringController {
+public class MainControllerImpl implements MainController {
 
-	public static final Logger LOG = LoggerFactory.getLogger(SpringControllerImpl.class);
+	public static final Logger LOG = LoggerFactory.getLogger(MainControllerImpl.class);
 	
 	@Autowired
 	private CarService carService;
@@ -41,10 +40,5 @@ public class SpringControllerImpl implements SpringController {
 		if (deleteEnabled) {
 			this.carService.delete(car);
 		}
-	}
-	
-	@Override
-	public void lock(CarModel car, LockDetails lockDetails) {
-		carService.lock(car, lockDetails);
 	}
 }

@@ -5,7 +5,6 @@ import org.springframework.stereotype.Service;
 
 import com.pduleba.hibernate.model.CarModel;
 import com.pduleba.spring.dao.CarDao;
-import com.pduleba.utils.LockDetails;
 
 @Service
 public class CarServiceImpl implements CarService {
@@ -33,8 +32,4 @@ public class CarServiceImpl implements CarService {
 		carDao.delete(car);
 	}
 	
-	@Override
-	public void lock(CarModel car, LockDetails lockDetails) {
-		carDao.lock(car, lockDetails);
-	}
 }

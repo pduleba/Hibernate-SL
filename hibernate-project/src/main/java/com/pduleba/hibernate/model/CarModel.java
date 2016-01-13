@@ -1,6 +1,7 @@
 package com.pduleba.hibernate.model;
 
 import javax.persistence.Column;
+import javax.persistence.Convert;
 import javax.persistence.Entity;
 import javax.persistence.GeneratedValue;
 import javax.persistence.GenerationType;
@@ -8,20 +9,21 @@ import javax.persistence.Id;
 import javax.persistence.SequenceGenerator;
 import javax.persistence.Table;
 
+import com.pduleba.converters.BooleanConverter;
+
 import lombok.Data;
 import lombok.NoArgsConstructor;
 
 @Entity
 @Table(name = "T_CAR")
 @NoArgsConstructor
-//@OptimisticLocking(type = OptimisticLockType.ALL)
-//@DynamicUpdate
 public @Data class CarModel {
 
-	public CarModel(String name, String dateId) {
+	public CarModel(String name, String dateId, boolean active) {
 		super();
 		this.name = name;
 		this.dateId = dateId;
+		this.active = active;
 	}
 
 	@Id
@@ -34,5 +36,9 @@ public @Data class CarModel {
 
 	@Column(name = "DATE_ID")
 	private String dateId;
+	
+	@Convert(converter = BooleanConverter.class)
+	@Column(name = "ACTIVE")
+	private Boolean active;
 	
 }

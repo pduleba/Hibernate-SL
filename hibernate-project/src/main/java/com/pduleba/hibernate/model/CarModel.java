@@ -1,16 +1,14 @@
 package com.pduleba.hibernate.model;
 
-import java.util.Calendar;
-
 import javax.persistence.Column;
 import javax.persistence.Entity;
+import javax.persistence.EnumType;
+import javax.persistence.Enumerated;
 import javax.persistence.GeneratedValue;
 import javax.persistence.GenerationType;
 import javax.persistence.Id;
 import javax.persistence.SequenceGenerator;
 import javax.persistence.Table;
-import javax.persistence.Temporal;
-import javax.persistence.TemporalType;
 
 import lombok.Data;
 import lombok.NoArgsConstructor;
@@ -20,11 +18,11 @@ import lombok.NoArgsConstructor;
 @NoArgsConstructor
 public @Data class CarModel {
 
-	public CarModel(String name, String dateId, Calendar creationDate) {
+	public CarModel(String name, String dateId, CarType type) {
 		super();
 		this.name = name;
 		this.dateId = dateId;
-		this.creationDate = creationDate;
+		this.type = type;
 	}
 
 	@Id
@@ -38,8 +36,8 @@ public @Data class CarModel {
 	@Column(name = "DATE_ID")
 	private String dateId;
 	
-	@Column(name = "CREATION_DATE")
-	@Temporal(TemporalType.TIMESTAMP)				//	<-- This maps java.util.* to proper DB type
-	private Calendar creationDate;					//	<-- Here we are using java.util.Calendar
+	@Column(name = "CAR_TYPE_ENUM")
+	@Enumerated(value = EnumType.STRING)		// Enum value can be stored as 'ORDINAL' or 'STRING'
+	private CarType type;
 	
 }

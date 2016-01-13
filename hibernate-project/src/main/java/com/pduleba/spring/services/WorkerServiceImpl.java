@@ -1,8 +1,10 @@
 package com.pduleba.spring.services;
 
+import static com.pduleba.hibernate.model.CarType.BIG;
+import static com.pduleba.hibernate.model.CarType.SMALL;
+
 import java.time.LocalTime;
 import java.time.format.DateTimeFormatter;
-import java.util.Calendar;
 
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
@@ -22,6 +24,6 @@ class WorkerServiceImpl implements WorkerService {
 	
 	@Override
 	public CarModel getCar() {
-		return new CarModel("Audi", getDateId(), Calendar.getInstance());
+		return new CarModel("Audi", getDateId(), Math.random() > 0.5 ? BIG : SMALL);
 	}
 }

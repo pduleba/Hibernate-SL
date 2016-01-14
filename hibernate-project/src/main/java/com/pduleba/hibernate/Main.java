@@ -93,7 +93,7 @@ public class Main {
 		} else if (Objects.isNull(car)) {
 			LOG.info("{} :: NOT FOUND", mode, car);
 		} else {
-			LOG.info("{} :: {}", car, car);
+			LOG.info("{} :: {}", mode, car);
 		}
 	}
 }

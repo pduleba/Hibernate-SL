@@ -1,6 +1,6 @@
 package com.pduleba.configuration;
 
-interface ApplicationPropertiesConfiguration {
+public interface ApplicationPropertiesConfiguration {
 
 	// DataSource properties
 	String KEY_DATASOURCE_DRIVER_CLASS = "jdbc.driverClassName";
@@ -10,5 +10,9 @@ interface ApplicationPropertiesConfiguration {
 
 	// Hibernate properties
 	String KEY_HIBERNATE_PROPERTIES_LOCATION = "hibernate.properties.location";
+
+	// Application properties
+	String KEY_IMAGE_FILE_CLASSPATH_LOCATION = "image.file.classpath.location";
+	String KEY_XML_FILE_CLASSPATH_LOCATION = "xml.file.classpath.location";
 
 }

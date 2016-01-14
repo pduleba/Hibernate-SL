@@ -75,10 +75,6 @@
 			</plugins>
 		</pluginManagement>
 
-		<!-- <resources> <resource> <directory>${basedir}/src/main/resources</directory> 
-			<excludes> <exclude>config/*</exclude> <exclude>dev/*</exclude> </excludes> 
-			</resource> </resources> -->
-
 		<resources>
 			<resource>
 				<directory>${resource.directory}</directory>
@@ -89,6 +85,12 @@
 				<excludes>
 					<exclude>**/config/database/*</exclude>
 				</excludes>
+			</resource>
+			<resource>
+				<directory>${resource.directory}</directory>
+				<includes>
+					<include>**/lobs/*.*</include>
+				</includes>
 			</resource>
 		</resources>
 

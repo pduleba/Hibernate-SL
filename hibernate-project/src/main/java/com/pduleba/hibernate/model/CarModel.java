@@ -39,7 +39,7 @@ public @Data class CarModel {
 
 	@Column(name = "DATE_ID")
 	private String dateId;
-	
+
 	@Lob
 	@Column(name = "IMAGE")
 	private byte[] image = {};

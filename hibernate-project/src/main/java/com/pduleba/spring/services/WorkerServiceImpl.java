@@ -1,11 +1,15 @@
 package com.pduleba.spring.services;
 
-import java.io.IOException;
 import java.io.InputStream;
 import java.nio.charset.Charset;
+import java.sql.Blob;
+import java.sql.Clob;
 import java.text.MessageFormat;
 import java.time.LocalTime;
 import java.time.format.DateTimeFormatter;
+
+import javax.sql.rowset.serial.SerialBlob;
+import javax.sql.rowset.serial.SerialClob;
 
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
@@ -35,46 +39,44 @@ class WorkerServiceImpl implements WorkerService, ApplicationPropertiesConfigura
 	public CarModel getCar() {
 //		LobCreator lobCreator = Hibernate.getLobCreator(session);
 //		Blob image = lobCreator.createBlob(stream, length)
-		byte[] image = getBytes(env.getProperty(KEY_IMAGE_FILE_CLASSPATH_LOCATION));
-		String xml = getString(env.getProperty(KEY_XML_FILE_CLASSPATH_LOCATION));
+		Blob image = getBlob(env.getProperty(KEY_IMAGE_FILE_CLASSPATH_LOCATION));
+		Clob xml = getClob(env.getProperty(KEY_XML_FILE_CLASSPATH_LOCATION));
 		
 		return new CarModel("Audi", getDateId(), image, xml);
 	}
 
-	private byte[] getBytes(String classpathLocation) {
+	private Blob getBlob(String classpathLocation) {
 		ClassPathResource imageFile = new ClassPathResource(classpathLocation);
 		
-		byte[] resource;
+		Blob resource = null;
 		if (imageFile.exists()) {
 			
 			try {
 				try (InputStream inputStream = imageFile.getInputStream()) {
-					resource = StreamUtils.copyToByteArray(inputStream);
+					resource = new SerialBlob(StreamUtils.copyToByteArray(inputStream));
 					LOG.warn("Resource loaded from {}", classpathLocation);
 				}
-			} catch (IOException e) {
-				LOG.error(MessageFormat.format("Unable to load resource from from {0}", classpathLocation), e);
-				resource = new byte[]{};
+			} catch (Exception e) {
+				LOG.error(MessageFormat.format("Unable to load resource from {0}", classpathLocation), e);
 			}
 		} else {
 			LOG.warn("Resource do not exist on {}", classpathLocation);
-			resource = new byte[]{};
 		}
 		return resource;
 	}
 	
-	private String getString(String classpathLocation) {
+	private Clob getClob(String classpathLocation) {
 		ClassPathResource imageFile = new ClassPathResource(classpathLocation);
 		
-		String resource = "";
+		Clob resource = null;
 		if (imageFile.exists()) {
 			
 			try {
 				try (InputStream inputStream = imageFile.getInputStream()) {
-					resource = StreamUtils.copyToString(inputStream, Charset.forName("UTF-8"));
+					resource = new SerialClob(StreamUtils.copyToString(inputStream, Charset.forName("UTF-8")).toCharArray());
 					LOG.warn("Resource loaded from {}", classpathLocation);
 				}
-			} catch (IOException e) {
+			} catch (Exception e) {
 				LOG.error(MessageFormat.format("Unable to load resource from from {0}", classpathLocation), e);
 			}
 		} else {

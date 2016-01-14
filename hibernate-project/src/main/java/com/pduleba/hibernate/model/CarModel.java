@@ -1,5 +1,10 @@
 package com.pduleba.hibernate.model;
 
+import static java.util.Objects.nonNull;
+
+import java.sql.Blob;
+import java.sql.Clob;
+
 import javax.persistence.Column;
 import javax.persistence.Entity;
 import javax.persistence.GeneratedValue;
@@ -8,9 +13,6 @@ import javax.persistence.Id;
 import javax.persistence.Lob;
 import javax.persistence.SequenceGenerator;
 import javax.persistence.Table;
-
-import org.apache.commons.lang3.ArrayUtils;
-import org.apache.commons.lang3.StringUtils;
 
 import lombok.Data;
 import lombok.NoArgsConstructor;
@@ -21,7 +23,7 @@ import lombok.NoArgsConstructor;
 //@ToString(exclude = "image")
 public @Data class CarModel {
 
-	public CarModel(String name, String dateId, byte[] image, String documentation) {
+	public CarModel(String name, String dateId, Blob image, Clob documentation) {
 		super();
 		this.name = name;
 		this.dateId = dateId;
@@ -42,11 +44,11 @@ public @Data class CarModel {
 
 	@Lob
 	@Column(name = "IMAGE")
-	private byte[] image = {};
+	private Blob image;
 	
 	@Lob
 	@Column(name = "documentation")
-	private String documentation;
+	private Clob documentation;
 
 	@Override
 	public String toString() {
@@ -57,10 +59,10 @@ public @Data class CarModel {
 		sb.append(name);
 		sb.append(", dateId=");
 		sb.append(dateId);
-		sb.append(", imageSize=");
-		sb.append(ArrayUtils.getLength(image));
+		sb.append(", image=");
+		sb.append(nonNull(image));
 		sb.append(", documentation=");
-		sb.append(StringUtils.length(documentation));
+		sb.append(nonNull(documentation));
 		sb.append("]");
 		return sb.toString();
 	}

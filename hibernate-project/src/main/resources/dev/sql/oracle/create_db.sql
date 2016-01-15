@@ -5,8 +5,8 @@ CREATE TABLE HIBERNATE.T_CAR (
   ID                    NUMBER(19),
   NAME             		VARCHAR2(100 CHAR),
   DATE_ID             	VARCHAR2(100 CHAR),
-  IMAGE        			BLOB,
-  DOCUMENTATION        	CLOB,
+  CLOB_COLUMN        	CLOB,
+  NCLOB_COLUMN        	NCLOB,
   CONSTRAINT PK_CAR PRIMARY KEY (ID)
 );
 

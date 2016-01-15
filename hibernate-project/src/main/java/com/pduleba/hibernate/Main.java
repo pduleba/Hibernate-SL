@@ -54,7 +54,7 @@ public class Main {
 	private CarModel read(long carId) {
 		CarModel car = this.controller.read(carId);
 		hasLobsInitialized(car, WorkerService.Mode.READ);
-		
+	
 		return car;
 	}
 	

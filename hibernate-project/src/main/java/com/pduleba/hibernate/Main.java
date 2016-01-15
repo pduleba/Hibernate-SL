@@ -34,8 +34,6 @@ public class Main {
 	
 			LOG.info("######## USER CRUDS ######## ");
 			executeUsersCRUD();
-			LOG.info("######## ORDER CRUDS ######## ");
-			executeOrdersCRUD();
 		}
 	}
 
@@ -52,25 +50,8 @@ public class Main {
 		LOG.info("Complete");
 	}
 
-	private void executeOrdersCRUD() {
-		saveOrder();
-		LOG.info(" ----- CREATE complete ----- ");
-		List<OrderModel> allOrders = getAllOrders();
-		LOG.info(" ----- READ complete ----- ");
-		removeAllOrders(allOrders);
-		LOG.info(" ----- DELETE complete ----- ");
-		getAllOrders();
-		LOG.info(" ----- READ complete ----- ");
-
-		LOG.info("Complete");
-	}
-
 	private void removeAllUsers(List<UserModel> users) {
 		this.controller.removeUsers(users);
-	}
-
-	private void removeAllOrders(List<OrderModel> orders) {
-		this.controller.removeOrders(orders);
 	}
 
 	private List<UserModel> getAllUsers() {
@@ -78,13 +59,6 @@ public class Main {
 		worker.showUsers(allUsers);
 
 		return allUsers;
-	}
-
-	private List<OrderModel> getAllOrders() {
-		List<OrderModel> allOrders = this.controller.getAllOrders();
-		worker.showOrders(allOrders, true);
-
-		return allOrders;
 	}
 
 	private void saveUser() {
@@ -95,23 +69,9 @@ public class Main {
 		for (int i = 0; i < 3; i++) {
 			order = new OrderModel();
 			order.setOrderDetails(worker.generateString(10, 2));
-//			order.setUser(user);
 			user.getOrders().add(order);
 		}
 
 		this.controller.saveUser(user);
 	}
-
-	private void saveOrder() {
-		UserModel user = new UserModel();
-		user.setName(worker.generateString(16, 16));
-
-		OrderModel order = new OrderModel();
-		order.setOrderDetails(worker.generateString(10, 2));
-//		order.setUser(user);
-		user.getOrders().add(order);
-
-		this.controller.saveOrder(order);
-	}
-
 }

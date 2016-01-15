@@ -3,38 +3,36 @@ package com.pduleba.hibernate.model;
 import java.util.Collection;
 import java.util.LinkedHashSet;
 
-import javax.persistence.CascadeType;
+import javax.persistence.CollectionTable;
 import javax.persistence.Column;
+import javax.persistence.ElementCollection;
 import javax.persistence.Entity;
 import javax.persistence.FetchType;
 import javax.persistence.GeneratedValue;
 import javax.persistence.GenerationType;
 import javax.persistence.Id;
 import javax.persistence.JoinColumn;
-import javax.persistence.OneToMany;
 import javax.persistence.SequenceGenerator;
 import javax.persistence.Table;
-import javax.persistence.UniqueConstraint;
 
 import lombok.Data;
 
 @Entity
-@Table(name = "T_USERS",uniqueConstraints = {
-		@UniqueConstraint(columnNames = "ID")}
-)
-@SequenceGenerator(name = "users-sequence-generator", sequenceName = "USERS_SEQ", initialValue = 1, allocationSize = 1)
+@Table(name = "T_USERS")
 public @Data class UserModel {
 
 	@Id
 	@Column(name = "id")
 	@GeneratedValue(generator = "users-sequence-generator", strategy = GenerationType.SEQUENCE)
+	@SequenceGenerator(name = "users-sequence-generator", sequenceName = "USERS_SEQ", initialValue = 1, allocationSize = 1)
 	private Long id;
 	
 	@Column(name = "name")
 	private String name;
 
-	@OneToMany(cascade = CascadeType.ALL, fetch = FetchType.EAGER)
-	@JoinColumn(name="id_user", referencedColumnName="id")
+	@ElementCollection(fetch = FetchType.EAGER)
+	@CollectionTable(name = "T_ORDERS",
+			joinColumns = @JoinColumn(name="id_user"))
 	private Collection<OrderModel> orders = new LinkedHashSet<>();
 
 }

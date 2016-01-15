@@ -63,8 +63,7 @@ public class Main {
 		} else if (Objects.isNull(car)) {
 			LOG.info("{} :: NOT FOUND", mode);
 		} else {
-			
-			LOG.info("{} :: Blob initialized = {}", mode, Persistence.getPersistenceUtil().isLoaded(car.getImage()));
+			LOG.info("{} :: Blob initialized = {}", mode, Persistence.getPersistenceUtil().isLoaded(car, "image"));
 			LOG.info("{} :: Clob initialized = {}", mode, Persistence.getPersistenceUtil().isLoaded(car, "documentation"));
 			LOG.info("{} :: Blob image = {}", mode, car.getImage());
 			LOG.info("{} :: Clob Documentation = {}", mode, car.getDocumentation());

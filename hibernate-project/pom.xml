@@ -81,18 +81,16 @@
 						<execution>
 							<configuration>
 								<target>
-									<taskdef name="instrument"
-										classname="org.hibernate.tool.instrument.javassist.InstrumentTask">
+									<taskdef name="enhance"
+										classname="org.hibernate.tool.enhance.EnhancementTask">
 										<classpath>
 											<path refid="maven.dependency.classpath" />
 											<path refid="maven.plugin.classpath" />
 										</classpath>
 									</taskdef>
-									<instrument verbose="true">
-										<fileset dir="${project.build.outputDirectory}">
-											<include name="**/model/*.class" />
-										</fileset>
-									</instrument>
+									<enhance>
+										<fileset dir="${project.build.outputDirectory}" includes="**/model/*.class"/>
+									</enhance>
 								</target>
 							</configuration>
 							<phase>process-classes</phase>

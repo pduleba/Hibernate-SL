@@ -1,0 +1,6 @@
+To lazy load entities filed:
+1. Annotate it with @Basic(fetch = FetchType.LAZY)
+2. Execute maven build (see pom.xml for details) to generate 'Bytecode enhancement'
+   See https://docs.jboss.org/hibernate/orm/5.0/manual/en-US/html/ch20.html#bytecode-enhancement for more
+   
+Without this Field Lazy Loading will not work!

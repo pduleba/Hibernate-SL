@@ -27,6 +27,7 @@
 
 		<!-- Persistence Layer -->
 		<commons-dbcp2.version>2.1.1</commons-dbcp2.version>
+		<hibernate-jpa-2.1-api.version>1.0.0.Final</hibernate-jpa-2.1-api.version>
 		<hibernate.validator.version>5.2.2.Final</hibernate.validator.version>
 		<hibernate.version>5.0.4.Final</hibernate.version>
 		<javax.transaction-api.version>1.2</javax.transaction-api.version>
@@ -201,6 +202,11 @@
 			<artifactId>hibernate-core</artifactId>
 			<version>${hibernate.version}</version>
 		</dependency>
+	    <!-- <dependency>
+			<groupId>org.hibernate</groupId>
+			<artifactId>hibernate-entitymanager</artifactId>
+			<version>${hibernate.version}</version>
+		</dependency> -->
 		<dependency>
 			<groupId>org.hibernate</groupId>
 			<artifactId>hibernate-validator</artifactId>
@@ -211,12 +217,17 @@
 			<artifactId>javax.transaction-api</artifactId>
 			<version>${javax.transaction-api.version}</version>
 		</dependency>
+		<!-- <dependency>
+			<groupId>org.hibernate.javax.persistence</groupId>
+			<artifactId>hibernate-jpa-2.1-api</artifactId>
+			<version>${hibernate-jpa-2.1-api.version}</version>
+		</dependency> -->
 		<dependency>
 			<groupId>org.apache.commons</groupId>
 			<artifactId>commons-dbcp2</artifactId>
 			<version>${commons-dbcp2.version}</version>
 		</dependency>
-
+    
 		<!-- Spring Core -->
 		<dependency>
 			<groupId>org.springframework</groupId>

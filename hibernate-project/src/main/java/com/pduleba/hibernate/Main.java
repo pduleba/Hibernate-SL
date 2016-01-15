@@ -5,6 +5,7 @@ import java.util.Objects;
 import javax.persistence.Persistence;
 
 import org.apache.commons.lang3.BooleanUtils;
+import org.hibernate.Hibernate;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.context.ConfigurableApplicationContext;
@@ -63,10 +64,11 @@ public class Main {
 		} else if (Objects.isNull(car)) {
 			LOG.info("{} :: NOT FOUND", mode);
 		} else {
-			LOG.info("{} :: Blob initialized = {}", mode, Persistence.getPersistenceUtil().isLoaded(car, "image"));
-			LOG.info("{} :: Clob initialized = {}", mode, Persistence.getPersistenceUtil().isLoaded(car, "documentation"));
-			LOG.info("{} :: Blob image = {}", mode, car.getImage());
-			LOG.info("{} :: Clob Documentation = {}", mode, car.getDocumentation());
+			if (Hibernate.isPropertyInitialized(car, "image")) {
+				LOG.info("{} :: Blob image INITIALIZED", mode);
+			} else {
+				LOG.info("{} :: Blob image NOT INITIALIZED ", mode);
+			}
 		}
 	}
 }

@@ -33,7 +33,7 @@
 		<!-- profile specific -->
 		<oracle.driver.version>11.2.0.4</oracle.driver.version>
 		<mysql.driver.version>5.1.38</mysql.driver.version>
-		
+
 		<!-- Business Layer -->
 		<el-api.version>3.0.0</el-api.version>
 		<javax.inject.version>1</javax.inject.version>
@@ -48,6 +48,7 @@
 		<!-- Maven dependencies -->
 		<maven-compiler-plugin.version>3.3</maven-compiler-plugin.version>
 		<properties-maven-plugin.version>1.0.0</properties-maven-plugin.version>
+		<maven-antrun-plugin.version>1.8</maven-antrun-plugin.version>
 	</properties>
 
 	<build>
@@ -72,6 +73,44 @@
 						</execution>
 					</executions>
 				</plugin>
+				<plugin>
+					<groupId>org.apache.maven.plugins</groupId>
+					<artifactId>maven-antrun-plugin</artifactId>
+					<version>${maven-antrun-plugin.version}</version>
+					<executions>
+						<execution>
+							<configuration>
+								<target>
+									<taskdef name="instrument"
+										classname="org.hibernate.tool.instrument.javassist.InstrumentTask">
+										<classpath>
+											<path refid="maven.dependency.classpath" />
+											<path refid="maven.plugin.classpath" />
+										</classpath>
+									</taskdef>
+									<instrument verbose="true">
+										<fileset dir="${project.build.outputDirectory}">
+											<include name="**/model/*.class" />
+										</fileset>
+									</instrument>
+								</target>
+							</configuration>
+							<phase>process-classes</phase>
+							<goals>
+								<goal>run</goal>
+							</goals>
+						</execution>
+					</executions>
+				</plugin>
+				<plugin>
+					<groupId>org.apache.maven.plugins</groupId>
+					<artifactId>maven-compiler-plugin</artifactId>
+					<version>${maven-compiler-plugin.version}</version>
+					<configuration>
+						<source>${java.version}</source>
+						<target>${java.version}</target>
+					</configuration>
+				</plugin>
 			</plugins>
 		</pluginManagement>
 
@@ -92,17 +131,22 @@
 					<include>**/lobs/*.*</include>
 				</includes>
 			</resource>
+			<resource>
+				<directory>${resource.directory}</directory>
+				<includes>
+					<include>**/log4j.*</include>
+				</includes>
+			</resource>
 		</resources>
 
 		<plugins>
 			<plugin>
 				<groupId>org.apache.maven.plugins</groupId>
 				<artifactId>maven-compiler-plugin</artifactId>
-				<version>${maven-compiler-plugin.version}</version>
-				<configuration>
-					<source>${java.version}</source>
-					<target>${java.version}</target>
-				</configuration>
+			</plugin>
+			<plugin>
+				<groupId>org.apache.maven.plugins</groupId>
+				<artifactId>maven-antrun-plugin</artifactId>
 			</plugin>
 		</plugins>
 	</build>

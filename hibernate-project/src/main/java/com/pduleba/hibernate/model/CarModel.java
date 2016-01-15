@@ -1,12 +1,12 @@
 package com.pduleba.hibernate.model;
 
-import static java.util.Objects.nonNull;
-
 import java.sql.Blob;
 import java.sql.Clob;
 
+import javax.persistence.Basic;
 import javax.persistence.Column;
 import javax.persistence.Entity;
+import javax.persistence.FetchType;
 import javax.persistence.GeneratedValue;
 import javax.persistence.GenerationType;
 import javax.persistence.Id;
@@ -20,7 +20,6 @@ import lombok.NoArgsConstructor;
 @Entity
 @Table(name = "T_CAR")
 @NoArgsConstructor
-//@ToString(exclude = "image")
 public @Data class CarModel {
 
 	public CarModel(String name, String dateId, Blob image, Clob documentation) {
@@ -42,28 +41,13 @@ public @Data class CarModel {
 	@Column(name = "DATE_ID")
 	private String dateId;
 
-	@Lob
+	@Lob 
+	@Basic(fetch = FetchType.LAZY)
 	@Column(name = "IMAGE")
 	private Blob image;
 	
-	@Lob
+	@Lob 
+	@Basic(fetch = FetchType.LAZY)
 	@Column(name = "documentation")
 	private Clob documentation;
-
-	@Override
-	public String toString() {
-		StringBuilder sb = new StringBuilder();
-		sb.append("CarModel [id=");
-		sb.append(id);
-		sb.append(", name=");
-		sb.append(name);
-		sb.append(", dateId=");
-		sb.append(dateId);
-		sb.append(", image=");
-		sb.append(nonNull(image));
-		sb.append(", documentation=");
-		sb.append(nonNull(documentation));
-		sb.append("]");
-		return sb.toString();
-	}
 }

@@ -37,8 +37,6 @@ class WorkerServiceImpl implements WorkerService, ApplicationPropertiesConfigura
 	
 	@Override
 	public CarModel getCar() {
-//		LobCreator lobCreator = Hibernate.getLobCreator(session);
-//		Blob image = lobCreator.createBlob(stream, length)
 		Blob image = getBlob(env.getProperty(KEY_IMAGE_FILE_CLASSPATH_LOCATION));
 		Clob xml = getClob(env.getProperty(KEY_XML_FILE_CLASSPATH_LOCATION));
 		

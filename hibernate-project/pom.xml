@@ -27,9 +27,8 @@
 
 		<!-- Persistence Layer -->
 		<commons-dbcp2.version>2.1.1</commons-dbcp2.version>
-		<hibernate-jpa-2.1-api.version>1.0.0.Final</hibernate-jpa-2.1-api.version>
-		<hibernate.validator.version>5.2.2.Final</hibernate.validator.version>
 		<hibernate.version>5.0.4.Final</hibernate.version>
+		<hibernate.validator.version>5.2.2.Final</hibernate.validator.version>
 		<javax.transaction-api.version>1.2</javax.transaction-api.version>
 		<!-- profile specific -->
 		<oracle.driver.version>11.2.0.4</oracle.driver.version>
@@ -49,7 +48,6 @@
 		<!-- Maven dependencies -->
 		<maven-compiler-plugin.version>3.3</maven-compiler-plugin.version>
 		<properties-maven-plugin.version>1.0.0</properties-maven-plugin.version>
-		<maven-antrun-plugin.version>1.8</maven-antrun-plugin.version>
 	</properties>
 
 	<build>
@@ -75,32 +73,48 @@
 					</executions>
 				</plugin>
 				<plugin>
-					<groupId>org.apache.maven.plugins</groupId>
-					<artifactId>maven-antrun-plugin</artifactId>
-					<version>${maven-antrun-plugin.version}</version>
-					<executions>
-						<execution>
-							<configuration>
-								<target>
-									<taskdef name="enhance"
-										classname="org.hibernate.tool.enhance.EnhancementTask">
-										<classpath>
-											<path refid="maven.dependency.classpath" />
-											<path refid="maven.plugin.classpath" />
-										</classpath>
-									</taskdef>
-									<enhance>
-										<fileset dir="${project.build.outputDirectory}" includes="**/model/*.class"/>
-									</enhance>
-								</target>
-							</configuration>
-							<phase>process-classes</phase>
-							<goals>
-								<goal>run</goal>
-							</goals>
-						</execution>
-					</executions>
-				</plugin>
+		            <groupId>org.hibernate.orm.tooling</groupId>
+		            <artifactId>hibernate-enhance-maven-plugin</artifactId>
+		            <version>${hibernate.version}</version>
+		            <executions>
+		                <execution>
+		                    <configuration>
+		                        <dir>${project.build.outputDirectory}\com\pduleba\hibernate\model</dir>
+		                        <failOnError>true</failOnError>
+		                        <enableLazyInitialization>true</enableLazyInitialization>
+		                        <enableDirtyTracking>true</enableDirtyTracking>
+		                        <enableAssociationManagement>true</enableAssociationManagement>
+		                        <enableExtendedEnhancement>false</enableExtendedEnhancement>
+		                    </configuration>
+		                    <phase>compile</phase>
+		                    <goals>
+		                        <goal>enhance</goal>
+		                    </goals>
+		                </execution>
+		            </executions>
+		            <dependencies>
+		            	<dependency>
+                            <groupId>org.hibernate</groupId>
+                            <artifactId>hibernate-entitymanager</artifactId>
+                            <version>${hibernate.version}</version>
+                        </dependency>
+                        <dependency>
+                            <groupId>org.hibernate</groupId>
+                            <artifactId>hibernate-validator</artifactId>
+                            <version>${hibernate.validator.version}</version>
+                        </dependency>
+                        <dependency>
+                            <groupId>org.hibernate</groupId>
+                            <artifactId>hibernate-envers</artifactId>
+                            <version>${hibernate.version}</version>
+                        </dependency>
+						<dependency>
+							<groupId>javax.transaction</groupId>
+							<artifactId>javax.transaction-api</artifactId>
+							<version>${javax.transaction-api.version}</version>
+						</dependency>
+		            </dependencies>
+		        </plugin>
 				<plugin>
 					<groupId>org.apache.maven.plugins</groupId>
 					<artifactId>maven-compiler-plugin</artifactId>
@@ -144,8 +158,8 @@
 				<artifactId>maven-compiler-plugin</artifactId>
 			</plugin>
 			<plugin>
-				<groupId>org.apache.maven.plugins</groupId>
-				<artifactId>maven-antrun-plugin</artifactId>
+	            <groupId>org.hibernate.orm.tooling</groupId>
+	            <artifactId>hibernate-enhance-maven-plugin</artifactId>
 			</plugin>
 		</plugins>
 	</build>
@@ -202,11 +216,6 @@
 			<artifactId>hibernate-core</artifactId>
 			<version>${hibernate.version}</version>
 		</dependency>
-	    <!-- <dependency>
-			<groupId>org.hibernate</groupId>
-			<artifactId>hibernate-entitymanager</artifactId>
-			<version>${hibernate.version}</version>
-		</dependency> -->
 		<dependency>
 			<groupId>org.hibernate</groupId>
 			<artifactId>hibernate-validator</artifactId>
@@ -217,11 +226,6 @@
 			<artifactId>javax.transaction-api</artifactId>
 			<version>${javax.transaction-api.version}</version>
 		</dependency>
-		<!-- <dependency>
-			<groupId>org.hibernate.javax.persistence</groupId>
-			<artifactId>hibernate-jpa-2.1-api</artifactId>
-			<version>${hibernate-jpa-2.1-api.version}</version>
-		</dependency> -->
 		<dependency>
 			<groupId>org.apache.commons</groupId>
 			<artifactId>commons-dbcp2</artifactId>

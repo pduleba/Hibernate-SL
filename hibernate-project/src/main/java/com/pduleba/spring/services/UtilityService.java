@@ -2,9 +2,9 @@ package com.pduleba.spring.services;
 
 import com.pduleba.hibernate.model.CarModel;
 
-public interface WorkerService {
+public interface UtilityService {
 
-	enum Mode {
+	public enum Mode {
 		CREATE,
 		READ,
 		UPDATE,
@@ -12,4 +12,6 @@ public interface WorkerService {
 	}
 	
 	CarModel getCar();
+	
+	void showCar(CarModel car, Mode mode);
 }

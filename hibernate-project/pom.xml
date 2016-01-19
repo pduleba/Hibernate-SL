@@ -159,6 +159,11 @@
 			<artifactId>hibernate-core</artifactId>
 			<version>${hibernate.version}</version>
 		</dependency>
+		<dependency><!-- REQUIRED TO CONFIGURE EVENTS FOR HIBERNATES SESSION FACTORY -->
+		   <groupId>org.hibernate</groupId>
+		   <artifactId>hibernate-entitymanager</artifactId>
+		   <version>${hibernate.version}</version>
+		</dependency> 
 		<dependency>
 			<groupId>org.hibernate</groupId>
 			<artifactId>hibernate-validator</artifactId>

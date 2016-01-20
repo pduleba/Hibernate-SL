@@ -38,9 +38,6 @@ public class SpringConfiguration implements ApplicationPropertiesConfiguration {
 
 	public static final String TRANSACTION_MANAGER_JPA = "transactionManagerJpa";
 	public static final String TRANSACTION_MANAGER_HIBERNATE = "transactionManagerHibernate";
-
-	public static final String DAO_JPA = "daoJpa";
-	public static final String DAO_HIBERNATE = "daoHibernate";
 	
 	@Autowired
 	private Environment env;
@@ -74,6 +71,7 @@ public class SpringConfiguration implements ApplicationPropertiesConfiguration {
 		sessionFactory.setPackagesToScan(CarModel.class.getPackage().getName());
 		sessionFactory.setHibernateProperties(getHibernateProperties());
 
+		
 		return sessionFactory;
 	}
 

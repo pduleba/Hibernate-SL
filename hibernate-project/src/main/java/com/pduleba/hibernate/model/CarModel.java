@@ -13,13 +13,13 @@ import javax.persistence.Table;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
-import com.pduleba.hibernate.listeners.BasicEventListener;
+import com.pduleba.hibernate.listeners.JPAEventListener;
 
 import lombok.Data;
 import lombok.NoArgsConstructor;
 
 @Entity
-@EntityListeners(value = { BasicEventListener.class })
+@EntityListeners(value = { JPAEventListener.class })
 @Table(name = "T_CAR")
 @NoArgsConstructor
 public @Data class CarModel {
@@ -34,7 +34,7 @@ public @Data class CarModel {
 	
 	@PrePersist
 	public void prePersist() {
-		LOG.debug("PrePersist Event {}");
+		LOG.info("@PrePersist");
 	}
 
 	@Id

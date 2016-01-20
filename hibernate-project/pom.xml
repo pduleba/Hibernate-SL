@@ -33,7 +33,7 @@
 		<!-- profile specific -->
 		<oracle.driver.version>11.2.0.4</oracle.driver.version>
 		<mysql.driver.version>5.1.38</mysql.driver.version>
-		
+
 		<!-- Business Layer -->
 		<el-api.version>3.0.0</el-api.version>
 		<javax.inject.version>1</javax.inject.version>
@@ -48,6 +48,7 @@
 		<!-- Maven dependencies -->
 		<maven-compiler-plugin.version>3.3</maven-compiler-plugin.version>
 		<properties-maven-plugin.version>1.0.0</properties-maven-plugin.version>
+		<maven-assembly-plugin.version>2.6</maven-assembly-plugin.version>
 	</properties>
 
 	<build>
@@ -72,6 +73,42 @@
 						</execution>
 					</executions>
 				</plugin>
+				<plugin>
+					<groupId>org.apache.maven.plugins</groupId>
+					<artifactId>maven-assembly-plugin</artifactId>
+					<version>${maven-assembly-plugin.version}</version>
+					<executions>
+						<execution>
+							<id>jar-with-classpath</id>
+							<phase>package</phase>
+							<goals>
+								<goal>single</goal>
+							</goals>
+							<inherited>false</inherited>
+							<configuration>
+								<archive>
+									<manifest>
+										<addClasspath>true</addClasspath>
+										<mainClass>com.pduleba.hibernate.Main</mainClass>
+									</manifest>
+								</archive>
+								<descriptorRefs>
+									<descriptorRef>jar-with-dependencies</descriptorRef>
+								</descriptorRefs>
+								<appendAssemblyId>false</appendAssemblyId>
+							</configuration>
+						</execution>
+					</executions>
+				</plugin>
+				<plugin>
+					<groupId>org.apache.maven.plugins</groupId>
+					<artifactId>maven-compiler-plugin</artifactId>
+					<version>${maven-compiler-plugin.version}</version>
+					<configuration>
+						<source>${java.version}</source>
+						<target>${java.version}</target>
+					</configuration>
+				</plugin>
 			</plugins>
 		</pluginManagement>
 
@@ -90,6 +127,7 @@
 				<directory>${resource.directory}</directory>
 				<includes>
 					<include>**/lobs/*.*</include>
+					<include>META-INF/**/*</include>
 				</includes>
 			</resource>
 		</resources>
@@ -98,11 +136,10 @@
 			<plugin>
 				<groupId>org.apache.maven.plugins</groupId>
 				<artifactId>maven-compiler-plugin</artifactId>
-				<version>${maven-compiler-plugin.version}</version>
-				<configuration>
-					<source>${java.version}</source>
-					<target>${java.version}</target>
-				</configuration>
+			</plugin>
+			<plugin>
+				<groupId>org.apache.maven.plugins</groupId>
+				<artifactId>maven-assembly-plugin</artifactId>
 			</plugin>
 		</plugins>
 	</build>
@@ -160,10 +197,10 @@
 			<version>${hibernate.version}</version>
 		</dependency>
 		<dependency><!-- REQUIRED TO CONFIGURE EVENTS FOR HIBERNATES SESSION FACTORY -->
-		   <groupId>org.hibernate</groupId>
-		   <artifactId>hibernate-entitymanager</artifactId>
-		   <version>${hibernate.version}</version>
-		</dependency> 
+			<groupId>org.hibernate</groupId>
+			<artifactId>hibernate-entitymanager</artifactId>
+			<version>${hibernate.version}</version>
+		</dependency>
 		<dependency>
 			<groupId>org.hibernate</groupId>
 			<artifactId>hibernate-validator</artifactId>

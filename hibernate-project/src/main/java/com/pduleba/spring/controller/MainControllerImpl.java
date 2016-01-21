@@ -25,7 +25,7 @@ public class MainControllerImpl implements MainController, PersistanceDaoBeans {
 	/**
 	 * This controls which DAO bean is used.
 	 */
-	public static final String REF_DAO_NAME = BEAN_NAME_JPA;
+	public static final String REF_DAO_NAME = BEAN_NAME_HIBERNATE;
 	
 	@Autowired
 	private CarService carService;

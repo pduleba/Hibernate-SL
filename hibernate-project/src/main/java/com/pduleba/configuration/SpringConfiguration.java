@@ -2,16 +2,12 @@ package com.pduleba.configuration;
 
 import java.io.IOException;
 import java.text.MessageFormat;
-import java.util.HashMap;
-import java.util.Map;
 import java.util.Properties;
 
 import javax.persistence.EntityManagerFactory;
 import javax.sql.DataSource;
 
 import org.apache.commons.dbcp2.BasicDataSource;
-import org.hibernate.SessionFactory;
-import org.springframework.beans.factory.FactoryBean;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.ComponentScan;
@@ -62,21 +58,15 @@ public class SpringConfiguration implements ApplicationPropertiesConfiguration {
 	@Bean LocalContainerEntityManagerFactoryBean entityManagerFactory(DataSource dataSource) throws IOException {
 		LocalContainerEntityManagerFactoryBean entityManagerFactory = new LocalContainerEntityManagerFactoryBean();
 		entityManagerFactory.setDataSource(dataSource);
-        Map<String, String> properties = new HashMap<String, String>();
-        properties.put("hibernate.current_session_context_class", SpringSessionContext.class.getName()); 
-
-        entityManagerFactory.setJpaPropertyMap(properties);
 		entityManagerFactory.setPackagesToScan(CarModel.class.getPackage().getName());
-		
-		HibernateJpaVendorAdapter va = new HibernateJpaVendorAdapter();
-        entityManagerFactory.setJpaVendorAdapter(va);
         entityManagerFactory.setJpaProperties(getHibernateProperties());
+        entityManagerFactory.setJpaVendorAdapter(new HibernateJpaVendorAdapter());
         
 		return entityManagerFactory;
 	}
 
 	// SessionFactory by EntityManagerFactory
-	@Bean public FactoryBean<SessionFactory> getSessionFactory(EntityManagerFactory emf) {
+	@Bean public HibernateJpaSessionFactoryBean getSessionFactory(EntityManagerFactory emf) {
 		HibernateJpaSessionFactoryBean factory = new HibernateJpaSessionFactoryBean();
 		factory.setEntityManagerFactory(emf);
 
@@ -98,6 +88,8 @@ public class SpringConfiguration implements ApplicationPropertiesConfiguration {
 		
 		if (resource.isReadable()) {
 			prop.load(resource.getInputStream());
+			// TRICK !!!
+	        prop.put("hibernate.current_session_context_class", SpringSessionContext.class.getName()); 
 		} else {
 			throw new IllegalStateException(MessageFormat.format("{0} not readable", resource.getFilename()));
 		}

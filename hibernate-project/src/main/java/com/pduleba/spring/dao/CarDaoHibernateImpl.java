@@ -8,12 +8,11 @@ import org.springframework.orm.hibernate5.support.HibernateDaoSupport;
 import org.springframework.stereotype.Repository;
 import org.springframework.transaction.annotation.Transactional;
 
-import com.pduleba.configuration.SpringConfiguration;
 import com.pduleba.hibernate.model.CarModel;
 import com.pduleba.spring.controller.PersistanceDaoBeans;
 
 @Repository(value = PersistanceDaoBeans.BEAN_NAME_HIBERNATE)
-@Transactional(value = SpringConfiguration.TRANSACTION_MANAGER_HIBERNATE)
+@Transactional
 public class CarDaoHibernateImpl extends HibernateDaoSupport implements CarDao {
 	
 	public static final Logger LOG = LoggerFactory.getLogger(CarDaoHibernateImpl.class);
@@ -40,6 +39,6 @@ public class CarDaoHibernateImpl extends HibernateDaoSupport implements CarDao {
 
 	@Override
 	public void delete(CarModel car) {
-		getHibernateTemplate().delete(car);
+		getHibernateTemplate().delete(getHibernateTemplate().merge(car));
 	}
 }

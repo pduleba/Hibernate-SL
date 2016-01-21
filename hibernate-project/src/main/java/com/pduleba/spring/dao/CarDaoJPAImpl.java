@@ -8,12 +8,11 @@ import org.slf4j.LoggerFactory;
 import org.springframework.stereotype.Repository;
 import org.springframework.transaction.annotation.Transactional;
 
-import com.pduleba.configuration.SpringConfiguration;
 import com.pduleba.hibernate.model.CarModel;
 import com.pduleba.spring.controller.PersistanceDaoBeans;
 
 @Repository(value = PersistanceDaoBeans.BEAN_NAME_JPA)
-@Transactional(value = SpringConfiguration.TRANSACTION_MANAGER_JPA)
+@Transactional
 public class CarDaoJPAImpl implements CarDao {
 
 	public static final Logger LOG = LoggerFactory.getLogger(CarDaoJPAImpl.class);

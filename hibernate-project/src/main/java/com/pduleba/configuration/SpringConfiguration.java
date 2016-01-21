@@ -2,12 +2,16 @@ package com.pduleba.configuration;
 
 import java.io.IOException;
 import java.text.MessageFormat;
+import java.util.HashMap;
+import java.util.Map;
 import java.util.Properties;
 
 import javax.persistence.EntityManagerFactory;
 import javax.sql.DataSource;
 
+import org.apache.commons.dbcp2.BasicDataSource;
 import org.hibernate.SessionFactory;
+import org.springframework.beans.factory.FactoryBean;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.ComponentScan;
@@ -17,14 +21,11 @@ import org.springframework.context.support.PropertySourcesPlaceholderConfigurer;
 import org.springframework.core.env.Environment;
 import org.springframework.core.io.ClassPathResource;
 import org.springframework.core.io.Resource;
-import org.springframework.jdbc.datasource.DriverManagerDataSource;
-import org.springframework.orm.hibernate5.HibernateTransactionManager;
-import org.springframework.orm.hibernate5.LocalSessionFactoryBean;
+import org.springframework.orm.hibernate5.SpringSessionContext;
 import org.springframework.orm.jpa.JpaTransactionManager;
-import org.springframework.orm.jpa.JpaVendorAdapter;
 import org.springframework.orm.jpa.LocalContainerEntityManagerFactoryBean;
+import org.springframework.orm.jpa.vendor.HibernateJpaSessionFactoryBean;
 import org.springframework.orm.jpa.vendor.HibernateJpaVendorAdapter;
-import org.springframework.transaction.PlatformTransactionManager;
 import org.springframework.transaction.annotation.EnableTransactionManagement;
 
 import com.pduleba.hibernate.model.CarModel;
@@ -35,9 +36,6 @@ import com.pduleba.spring.ApplicationInitializationPackageMarker;
 @PropertySource("classpath:/config/application.properties")
 @EnableTransactionManagement
 public class SpringConfiguration implements ApplicationPropertiesConfiguration {
-
-	public static final String TRANSACTION_MANAGER_JPA = "transactionManagerJpa";
-	public static final String TRANSACTION_MANAGER_HIBERNATE = "transactionManagerHibernate";
 	
 	@Autowired
 	private Environment env;
@@ -50,7 +48,7 @@ public class SpringConfiguration implements ApplicationPropertiesConfiguration {
 	}
 	
 	@Bean DataSource dataSource() {
-		DriverManagerDataSource dataSource = new DriverManagerDataSource();
+		BasicDataSource dataSource = new BasicDataSource();
 		
 		dataSource.setDriverClassName(env.getProperty(KEY_DATASOURCE_DRIVER_CLASS));
 		dataSource.setUrl(env.getProperty(KEY_DATASOURCE_URL));
@@ -60,47 +58,38 @@ public class SpringConfiguration implements ApplicationPropertiesConfiguration {
 		return dataSource;
 	}
 	
-	// ---------------------------------------
-	// 	   Session Factory + Transactions
-	// ---------------------------------------
-	@Bean
-	@Autowired LocalSessionFactoryBean sessionFactory(DataSource dataSource) throws IOException {
-		LocalSessionFactoryBean sessionFactory = new LocalSessionFactoryBean();
-		
-		sessionFactory.setDataSource(dataSource);
-		sessionFactory.setPackagesToScan(CarModel.class.getPackage().getName());
-		sessionFactory.setHibernateProperties(getHibernateProperties());
+	// EntityManager by dataSource
+	@Bean LocalContainerEntityManagerFactoryBean entityManagerFactory(DataSource dataSource) throws IOException {
+		LocalContainerEntityManagerFactoryBean entityManagerFactory = new LocalContainerEntityManagerFactoryBean();
+		entityManagerFactory.setDataSource(dataSource);
+        Map<String, String> properties = new HashMap<String, String>();
+        properties.put("hibernate.current_session_context_class", SpringSessionContext.class.getName()); 
 
+        entityManagerFactory.setJpaPropertyMap(properties);
+		entityManagerFactory.setPackagesToScan(CarModel.class.getPackage().getName());
 		
-		return sessionFactory;
+		HibernateJpaVendorAdapter va = new HibernateJpaVendorAdapter();
+        entityManagerFactory.setJpaVendorAdapter(va);
+        entityManagerFactory.setJpaProperties(getHibernateProperties());
+        
+		return entityManagerFactory;
 	}
 
-	@Bean(name = TRANSACTION_MANAGER_HIBERNATE)
-	@Autowired PlatformTransactionManager transactionManager(SessionFactory sessionFactory) {
-		return new HibernateTransactionManager(sessionFactory);
-	}
-	
-	// ---------------------------------------
-	// 	Entity Manager Factory + Transactions
-	// ---------------------------------------
-	@Bean
-	@Autowired 
-	LocalContainerEntityManagerFactoryBean entityManagerFactory(DataSource dataSource) throws IOException {
-		LocalContainerEntityManagerFactoryBean em = new LocalContainerEntityManagerFactoryBean();
-		
-		em.setDataSource(dataSource);
-		em.setPackagesToScan(CarModel.class.getPackage().getName());
-		
-		JpaVendorAdapter vendorAdapter = new HibernateJpaVendorAdapter();
-        em.setJpaVendorAdapter(vendorAdapter);
-        em.setJpaProperties(getHibernateProperties());	 
+	// SessionFactory by EntityManagerFactory
+	@Bean public FactoryBean<SessionFactory> getSessionFactory(EntityManagerFactory emf) {
+		HibernateJpaSessionFactoryBean factory = new HibernateJpaSessionFactoryBean();
+		factory.setEntityManagerFactory(emf);
 
-		return em;
+		return factory;
 	}
-	
-	@Bean(name = TRANSACTION_MANAGER_JPA)
-	@Autowired PlatformTransactionManager jpaTransactionManager(EntityManagerFactory entityManagerFactory) {
-		return new JpaTransactionManager(entityManagerFactory);
+
+	// TransactionManager by EntityManagerFactory 
+	@Bean JpaTransactionManager jpaTransactionManager(EntityManagerFactory emf, DataSource dataSource) {
+		JpaTransactionManager jpaTransactionManager = new JpaTransactionManager();
+		jpaTransactionManager.setEntityManagerFactory(emf);
+		jpaTransactionManager.setDataSource(dataSource);
+		
+		return jpaTransactionManager;
 	}
 	
 	private Properties getHibernateProperties() throws IOException {

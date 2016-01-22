@@ -20,6 +20,7 @@ import org.springframework.core.io.Resource;
 import org.springframework.orm.hibernate5.SpringSessionContext;
 import org.springframework.orm.jpa.JpaTransactionManager;
 import org.springframework.orm.jpa.LocalContainerEntityManagerFactoryBean;
+import org.springframework.orm.jpa.support.SharedEntityManagerBean;
 import org.springframework.orm.jpa.vendor.HibernateJpaSessionFactoryBean;
 import org.springframework.orm.jpa.vendor.HibernateJpaVendorAdapter;
 import org.springframework.transaction.annotation.EnableTransactionManagement;
@@ -54,7 +55,7 @@ public class SpringConfiguration implements ApplicationPropertiesConfiguration {
 		return dataSource;
 	}
 	
-	// EntityManager by dataSource
+	// EntityManagerFactory by dataSource
 	@Bean LocalContainerEntityManagerFactoryBean entityManagerFactory(DataSource dataSource) throws IOException {
 		LocalContainerEntityManagerFactoryBean entityManagerFactory = new LocalContainerEntityManagerFactoryBean();
 		entityManagerFactory.setDataSource(dataSource);
@@ -71,6 +72,14 @@ public class SpringConfiguration implements ApplicationPropertiesConfiguration {
 		factory.setEntityManagerFactory(emf);
 
 		return factory;
+	}
+	
+	// EntityManager by EntityMangerFactory
+	@Bean SharedEntityManagerBean entityManager(EntityManagerFactory emf) {
+		SharedEntityManagerBean entityManager = new SharedEntityManagerBean();
+		entityManager.setEntityManagerFactory(emf);
+		
+		return entityManager;
 	}
 
 	// TransactionManager by EntityManagerFactory 

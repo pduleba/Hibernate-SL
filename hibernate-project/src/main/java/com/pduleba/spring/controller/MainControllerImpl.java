@@ -22,10 +22,8 @@ public class MainControllerImpl implements MainController, PersistanceDaoBeans {
 
 	public static final Logger LOG = LoggerFactory.getLogger(MainControllerImpl.class);
 
-	/**
-	 * This controls which DAO bean is used.
-	 */
-	public static final String REF_DAO_NAME = BEAN_NAME_HIBERNATE;
+	// CONFIGURATION : Here you can switch Jpa (EntityManager) and Hibernate (SessionFactory) DB access API
+	public static final String REF_DAO_NAME = BEAN_NAME_JPA;
 	
 	@Autowired
 	private CarService carService;

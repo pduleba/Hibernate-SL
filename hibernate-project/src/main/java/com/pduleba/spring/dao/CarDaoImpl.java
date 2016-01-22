@@ -9,16 +9,15 @@ import org.springframework.stereotype.Repository;
 import org.springframework.transaction.annotation.Transactional;
 
 import com.pduleba.hibernate.model.CarModel;
-import com.pduleba.spring.controller.PersistanceDaoBeans;
 
-@Repository(value = PersistanceDaoBeans.BEAN_NAME_HIBERNATE)
+@Repository
 @Transactional
-public class CarDaoHibernateImpl extends HibernateDaoSupport implements CarDao {
+public class CarDaoImpl extends HibernateDaoSupport implements CarDao {
 	
-	public static final Logger LOG = LoggerFactory.getLogger(CarDaoHibernateImpl.class);
+	public static final Logger LOG = LoggerFactory.getLogger(CarDaoImpl.class);
 	
 	@Autowired
-	public CarDaoHibernateImpl(SessionFactory sessionFactory) {
+	public CarDaoImpl(SessionFactory sessionFactory) {
 		setSessionFactory(sessionFactory);
 	}
 

@@ -1,17 +1,15 @@
 package com.pduleba.spring.services;
 
-import javax.annotation.Resource;
-
+import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
 import com.pduleba.hibernate.model.CarModel;
-import com.pduleba.spring.controller.MainControllerImpl;
 import com.pduleba.spring.dao.CarDao;
 
 @Service
 public class CarServiceImpl implements CarService {
 
-	@Resource(name = MainControllerImpl.REF_DAO_NAME)
+	@Autowired
 	private CarDao carDao;
 	
 	@Override

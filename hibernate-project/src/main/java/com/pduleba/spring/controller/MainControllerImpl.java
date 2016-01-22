@@ -5,8 +5,6 @@ import static com.pduleba.spring.services.UtilityService.Mode.DELETE;
 import static com.pduleba.spring.services.UtilityService.Mode.READ;
 import static com.pduleba.spring.services.UtilityService.Mode.UPDATE;
 
-import java.text.MessageFormat;
-
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -18,12 +16,9 @@ import com.pduleba.spring.services.CarService;
 import com.pduleba.spring.services.UtilityService;
 
 @Component
-public class MainControllerImpl implements MainController, PersistanceDaoBeans {
+public class MainControllerImpl implements MainController {
 
 	public static final Logger LOG = LoggerFactory.getLogger(MainControllerImpl.class);
-
-	// CONFIGURATION : Here you can switch Jpa (EntityManager) and Hibernate (SessionFactory) DB access API
-	public static final String REF_DAO_NAME = BEAN_NAME_JPA;
 	
 	@Autowired
 	private CarService carService;
@@ -35,8 +30,6 @@ public class MainControllerImpl implements MainController, PersistanceDaoBeans {
 
 	@Override
 	public void execute() {
-		showActivePersistanceModeDetails();
-		
 		LOG.info("------------");
 		Long carId = create();
 		LOG.info("------------");
@@ -48,19 +41,6 @@ public class MainControllerImpl implements MainController, PersistanceDaoBeans {
 		LOG.info("------------");
 	}
 	
-	private void showActivePersistanceModeDetails() {
-		switch (REF_DAO_NAME) {
-			case BEAN_NAME_JPA:
-				LOG.info("EntityManager is active");
-				break;
-			case BEAN_NAME_HIBERNATE:
-				LOG.info("HibernateTemplate is active");
-				break;
-			default:
-				throw new IllegalArgumentException(MessageFormat.format("Unknown ref dao bean name {0}", REF_DAO_NAME));
-		}
-	}
-
 	private Long create() {
 		CarModel car = utils.getCar();
 		utils.showCar(car, CREATE);

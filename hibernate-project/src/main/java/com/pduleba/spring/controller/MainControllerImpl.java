@@ -1,10 +1,5 @@
 package com.pduleba.spring.controller;
 
-import static com.pduleba.spring.services.UtilityService.Mode.CREATE;
-import static com.pduleba.spring.services.UtilityService.Mode.DELETE;
-import static com.pduleba.spring.services.UtilityService.Mode.READ;
-import static com.pduleba.spring.services.UtilityService.Mode.UPDATE;
-
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -43,7 +38,7 @@ public class MainControllerImpl implements MainController {
 	
 	private Long create() {
 		CarModel car = utils.getCar();
-		utils.showCar(car, CREATE);
+		utils.showCar(car);
 		carService.create(car);
 		
 		return car.getId();
@@ -51,14 +46,14 @@ public class MainControllerImpl implements MainController {
 
 	private CarModel read(long carId) {
 		CarModel car = carService.read(carId);
-		utils.showCar(car, READ);
+		utils.showCar(car);
 		
 		return car;
 	}
 
 	private void update(CarModel car, String newName) {
 		car.setName(newName);
-		utils.showCar(car, UPDATE);
+		utils.showCar(car);
 		carService.update(car);
 	}
 
@@ -66,7 +61,7 @@ public class MainControllerImpl implements MainController {
 		if (deleteEnabled) {
 			carService.delete(car);
 			CarModel deleted = carService.read(car.getId());
-			utils.showCar(deleted, DELETE);
+			utils.showCar(deleted);
 		} else {
 			LOG.warn("Delete feature disabled!");
 		}

@@ -12,6 +12,7 @@ public interface ApplicationPropertiesConfiguration {
 	String KEY_HIBERNATE_PROPERTIES_LOCATION = "hibernate.properties.location";
 
 	// Application properties
-	String KEY_XML_FILE_CLASSPATH_LOCATION = "xml.file.classpath.location";
+	String KEY_SPEC_FILE_CLASSPATH_LOCATION = "spec.file.classpath.location";
+	String KEY_IMAGE_FILE_CLASSPATH_LOCATION = "image.file.classpath.location";
 
 }

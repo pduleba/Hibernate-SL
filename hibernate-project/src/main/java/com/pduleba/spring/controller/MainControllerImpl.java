@@ -9,6 +9,7 @@ import org.springframework.stereotype.Component;
 import com.pduleba.hibernate.model.CarModel;
 import com.pduleba.spring.services.CarService;
 import com.pduleba.spring.services.UtilityService;
+import com.pduleba.spring.services.UtilityService.Mode;
 
 @Component
 public class MainControllerImpl implements MainController {
@@ -38,7 +39,7 @@ public class MainControllerImpl implements MainController {
 	
 	private Long create() {
 		CarModel car = utils.getCar();
-		utils.showCar(car);
+		utils.showCar(car, Mode.CREATE);
 		carService.create(car);
 		
 		return car.getId();
@@ -46,14 +47,14 @@ public class MainControllerImpl implements MainController {
 
 	private CarModel read(long carId) {
 		CarModel car = carService.read(carId);
-		utils.showCar(car);
+		utils.showCar(car, Mode.READ);
 		
 		return car;
 	}
 
 	private void update(CarModel car, String newName) {
 		car.setName(newName);
-		utils.showCar(car);
+		utils.showCar(car, Mode.UPDATE);
 		carService.update(car);
 	}
 
@@ -61,7 +62,7 @@ public class MainControllerImpl implements MainController {
 		if (deleteEnabled) {
 			carService.delete(car);
 			CarModel deleted = carService.read(car.getId());
-			utils.showCar(deleted);
+			utils.showCar(deleted, Mode.DELETE);
 		} else {
 			LOG.warn("Delete feature disabled!");
 		}

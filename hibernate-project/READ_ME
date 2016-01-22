@@ -1,5 +1,5 @@
 Events can be used :
- - in JPA by annotations
+ - by JPA annotations
 	@PostLoad - Invoked after an Entity is loaded into the persistence context (EntityManager), or after a refresh operation.
 	@PrePersist - Invoked before the persist operation is invoked on an Entity. Also invoked on merge for new instances, and on cascade of a persist operation. The Id of the object may not have been assigned, and code be assigned by the event.
 	@PostPersist - Invoked after a new instance is persisted to the database. This occurs during a flush or commit operation after the database INSERT has occurred, but before the transaction is committed. It does not occur during the persist operation. The Id of the object should be assigned.
@@ -8,15 +8,23 @@ Events can be used :
 	@PreRemove - Invoked before the remove operation is invoked on an Entity. Also invoked for cascade of a remove operation. It is also invoked during a flush or commit for orphanRemoval in JPA 2.0.
 	@PostRemove - Invoked after an instance is deleted from the database. This occurs during a flush or commit operation after the database DELETE has occurred, but before the transaction is committed. It does not occur during the remove operation.
  - in Hibernate
-   By event handling specific class
+   by JPA annotation (here is required HibernateJpaSessionFactoryBean + SpringSessionContext)
+   by event handling specific class
 
  - SessionFactory - DO NOT WORK BY DEFAULT 
-   To enable events you have to :
+   To enable Hibernate events you have to :
    1. Configure hibernate Integrator using service loader defined in specific 
       location (/META-INF/services/org.hibernate.integrator.spi.Integrator) and register listener
 	  See for details : https://docs.jboss.org/hibernate/orm/5.0/devguide/en-US/html/ch07.html#registering-listeners-example
+   To enable JPA events you have to :
+   1. create bean using HibernateJpaSessionFactoryBean
+   2. register hibernate parameter hibernate.current_session_context_class = SpringSessionContext (see SpringConfiguration for details)
+   
  - EntityManager - WORK BY DEFAULT 
    1. Create DAO which uses JPA Entity Manager and JpaTransactionManager 
       See for details : http://docs.spring.io/spring/docs/4.2.3.RELEASE/spring-framework-reference/html/orm.html#orm-jpa
    2. Create listener (@EntityListeners(value = { JPAEventListener.class })) or user specific annotation (see CarModel) 
  - JpaTemplate & JpaDaoSupport are not available in Spring any more !!!
+ 
+ 
+ 

@@ -1,13 +1,15 @@
 package com.pduleba.spring.controller;
 
+import java.util.List;
+
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.stereotype.Component;
 
-import com.pduleba.hibernate.model.CarModel;
-import com.pduleba.spring.services.CarService;
+import com.pduleba.hibernate.model.OwnerModel;
+import com.pduleba.spring.services.OwnerService;
 import com.pduleba.spring.services.UtilityService;
 import com.pduleba.spring.services.UtilityService.Mode;
 
@@ -17,7 +19,7 @@ public class MainControllerImpl implements MainController {
 	public static final Logger LOG = LoggerFactory.getLogger(MainControllerImpl.class);
 	
 	@Autowired
-	private CarService carService;
+	private OwnerService ownerService;
 	@Autowired
 	private UtilityService utils;
 	
@@ -27,9 +29,9 @@ public class MainControllerImpl implements MainController {
 	@Override
 	public void execute() {
 		LOG.info("------------");
-		Long carId = create();
+		Long ownerId = create();
 		LOG.info("------------");
-		CarModel persisted = read(carId);
+		OwnerModel persisted = read(ownerId);
 		LOG.info("------------");
 		update(persisted, Thread.currentThread().getName());
 		LOG.info("------------");
@@ -38,31 +40,31 @@ public class MainControllerImpl implements MainController {
 	}
 	
 	private Long create() {
-		CarModel car = utils.getCar();
-		utils.showCar(car, Mode.CREATE);
-		carService.create(car);
+		List<OwnerModel> owners = utils.getData();
+		utils.show(owners, Mode.CREATE);
+		ownerService.createAll(owners);
 		
-		return car.getId();
+		return owners.get(0).getId();
 	}
 
-	private CarModel read(long carId) {
-		CarModel car = carService.read(carId);
-		utils.showCar(car, Mode.READ);
+	private OwnerModel read(long ownerId) {
+		OwnerModel owner = ownerService.read(ownerId);
+		utils.show(owner, Mode.READ);
 		
-		return car;
+		return owner;
 	}
 
-	private void update(CarModel car, String newName) {
-		car.setName(newName);
-		utils.showCar(car, Mode.UPDATE);
-		carService.update(car);
+	private void update(OwnerModel owner, String newName) {
+		owner.setFirstName(newName);
+		utils.show(owner, Mode.UPDATE);
+		ownerService.update(owner);
 	}
 
-	private void delete(CarModel car) {
+	private void delete(OwnerModel owner) {
 		if (deleteEnabled) {
-			carService.delete(car);
-			CarModel deleted = carService.read(car.getId());
-			utils.showCar(deleted, Mode.DELETE);
+			ownerService.delete(owner);
+			OwnerModel deleted = ownerService.read(owner.getId());
+			utils.show(deleted, Mode.DELETE);
 		} else {
 			LOG.warn("Delete feature disabled!");
 		}

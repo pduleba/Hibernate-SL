@@ -1,6 +1,7 @@
 package com.pduleba.hibernate.model;
 
 import java.sql.Date;
+import java.util.LinkedList;
 import java.util.List;
 
 import javax.persistence.CascadeType;
@@ -22,6 +23,14 @@ import lombok.NoArgsConstructor;
 @NoArgsConstructor
 public @Data class OwnerModel {
 
+	public OwnerModel(String firstName, String lastName, Integer age) {
+		super();
+		this.firstName = firstName;
+		this.lastName = lastName;
+		this.since = new Date(System.currentTimeMillis());
+		this.age = age;
+	}
+
 	@Id
 	@GeneratedValue(generator = "owner-sequence-generator", strategy = GenerationType.SEQUENCE)
 	@SequenceGenerator(name = "owner-sequence-generator", sequenceName = "OWNER_SEQ", initialValue = 1, allocationSize = 1)
@@ -40,5 +49,5 @@ public @Data class OwnerModel {
 	private Integer age;
 	
 	@OneToMany(mappedBy = "owner", cascade = CascadeType.ALL, fetch = FetchType.EAGER)
-	private List<CarModel> cars;
+	private List<CarModel> cars = new LinkedList<>();
 }

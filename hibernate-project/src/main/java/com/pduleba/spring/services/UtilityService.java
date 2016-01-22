@@ -1,6 +1,9 @@
 package com.pduleba.spring.services;
 
-import com.pduleba.hibernate.model.CarModel;
+import java.util.Collection;
+import java.util.List;
+
+import com.pduleba.hibernate.model.OwnerModel;
 
 public interface UtilityService {
 	
@@ -11,7 +14,9 @@ public interface UtilityService {
 		DELETE
 	}
 	
-	CarModel getCar();
+	public List<OwnerModel> getData();
 	
-	void showCar(Object entity, Mode mode);
+	void show(Object entity, Mode mode);
+
+	void show(Collection<?> entities, Mode mode);
 }

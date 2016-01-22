@@ -20,11 +20,13 @@ import javax.persistence.Table;
 import lombok.AllArgsConstructor;
 import lombok.Data;
 import lombok.NoArgsConstructor;
+import lombok.ToString;
 
 @Entity
 @Table(name = "T_CAR")
 @NoArgsConstructor
 @AllArgsConstructor
+@ToString(exclude = "owner")
 public @Data class CarModel {
 
 	public CarModel(String name, Integer wheelsNumber, Clob spec, Blob image) {

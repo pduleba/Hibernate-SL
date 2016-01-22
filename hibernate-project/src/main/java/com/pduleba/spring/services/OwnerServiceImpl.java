@@ -1,5 +1,7 @@
 package com.pduleba.spring.services;
 
+import java.util.List;
+
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
@@ -15,6 +17,11 @@ public class OwnerServiceImpl implements OwnerService {
 	@Override
 	public void create(OwnerModel owner) {
 		ownerDao.create(owner);
+	}
+	
+	@Override
+	public void createAll(List<OwnerModel> owners) {
+		ownerDao.createAll(owners);
 	}
 
 	@Override

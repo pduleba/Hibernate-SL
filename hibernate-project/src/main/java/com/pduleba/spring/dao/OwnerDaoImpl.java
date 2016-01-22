@@ -1,5 +1,7 @@
 package com.pduleba.spring.dao;
 
+import java.util.List;
+
 import org.hibernate.SessionFactory;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
@@ -24,6 +26,13 @@ public class OwnerDaoImpl extends HibernateDaoSupport implements OwnerDao {
 	@Override
 	public void create(OwnerModel owner) {
 		getHibernateTemplate().save(owner);
+	}
+	
+	@Override
+	public void createAll(List<OwnerModel> owners) {
+		for(OwnerModel owner : owners) {
+			create(owner);
+		}
 	}
 
 	@Override

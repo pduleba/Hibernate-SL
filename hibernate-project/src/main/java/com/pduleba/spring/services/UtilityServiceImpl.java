@@ -5,6 +5,9 @@ import java.nio.charset.Charset;
 import java.sql.Blob;
 import java.sql.Clob;
 import java.text.MessageFormat;
+import java.util.Collection;
+import java.util.LinkedList;
+import java.util.List;
 import java.util.Objects;
 
 import javax.sql.rowset.serial.SerialBlob;
@@ -22,6 +25,7 @@ import org.springframework.util.StreamUtils;
 
 import com.pduleba.configuration.ApplicationPropertiesConfiguration;
 import com.pduleba.hibernate.model.CarModel;
+import com.pduleba.hibernate.model.OwnerModel;
 
 @Component
 class UtilityServiceImpl implements UtilityService, ApplicationPropertiesConfiguration {
@@ -32,7 +36,7 @@ class UtilityServiceImpl implements UtilityService, ApplicationPropertiesConfigu
 	private Environment env;
 	
 	@Override
-	public void showCar(Object entity, Mode mode) {
+	public void show(Object entity, Mode mode) {
 		if (Objects.isNull(entity)) {
 			LOG.info("{} :: NOT FOUND", mode);
 		} else if (BooleanUtils.isFalse(Hibernate.isInitialized(entity))) {
@@ -43,11 +47,42 @@ class UtilityServiceImpl implements UtilityService, ApplicationPropertiesConfigu
 	}
 	
 	@Override
-	public CarModel getCar() {
-		Clob xml = getClob(env.getProperty(KEY_SPEC_FILE_CLASSPATH_LOCATION));
+	public void show(Collection<?> entities, Mode mode) {
+		for (Object entity : entities) {
+			show(entity, mode);
+		}
+	}
+	
+	@Override
+	public List<OwnerModel> getData() {
+		Clob spec = getClob(env.getProperty(KEY_SPEC_FILE_CLASSPATH_LOCATION));
 		Blob image = getBlob(env.getProperty(KEY_IMAGE_FILE_CLASSPATH_LOCATION));
 		
-		return new CarModel("Audi", 4, xml, image);
+		List<OwnerModel> owners = new LinkedList<>();
+		String[][] persons = {{"Adam","A"}, {"Jola","J"}, {"Zbyszek","Z"}, {"Bartek","B"}};
+		OwnerModel owner;
+		CarModel car;
+		Integer age, wheels;
+		final int numberOfCars = 3;
+		int userIndex = 0;
+		String carName;
+		
+		for (String[] person : persons) {
+			age = Integer.valueOf((int)(Math.random() * 99));
+			owner = new OwnerModel(person[0], person[1], age);
+			
+			for (int i = 1; i <= numberOfCars; i++) {
+				wheels = Integer.valueOf((int)(Math.random() * 5));
+				carName = "Audi-(" + (userIndex++) + i;
+				car = new CarModel(carName, wheels, spec, image);
+				owner.getCars().add(car);
+				car.setOwner(owner);
+			}
+			
+			owners.add(owner);
+		}
+		
+		return owners;
 	}
 
 	private Blob getBlob(String classpathLocation) {

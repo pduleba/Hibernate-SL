@@ -1,12 +1,14 @@
 package com.pduleba.hibernate.model;
 
-import java.sql.Date;
+import java.util.Date;
 import java.util.LinkedList;
 import java.util.List;
 
 import javax.persistence.CascadeType;
 import javax.persistence.Column;
 import javax.persistence.Entity;
+import javax.persistence.EnumType;
+import javax.persistence.Enumerated;
 import javax.persistence.FetchType;
 import javax.persistence.GeneratedValue;
 import javax.persistence.GenerationType;
@@ -14,6 +16,8 @@ import javax.persistence.Id;
 import javax.persistence.OneToMany;
 import javax.persistence.SequenceGenerator;
 import javax.persistence.Table;
+import javax.persistence.Temporal;
+import javax.persistence.TemporalType;
 
 import lombok.Data;
 import lombok.NoArgsConstructor;
@@ -23,10 +27,11 @@ import lombok.NoArgsConstructor;
 @NoArgsConstructor
 public @Data class OwnerModel {
 
-	public OwnerModel(String firstName, String lastName, Integer age) {
+	public OwnerModel(String firstName, String lastName, Integer age, OwnerType type) {
 		super();
 		this.firstName = firstName;
 		this.lastName = lastName;
+		this.type = type;
 		this.since = new Date(System.currentTimeMillis());
 		this.age = age;
 	}
@@ -42,7 +47,12 @@ public @Data class OwnerModel {
 	@Column(name = "LAST_NAME")
 	private String lastName;
 	
+	@Column(name = "TYPE")
+	@Enumerated(EnumType.STRING)
+	private OwnerType type;
+	
 	@Column(name = "SINCE")
+	@Temporal(TemporalType.TIME)
 	private Date since;
 	
 	@Column(name = "AGE")

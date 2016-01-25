@@ -2,7 +2,7 @@ package com.pduleba.hibernate.model;
 
 import java.sql.Blob;
 import java.sql.Clob;
-import java.sql.Date;
+import java.util.Date;
 
 import javax.persistence.CascadeType;
 import javax.persistence.Column;
@@ -16,6 +16,8 @@ import javax.persistence.Lob;
 import javax.persistence.ManyToOne;
 import javax.persistence.SequenceGenerator;
 import javax.persistence.Table;
+import javax.persistence.Temporal;
+import javax.persistence.TemporalType;
 
 import lombok.AllArgsConstructor;
 import lombok.Data;
@@ -47,6 +49,7 @@ public @Data class CarModel {
 	private String name;
 
 	@Column(name = "CREATED_IN")
+	@Temporal(TemporalType.TIMESTAMP)
 	private Date createdIn;
 	
 	@Column(name = "WHEELS_NUMBER")

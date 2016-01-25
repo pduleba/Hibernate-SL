@@ -12,13 +12,16 @@ import org.springframework.context.annotation.AnnotationConfigApplicationContext
 import org.springframework.core.io.ClassPathResource;
 
 import com.pduleba.configuration.SpringConfiguration;
-import com.pduleba.spring.controller.MainController;
+import com.pduleba.spring.controller.DBController;
+import com.pduleba.spring.controller.QueryController;
 
 public class Main {
 
 	public static final Logger LOG = LoggerFactory.getLogger(Main.class);
 
-	private MainController controller;
+	private DBController dbController;
+	
+	private QueryController queryController;
 
 	public static void main(String[] args) {
 		new Main().execute();
@@ -38,10 +41,13 @@ public class Main {
 		configureLogger();
 		
 		try (ConfigurableApplicationContext ctx = new AnnotationConfigApplicationContext(SpringConfiguration.class)) {
-			controller = ctx.getBean(MainController.class);
+			dbController = ctx.getBean(DBController.class);
+			queryController = ctx.getBean(QueryController.class);
+
+			dbController.createDB();
 			
 			LOG.info("##### Starting... #####");
-			controller.execute();
+			queryController.executeQueries();
 			LOG.info("##### Starting... Complete #####");
 		}
 	}

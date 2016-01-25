@@ -14,9 +14,9 @@ import com.pduleba.spring.services.UtilityService;
 import com.pduleba.spring.services.UtilityService.Mode;
 
 @Component
-public class MainControllerImpl implements MainController {
+public class DBControllerImpl implements DBController {
 
-	public static final Logger LOG = LoggerFactory.getLogger(MainControllerImpl.class);
+	public static final Logger LOG = LoggerFactory.getLogger(DBControllerImpl.class);
 	
 	@Autowired
 	private OwnerService ownerService;
@@ -27,18 +27,26 @@ public class MainControllerImpl implements MainController {
 	private boolean deleteEnabled = true;
 
 	@Override
-	public void execute() {
-		LOG.info("------------");
-		Long ownerId = create();
-		LOG.info("------------");
-		OwnerModel persisted = read(ownerId);
-		LOG.info("------------");
-		update(persisted, Thread.currentThread().getName());
-		LOG.info("------------");
-		delete(persisted);
-		LOG.info("------------");
+	public void createDB() {
+		if (databaseExists()) {
+			LOG.info("Database already exists");
+		} else {
+			LOG.info("------------");
+			Long ownerId = create();
+			LOG.info("------------");
+			OwnerModel persisted = read(ownerId);
+			LOG.info("------------");
+			update(persisted, Thread.currentThread().getName());
+			LOG.info("------------");
+			delete(persisted);
+			LOG.info("------------");
+		}
 	}
 	
+	private boolean databaseExists() {
+		return 0 != ownerService.getNumberOfOwners();
+	}
+
 	private Long create() {
 		List<OwnerModel> owners = utils.getData();
 		utils.show(owners, Mode.CREATE);

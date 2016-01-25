@@ -9,6 +9,7 @@ import java.util.Collection;
 import java.util.LinkedList;
 import java.util.List;
 import java.util.Objects;
+import java.util.Random;
 
 import javax.sql.rowset.serial.SerialBlob;
 import javax.sql.rowset.serial.SerialClob;
@@ -26,30 +27,51 @@ import org.springframework.util.StreamUtils;
 import com.pduleba.configuration.ApplicationPropertiesConfiguration;
 import com.pduleba.hibernate.model.CarModel;
 import com.pduleba.hibernate.model.OwnerModel;
+import com.pduleba.hibernate.model.OwnerType;
 
 @Component
 class UtilityServiceImpl implements UtilityService, ApplicationPropertiesConfiguration {
 
 	public static final Logger LOG = LoggerFactory.getLogger(UtilityServiceImpl.class);
 	
+	final private OwnerType[] OWNER_TYPES =  OwnerType.values();
+	
 	@Autowired
 	private Environment env;
+	
+	private Random generator = new Random();
+
+	@Override
+	public void show(Object entity) {
+		show(entity, Mode.READ);
+	}
 	
 	@Override
 	public void show(Object entity, Mode mode) {
 		if (Objects.isNull(entity)) {
-			LOG.info("{} :: NOT FOUND", mode);
+			LOG.info("{} :: ENTITY NOT FOUND", mode);
 		} else if (BooleanUtils.isFalse(Hibernate.isInitialized(entity))) {
-			LOG.info("{} :: NOT INITIALIZED", entity);
+			LOG.info("{} :: ENTITY NOT INITIALIZED", entity);
 		} else {
 			LOG.info("{} :: {}", mode, entity);
 		}
 	}
+
+	@Override
+	public void show(Collection<?> entities) {
+		show(entities, Mode.READ);
+	}
 	
 	@Override
 	public void show(Collection<?> entities, Mode mode) {
-		for (Object entity : entities) {
-			show(entity, mode);
+		if (Objects.isNull(entities)) {
+			LOG.info("{} :: COLLECTION NOT FOUND", mode);
+		} else if (BooleanUtils.isFalse(Hibernate.isInitialized(entities))) {
+			LOG.info("{} :: COLLECTION NOT INITIALIZED", entities);
+		} else {
+			for (Object entity : entities) {
+				show(entity, mode);
+			}
 		}
 	}
 	
@@ -68,12 +90,13 @@ class UtilityServiceImpl implements UtilityService, ApplicationPropertiesConfigu
 		
 		for (String[] person : persons) {
 			age = Integer.valueOf((int)(Math.random() * 99));
-			owner = new OwnerModel(person[0], person[1], age);
-			int numberOfCars = Integer.valueOf((int)(Math.random() * 5));
+			owner = new OwnerModel(person[0], person[1], age, getRandomType());
+			int numberOfCars = Integer.valueOf((int)(Math.random() * 6));
+			userIndex++;
 			
 			for (int i = 1; i <= numberOfCars; i++) {
 				wheels = Integer.valueOf((int)(Math.random() * 5));
-				carName = "Audi-" + (userIndex++) + i;
+				carName = "Audi-" + userIndex + "-"+ i;
 				car = new CarModel(carName, wheels, spec, image);
 				owner.addCar(car);
 			}
@@ -82,6 +105,10 @@ class UtilityServiceImpl implements UtilityService, ApplicationPropertiesConfigu
 		}
 		
 		return owners;
+	}
+
+	private OwnerType getRandomType() {
+		return OWNER_TYPES[generator.nextInt(OWNER_TYPES.length)];
 	}
 
 	private Blob getBlob(String classpathLocation) {

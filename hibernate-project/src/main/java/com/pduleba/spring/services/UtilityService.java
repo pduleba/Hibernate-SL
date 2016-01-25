@@ -18,5 +18,9 @@ public interface UtilityService {
 	
 	void show(Object entity, Mode mode);
 
+	void show(Object entity);
+	
 	void show(Collection<?> entities, Mode mode);
+
+	void show(Collection<?> entities);
 }

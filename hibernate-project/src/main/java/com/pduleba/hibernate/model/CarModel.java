@@ -40,7 +40,7 @@ public @Data class CarModel {
 
 	@Id
 	@GeneratedValue(generator = "car-sequence-generator", strategy = GenerationType.SEQUENCE)
-	@SequenceGenerator(name = "car-sequence-generator", sequenceName = "CAR_SEQ", allocationSize = 1, initialValue = 1)
+	@SequenceGenerator(name = "car-sequence-generator", sequenceName = "CAR_SEQ", initialValue = 1, allocationSize = 20)
 	private Long id;
 	
 	@Column(name = "NAME")
@@ -60,7 +60,7 @@ public @Data class CarModel {
 	@Column(name = "IMAGE")
 	private Blob image;
 	
-	@ManyToOne(cascade = CascadeType.ALL, fetch = FetchType.EAGER, targetEntity = CarModel.class)
+	@ManyToOne(cascade = CascadeType.ALL, fetch = FetchType.EAGER, targetEntity = OwnerModel.class)
 	@JoinColumn(name = "ID_OWNER")
 	private OwnerModel owner;
 }

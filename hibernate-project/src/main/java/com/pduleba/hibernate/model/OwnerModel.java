@@ -33,7 +33,7 @@ public @Data class OwnerModel {
 
 	@Id
 	@GeneratedValue(generator = "owner-sequence-generator", strategy = GenerationType.SEQUENCE)
-	@SequenceGenerator(name = "owner-sequence-generator", sequenceName = "OWNER_SEQ", initialValue = 1, allocationSize = 1)
+	@SequenceGenerator(name = "owner-sequence-generator", sequenceName = "OWNER_SEQ", initialValue = 1, allocationSize = 20)
 	private Long id;
 	
 	@Column(name = "FIRST_NAME")
@@ -48,6 +48,11 @@ public @Data class OwnerModel {
 	@Column(name = "AGE")
 	private Integer age;
 	
-	@OneToMany(mappedBy = "owner", cascade = CascadeType.ALL, fetch = FetchType.EAGER)
+	@OneToMany(mappedBy = "owner", cascade = CascadeType.ALL, fetch = FetchType.EAGER, targetEntity = CarModel.class)
 	private List<CarModel> cars = new LinkedList<>();
+
+	public void addCar(CarModel car) {
+		cars.add(car);
+		car.setOwner(this);
+	}
 }

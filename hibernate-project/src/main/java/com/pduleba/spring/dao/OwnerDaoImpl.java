@@ -54,7 +54,7 @@ public class OwnerDaoImpl extends AbstractDaoSupport<OwnerModel> implements Owne
 	
 	@Override
 	public List<?> executeSelectWithGroupBy() {
-		return (List<?>) getSession().createQuery("select o, COUNT(c) from OwnerModel o LEFT JOIN o.cars c GROUP BY o").list();
+		return (List<?>) getSession().createQuery("select o.firstName, COUNT(c) from OwnerModel o LEFT JOIN o.cars c GROUP BY o.firstName").list();
 	}
 	
 	@Override

@@ -28,7 +28,7 @@
 		<!-- Persistence Layer -->
 		<commons-dbcp2.version>2.1.1</commons-dbcp2.version>
 		<hibernate.validator.version>5.2.2.Final</hibernate.validator.version>
-		<hibernate.version>5.0.4.Final</hibernate.version>
+		<hibernate.version>5.0.7.Final</hibernate.version>
 		<javax.transaction-api.version>1.2</javax.transaction-api.version>
 		<!-- profile specific -->
 		<oracle.driver.version>11.2.0.4</oracle.driver.version>

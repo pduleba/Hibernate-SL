@@ -64,13 +64,10 @@ public class OwnerDaoImpl extends AbstractDaoSupport<OwnerModel> implements Owne
 	
 	@Override
 	public List<OwnerModel> executeSelectWithJoin(OwnerParamterValueBean valueBean) {
-//		getHibernateTemplate().findByValueBean("", valueBean);
 		return null;
 	}
 	@Override
 	public List<OwnerModel> executeSelectWithFetchSize(int fetchSize) {
-//		getSession().setFetchSize(fetchSize);
-		// iterate
 		return null;
 	}
 	

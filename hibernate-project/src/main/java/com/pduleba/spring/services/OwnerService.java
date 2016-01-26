@@ -20,4 +20,8 @@ public interface OwnerService {
 
 	List<?> queryForList();
 
+	List<?> queryForList(String carName);
+
+	List<?> queryForList(int index, String carName);
+
 }

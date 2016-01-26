@@ -2,6 +2,7 @@ package com.pduleba.spring.dao;
 
 import java.util.List;
 
+import org.hibernate.Query;
 import org.hibernate.SessionFactory;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
@@ -34,6 +35,23 @@ public class OwnerDaoImpl extends AbstractDaoSupport<OwnerModel> implements Owne
 
 	@Override
 	public List<?> queryForList() {
-		return getSession().createSQLQuery("SELECT o.* FROM t_owner o").list();
+		return getSession().getNamedQuery(OwnerModel.NAMED_QUERY_FIND_OWNERS).list();
 	}
+
+	@Override
+	public List<?> queryForList(final String carName) {
+		Query query = getSession().getNamedQuery(OwnerModel.NAMED_QUERY_FIND_OWNERS_BY_CAR_NAME_NAMED_PARAMETER);
+		query.setParameter("carName", carName);
+		
+		return query.list();
+	}
+
+	@Override
+	public List<?> queryForList(final int index, final String carName) {
+		Query query = getSession().getNamedQuery(OwnerModel.NAMED_QUERY_FIND_OWNERS_BY_CAR_NAME_INDEX_PARAMETER);
+		query.setParameter(index, carName);
+		
+		return query.list();
+	}
+
 }

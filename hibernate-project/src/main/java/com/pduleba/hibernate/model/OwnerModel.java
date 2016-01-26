@@ -13,6 +13,8 @@ import javax.persistence.FetchType;
 import javax.persistence.GeneratedValue;
 import javax.persistence.GenerationType;
 import javax.persistence.Id;
+import javax.persistence.NamedQueries;
+import javax.persistence.NamedQuery;
 import javax.persistence.OneToMany;
 import javax.persistence.SequenceGenerator;
 import javax.persistence.Table;
@@ -22,11 +24,21 @@ import javax.persistence.TemporalType;
 import lombok.Data;
 import lombok.NoArgsConstructor;
 
+
+@NamedQueries(value = { 
+		@NamedQuery(name = OwnerModel.NAMED_QUERY_FIND_OWNERS, query = "select o from OwnerModel o"),
+		@NamedQuery(name = OwnerModel.NAMED_QUERY_FIND_OWNERS_BY_CAR_NAME_NAMED_PARAMETER, query = "select o from OwnerModel o JOIN o.cars c WHERE c.name = :carName"),
+		@NamedQuery(name = OwnerModel.NAMED_QUERY_FIND_OWNERS_BY_CAR_NAME_INDEX_PARAMETER, query = "select o from OwnerModel o JOIN o.cars c WHERE c.name = ?") 
+})
 @Entity
 @Table(name = "T_OWNER")
 @NoArgsConstructor
 public @Data class OwnerModel {
 
+	public static final String NAMED_QUERY_FIND_OWNERS = "find.owners";
+	public static final String NAMED_QUERY_FIND_OWNERS_BY_CAR_NAME_NAMED_PARAMETER = "find.owners.by.car.name.named.parameter";
+	public static final String NAMED_QUERY_FIND_OWNERS_BY_CAR_NAME_INDEX_PARAMETER = "find.owners.by.car.name.index.parameter";
+	
 	public OwnerModel(String firstName, String lastName, Integer age, OwnerType type) {
 		super();
 		this.firstName = firstName;

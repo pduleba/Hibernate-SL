@@ -27,6 +27,10 @@ public @Data class QueryControllerImpl implements QueryController {
 	public void executeQueries() {
 		LOG.info("########### Execute Query for List ###########");
 		utils.show(ownerSerivce.queryForList());
+		LOG.info("########### Execute Query for List by named parameter ###########");
+		utils.show(ownerSerivce.queryForList("Audi-2-2"));
+		LOG.info("########### Execute Query for List by index parameter ###########");
+		utils.show(ownerSerivce.queryForList(0, "Audi-2-2"));
 	}
 
 }

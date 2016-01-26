@@ -46,8 +46,6 @@ public interface OwnerService {
 
 	List<FirstAndLastName> queryWithProjectionAndConstructor();
 
-	List<?> executeSelectWithFetchSize(int fetchSize);
-
 	List<?> queryWithLeftJoin();
 
 }

@@ -138,14 +138,5 @@ public class OwnerDaoImpl extends AbstractDaoSupport<OwnerModel> implements Owne
 	@Override
 	public List<?> queryWithLeftJoin() {
 		return getSession().createQuery("select o from OwnerModel o LEFT JOIN o.cars c ORDER BY c.name DESC").list();
-	}
-	
-	@Override
-	public List<?> executeSelectWithFetchSize(int fetchSize) {
-//		getSession().setFetchSize(fetchSize);
-//		iterate
-//		return getSession().createQuery("select o from OwnerModel o where o.id = :id").list();
-		return null;
-	}
-	
+	}	
 }

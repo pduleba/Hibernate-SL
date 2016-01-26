@@ -58,9 +58,6 @@ public @Data class QueryControllerImpl implements QueryController {
 		
 		LOG.info("########### Execute Query with LEFT JOIN ###########");
 		utils.show(ownerSerivce.queryWithLeftJoin());
-		
-		LOG.info("########### Execute TODO ###########");
-		utils.show(ownerSerivce.executeSelectWithFetchSize(20));
 	}
 
 }

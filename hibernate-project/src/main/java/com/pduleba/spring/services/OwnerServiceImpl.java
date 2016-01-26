@@ -116,11 +116,6 @@ public class OwnerServiceImpl implements OwnerService {
 	}
 	
 	@Override
-	public List<?> executeSelectWithFetchSize(int fetchSize) {
-		return ownerDao.executeSelectWithFetchSize(fetchSize);
-	}
-	
-	@Override
 	public List<?> queryWithLeftJoin() {
 		return ownerDao.queryWithLeftJoin();
 	}

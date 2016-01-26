@@ -47,6 +47,4 @@ public interface OwnerDao {
 	List<FirstAndLastName> queryWithProjectionAndConstructor();
 	
 	List<?> queryWithLeftJoin();
-
-	List<?> executeSelectWithFetchSize(int fetchSize);
 }

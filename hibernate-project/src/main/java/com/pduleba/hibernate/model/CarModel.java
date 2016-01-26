@@ -30,8 +30,6 @@ import lombok.ToString;
 @AllArgsConstructor
 @ToString(exclude = "owner")
 public @Data class CarModel {
-
-	public static final String PROPERTY_NAME = "name";
 	
 	public CarModel(String name, Integer wheelsNumber, Clob spec, Blob image) {
 		super();

@@ -27,8 +27,6 @@ import lombok.NoArgsConstructor;
 @NoArgsConstructor
 public @Data class OwnerModel {
 
-	public static final String PROPERTY_CARS = "cars";
-
 	public OwnerModel(String firstName, String lastName, Integer age, OwnerType type) {
 		super();
 		this.firstName = firstName;

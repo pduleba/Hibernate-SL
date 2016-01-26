@@ -1,18 +1,14 @@
 package com.pduleba.spring.dao;
 
-import static com.pduleba.hibernate.model.CarModel.PROPERTY_NAME;
-import static com.pduleba.hibernate.model.OwnerModel.PROPERTY_CARS;
-
-import java.text.MessageFormat;
 import java.util.List;
 
-import org.hibernate.Criteria;
 import org.hibernate.SessionFactory;
-import org.hibernate.criterion.Restrictions;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.dao.support.DataAccessUtils;
+import org.springframework.orm.hibernate5.HibernateTemplate;
+import org.springframework.orm.hibernate5.support.HibernateDaoSupport;
 import org.springframework.stereotype.Repository;
 import org.springframework.transaction.annotation.Transactional;
 
@@ -20,30 +16,53 @@ import com.pduleba.hibernate.model.OwnerModel;
 
 @Repository
 @Transactional
-public class OwnerDaoImpl extends AbstractDaoSupport<OwnerModel> implements OwnerDao {
+public class OwnerDaoImpl extends HibernateDaoSupport implements OwnerDao {
 	
 	public static final Logger LOG = LoggerFactory.getLogger(OwnerDaoImpl.class);
 	
-	@Override
-	public int getNumberOfOwners() {
-		return DataAccessUtils.intResult(getSession().createQuery("select count(*) from OwnerModel").list());
+	@Autowired
+	public OwnerDaoImpl(SessionFactory sessionFactory) {
+		setSessionFactory(sessionFactory);
 	}
 
 	// ------------------------------------------------
 	//					Crete DB methods
 	// ------------------------------------------------
+
+	public void create(OwnerModel enity) {
+		getHibernateTemplate().save(enity);
+	}
 	
-	@Autowired
-	public OwnerDaoImpl(SessionFactory sessionFactory) {
-		super(sessionFactory, OwnerModel.class);
+	public void createAll(List<OwnerModel> entities) {
+		for(OwnerModel entity : entities) {
+			create(entity);
+		}
+	}
+
+	public OwnerModel read(long entityId) {
+		return getHibernateTemplate().get(OwnerModel.class, entityId);
+	}
+
+	public void update(OwnerModel enity) {
+		HibernateTemplate template = getHibernateTemplate();
+		template.update(template.contains(enity) ? enity : template.merge(enity));
+	}
+
+	public void delete(OwnerModel enity) {
+		HibernateTemplate template = getHibernateTemplate();
+		template.delete(template.contains(enity) ? enity : template.merge(enity));
 	}
 
 	@Override
-	public List<?> queryForList(String carName) {
-		Criteria criteria = getSession().createCriteria(OwnerModel.class);
-		criteria.createAlias(PROPERTY_CARS, "c");
-		criteria.add(Restrictions.eq(MessageFormat.format("c.{0}", PROPERTY_NAME), carName));
+	public int getNumberOfOwners() {
+		return DataAccessUtils.intResult(getHibernateTemplate().find("select count(*) from OwnerModel"));
+	}
+	
+	@Override
+	public List<OwnerModel> queryForList(String firstName) {
+		OwnerModel om = new OwnerModel();
+		om.setFirstName(firstName);
 		
-		return criteria.list();
+		return getHibernateTemplate().findByExample(om);
 	}
 }

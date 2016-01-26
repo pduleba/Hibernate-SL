@@ -49,7 +49,7 @@ public class OwnerServiceImpl implements OwnerService {
 	// ------------------------------------------------
 
 	@Override
-	public List<?> queryForList(String carName) {
-		return ownerDao.queryForList(carName);
+	public List<OwnerModel> queryForList(String firstName) {
+		return ownerDao.queryForList(firstName);
 	}
 }

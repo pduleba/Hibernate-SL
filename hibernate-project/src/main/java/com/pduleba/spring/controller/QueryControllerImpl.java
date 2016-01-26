@@ -5,7 +5,6 @@ import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Component;
 
-import com.pduleba.spring.services.CarService;
 import com.pduleba.spring.services.OwnerService;
 import com.pduleba.spring.services.UtilityService;
 
@@ -19,14 +18,12 @@ public @Data class QueryControllerImpl implements QueryController {
 	@Autowired
 	private OwnerService ownerSerivce;
 	@Autowired
-	private CarService carSerivce;
-	@Autowired
 	private UtilityService utils;
 	
 	@Override
 	public void executeQueries() {
-		LOG.info("########### Execute Query for List ###########");
-		utils.show(ownerSerivce.queryForList("Audi-5-1"));
+		LOG.info("########### Execute Query by Example ###########");
+		utils.show(ownerSerivce.queryForList("Darek"));
 	}
 
 }

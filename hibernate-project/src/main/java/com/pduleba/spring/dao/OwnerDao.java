@@ -18,5 +18,5 @@ public interface OwnerDao {
 
 	int getNumberOfOwners();
 
-	List<?> queryForList(String carName);
+	List<OwnerModel> queryForList(String firstName);
 }

@@ -14,7 +14,6 @@ import org.springframework.transaction.annotation.Transactional;
 import com.pduleba.hibernate.model.OwnerModel;
 import com.pduleba.hibernate.model.OwnerType;
 import com.pduleba.hibernate.model.constructor.FirstAndLastName;
-import com.pduleba.spring.dao.parameters.OwnerParamterValueBean;
 
 @Repository
 @Transactional
@@ -137,20 +136,15 @@ public class OwnerDaoImpl extends AbstractDaoSupport<OwnerModel> implements Owne
 	}
 	
 	@Override
-	public List<?> executeSelectWithJoin(OwnerParamterValueBean valueBean) {
-//		getHibernateTemplate().findByValueBean("", valueBean);
-//		return getSession().createQuery("select o.firstName, o.lastName, o.type from OwnerModel o where o.id = :id").list();
-		
-		LOG.info("/" + getSession().getTenantIdentifier() + "/");
-		
-		return null;
+	public List<?> queryWithLeftJoin() {
+		return getSession().createQuery("select o from OwnerModel o LEFT JOIN o.cars c ORDER BY c.name DESC").list();
 	}
 	
 	@Override
 	public List<?> executeSelectWithFetchSize(int fetchSize) {
 //		getSession().setFetchSize(fetchSize);
 //		iterate
-//		return getSession().createQuery("select o.firstName, o.lastName, o.type from OwnerModel o where o.id = :id").list();
+//		return getSession().createQuery("select o from OwnerModel o where o.id = :id").list();
 		return null;
 	}
 	

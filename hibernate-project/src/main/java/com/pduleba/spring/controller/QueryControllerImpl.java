@@ -6,7 +6,6 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Component;
 
 import com.pduleba.hibernate.model.OwnerType;
-import com.pduleba.spring.dao.parameters.OwnerParamterValueBean;
 import com.pduleba.spring.services.CarService;
 import com.pduleba.spring.services.OwnerService;
 import com.pduleba.spring.services.UtilityService;
@@ -57,10 +56,11 @@ public @Data class QueryControllerImpl implements QueryController {
 		LOG.info("########### Execute Query with HAVING ###########");
 		utils.show(ownerSerivce.queryWithHaving());
 		
+		LOG.info("########### Execute Query with LEFT JOIN ###########");
+		utils.show(ownerSerivce.queryWithLeftJoin());
+		
 		LOG.info("########### Execute TODO ###########");
 		utils.show(ownerSerivce.executeSelectWithFetchSize(20));
-		LOG.info("########### Execute TODO ###########");
-		utils.show(ownerSerivce.executeSelectWithJoin(new OwnerParamterValueBean()));
 	}
 
 }

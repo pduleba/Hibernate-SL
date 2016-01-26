@@ -9,7 +9,6 @@ import com.pduleba.hibernate.model.OwnerModel;
 import com.pduleba.hibernate.model.OwnerType;
 import com.pduleba.hibernate.model.constructor.FirstAndLastName;
 import com.pduleba.spring.dao.OwnerDao;
-import com.pduleba.spring.dao.parameters.OwnerParamterValueBean;
 
 @Service
 public class OwnerServiceImpl implements OwnerService {
@@ -122,7 +121,7 @@ public class OwnerServiceImpl implements OwnerService {
 	}
 	
 	@Override
-	public List<?> executeSelectWithJoin(OwnerParamterValueBean param) {
-		return ownerDao.executeSelectWithJoin(param);
+	public List<?> queryWithLeftJoin() {
+		return ownerDao.queryWithLeftJoin();
 	}
 }

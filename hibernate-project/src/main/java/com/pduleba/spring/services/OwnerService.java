@@ -5,7 +5,6 @@ import java.util.List;
 import com.pduleba.hibernate.model.OwnerModel;
 import com.pduleba.hibernate.model.OwnerType;
 import com.pduleba.hibernate.model.constructor.FirstAndLastName;
-import com.pduleba.spring.dao.parameters.OwnerParamterValueBean;
 
 public interface OwnerService {
 
@@ -49,6 +48,6 @@ public interface OwnerService {
 
 	List<?> executeSelectWithFetchSize(int fetchSize);
 
-	List<?> executeSelectWithJoin(OwnerParamterValueBean param);
+	List<?> queryWithLeftJoin();
 
 }

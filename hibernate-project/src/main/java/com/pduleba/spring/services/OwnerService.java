@@ -4,6 +4,8 @@ import java.util.List;
 
 import com.pduleba.hibernate.model.OwnerModel;
 import com.pduleba.hibernate.model.OwnerType;
+import com.pduleba.hibernate.model.constructor.FirstAndLastName;
+import com.pduleba.spring.dao.parameters.OwnerParamterValueBean;
 
 public interface OwnerService {
 
@@ -19,18 +21,34 @@ public interface OwnerService {
 
 	int getNumberOfOwners();
 
-	List<OwnerModel> executeSelect();
+	List<OwnerModel> queryForList();
 
-	List<OwnerModel> executeSelectWithJoin();
+	List<OwnerModel> queryWithJoin();
 
-	List<?> executeSelectWithGroupBy();
+	List<?> queryWithGroupBy();
 
-	List<OwnerModel> executeSelectWithOrderBy();
+	List<OwnerModel> queryWithOrderBy();
 
-	List<OwnerModel> executeSelectWithHaving();
+	List<?> queryWithHaving();
 
-	Long executeSelectWithFunctionMax();
+	Long queryForAggregateFunction();
 
-	List<OwnerModel> executeSelectByEnum(OwnerType type);
+	List<OwnerModel> queryByEnum(OwnerType type);
+
+	List<OwnerModel> queryWithNumericBinding();
+
+	List<OwnerModel> queryWithNameBinding();
+
+	OwnerModel queryForSingleObject();
+
+	Object queryForSingleField();
+
+	List<OwnerModel> queryForArrayOfFields();
+
+	List<FirstAndLastName> queryWithProjectionAndConstructor();
+
+	List<?> executeSelectWithFetchSize(int fetchSize);
+
+	List<?> executeSelectWithJoin(OwnerParamterValueBean param);
 
 }

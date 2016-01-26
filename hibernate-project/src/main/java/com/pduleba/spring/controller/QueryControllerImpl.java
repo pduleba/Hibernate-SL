@@ -6,6 +6,7 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Component;
 
 import com.pduleba.hibernate.model.OwnerType;
+import com.pduleba.spring.dao.parameters.OwnerParamterValueBean;
 import com.pduleba.spring.services.CarService;
 import com.pduleba.spring.services.OwnerService;
 import com.pduleba.spring.services.UtilityService;
@@ -26,26 +27,40 @@ public @Data class QueryControllerImpl implements QueryController {
 	
 	@Override
 	public void executeQueries() {
-		LOG.info("########### Execute JPQL SELECT ###########");
-		utils.show(ownerSerivce.executeSelect());
-		LOG.info("########### Execute JPQL SELECT WITH JOIN ###########");
-		utils.show(ownerSerivce.executeSelectWithJoin());
-		LOG.info("########### Execute JPQL SELECT BY ENUM PAST ###########");
-		utils.show(ownerSerivce.executeSelectByEnum(OwnerType.PAST));
-		LOG.info("########### Execute JPQL SELECT WITH FUNCTION max() ###########");
-		utils.show(ownerSerivce.executeSelectWithFunctionMax());
+		LOG.info("########### Execute Query for List ###########");
+		utils.show(ownerSerivce.queryForList());
+		LOG.info("########### Execute Query for single object ###########");
+		utils.show(ownerSerivce.queryForSingleObject());
+		LOG.info("########### Execute Query for single field ###########");
+		utils.show(ownerSerivce.queryForSingleField());
+		LOG.info("########### Execute Query for array of fields ###########");
+		utils.show(ownerSerivce.queryForArrayOfFields());
+		LOG.info("########### Execute Query for aggregate function ###########");
+		utils.show(ownerSerivce.queryForAggregateFunction());
+		LOG.info("########### Execute Query by Enum ###########");
+		utils.show(ownerSerivce.queryByEnum(OwnerType.PAST));
+		LOG.info("########### Execute Query with Projection and Constructor ###########");
+		utils.show(ownerSerivce.queryWithProjectionAndConstructor());
+
+		LOG.info("########### Execute Query with positional binding ###########");
+		utils.show(ownerSerivce.queryWithNumericBinding());
+		LOG.info("########### Execute Query with name binding ###########");
+		utils.show(ownerSerivce.queryWithNameBinding());
 		
-		LOG.info("########### Execute JPQL SELECT WITH GROUP BY ###########");
-		utils.show(ownerSerivce.executeSelectWithGroupBy());
-		LOG.info("########### Execute JPQL SELECT WITH ORDER BY ###########");
-		utils.show(ownerSerivce.executeSelectWithOrderBy());
-		LOG.info("########### Execute JPQL SELECT WITH HAVING ###########");
-		utils.show(ownerSerivce.executeSelectWithHaving());
+		LOG.info("########### Execute Query with JOIN ###########");
+		utils.show(ownerSerivce.queryWithJoin());
 		
-//		LOG.info("Execute JPQL dynamic query WITH POSITIONAL BINDING()");
-//		ownerSerivce.executeDynamicQueryWithPositionalBinding();
-//		LOG.info("Execute JPQL dynamic query WITH NAME BINDING()");
-//		ownerSerivce.executeDynamicQueryWithNameBinding();
+		LOG.info("########### Execute Query with GROUP BY ###########");
+		utils.show(ownerSerivce.queryWithGroupBy());
+		LOG.info("########### Execute Query with ORDER BY ###########");
+		utils.show(ownerSerivce.queryWithOrderBy());
+		LOG.info("########### Execute Query with HAVING ###########");
+		utils.show(ownerSerivce.queryWithHaving());
+		
+		LOG.info("########### Execute TODO ###########");
+		utils.show(ownerSerivce.executeSelectWithFetchSize(20));
+		LOG.info("########### Execute TODO ###########");
+		utils.show(ownerSerivce.executeSelectWithJoin(new OwnerParamterValueBean()));
 	}
 
 }

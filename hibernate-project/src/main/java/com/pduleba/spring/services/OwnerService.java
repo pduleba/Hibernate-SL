@@ -18,6 +18,6 @@ public interface OwnerService {
 
 	int getNumberOfOwners();
 
-	List<?> queryForList();
+	List<?> queryForList(String carName);
 
 }

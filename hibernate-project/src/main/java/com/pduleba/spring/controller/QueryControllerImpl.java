@@ -26,7 +26,7 @@ public @Data class QueryControllerImpl implements QueryController {
 	@Override
 	public void executeQueries() {
 		LOG.info("########### Execute Query for List ###########");
-		utils.show(ownerSerivce.queryForList());
+		utils.show(ownerSerivce.queryForList("Audi-5-1"));
 	}
 
 }

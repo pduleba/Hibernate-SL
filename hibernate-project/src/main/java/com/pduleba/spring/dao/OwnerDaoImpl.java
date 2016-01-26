@@ -1,8 +1,14 @@
 package com.pduleba.spring.dao;
 
+import static com.pduleba.hibernate.model.CarModel.PROPERTY_NAME;
+import static com.pduleba.hibernate.model.OwnerModel.PROPERTY_CARS;
+
+import java.text.MessageFormat;
 import java.util.List;
 
+import org.hibernate.Criteria;
 import org.hibernate.SessionFactory;
+import org.hibernate.criterion.Restrictions;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -33,7 +39,11 @@ public class OwnerDaoImpl extends AbstractDaoSupport<OwnerModel> implements Owne
 	}
 
 	@Override
-	public List<?> queryForList() {
-		return getSession().createSQLQuery("SELECT o.* FROM t_owner o").list();
+	public List<?> queryForList(String carName) {
+		Criteria criteria = getSession().createCriteria(OwnerModel.class);
+		criteria.createAlias(PROPERTY_CARS, "c");
+		criteria.add(Restrictions.eq(MessageFormat.format("c.{0}", PROPERTY_NAME), carName));
+		
+		return criteria.list();
 	}
 }

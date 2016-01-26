@@ -3,8 +3,6 @@ package com.pduleba.spring.dao;
 import java.util.List;
 
 import com.pduleba.hibernate.model.OwnerModel;
-import com.pduleba.hibernate.model.OwnerType;
-import com.pduleba.hibernate.model.constructor.FirstAndLastName;
 
 public interface OwnerDao {
 
@@ -20,31 +18,5 @@ public interface OwnerDao {
 
 	int getNumberOfOwners();
 
-	List<OwnerModel> queryForList();
-
-	List<OwnerModel> queryWithJoin();
-
-	List<OwnerModel> queryByEnum(OwnerType type);
-
-	Long queryForAggregateFunction();
-
-	List<?> queryWithGroupBy();
-
-	List<?> queryWithHaving();
-
-	List<OwnerModel> queryWithOrderBy();
-
-	List<OwnerModel> queryWithNumericBinding();
-
-	List<OwnerModel> queryWithNameBinding();
-
-	OwnerModel queryForSingleObject();
-
-	Object queryForSingleField();
-
-	List<OwnerModel> queryForArrayOfFields();
-
-	List<FirstAndLastName> queryWithProjectionAndConstructor();
-	
-	List<?> queryWithLeftJoin();
+	List<?> queryForList();
 }

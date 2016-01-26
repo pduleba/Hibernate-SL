@@ -6,8 +6,6 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
 import com.pduleba.hibernate.model.OwnerModel;
-import com.pduleba.hibernate.model.OwnerType;
-import com.pduleba.hibernate.model.constructor.FirstAndLastName;
 import com.pduleba.spring.dao.OwnerDao;
 
 @Service
@@ -51,72 +49,7 @@ public class OwnerServiceImpl implements OwnerService {
 	// ------------------------------------------------
 
 	@Override
-	public List<OwnerModel> queryForList() {
+	public List<?> queryForList() {
 		return ownerDao.queryForList();
-	}
-	
-	@Override
-	public List<OwnerModel> queryWithJoin() {
-		return ownerDao.queryWithJoin();
-	}
-	
-	@Override
-	public List<OwnerModel> queryByEnum(OwnerType type) {
-		 return ownerDao.queryByEnum(type);
-	}
-	
-	@Override
-	public Long queryForAggregateFunction() {
-		 return ownerDao.queryForAggregateFunction();
-	}
-	
-	@Override
-	public List<?> queryWithGroupBy() {
-		 return ownerDao.queryWithGroupBy();
-	}
-	
-	@Override
-	public List<?> queryWithHaving() {
-		 return ownerDao.queryWithHaving();
-	}
-	
-	@Override
-	public List<OwnerModel> queryWithOrderBy() {
-		 return ownerDao.queryWithOrderBy();
-	}
-	
-	@Override
-	public List<OwnerModel> queryWithNumericBinding() {
-		return ownerDao.queryWithNumericBinding();
-	}
-
-	@Override
-	public List<OwnerModel> queryWithNameBinding() {
-		return ownerDao.queryWithNameBinding();
-	}
-
-	@Override
-	public OwnerModel queryForSingleObject() {
-		return ownerDao.queryForSingleObject();
-	}
-
-	@Override
-	public Object queryForSingleField() {
-		return ownerDao.queryForSingleField();
-	}
-
-	@Override
-	public List<OwnerModel> queryForArrayOfFields() {
-		return ownerDao.queryForArrayOfFields();
-	}
-	
-	@Override
-	public List<FirstAndLastName> queryWithProjectionAndConstructor() {
-		return ownerDao.queryWithProjectionAndConstructor();
-	}
-	
-	@Override
-	public List<?> queryWithLeftJoin() {
-		return ownerDao.queryWithLeftJoin();
 	}
 }

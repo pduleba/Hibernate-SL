@@ -19,8 +19,8 @@ import lombok.Data;
 import lombok.EqualsAndHashCode;
 
 @Entity
-@Table(name="T_ORDERS")
-@SequenceGenerator(name="orders-sequence-generator", sequenceName="ORDERS_SEQ", initialValue=1, allocationSize=1)
+@Table(name="T_USER_DETAILS")
+@SequenceGenerator(name="user-details-sequence-generator", sequenceName="ORDERS_SEQ", initialValue=1, allocationSize=1)
 @SecondaryTable(name = "t_user2orders", 
 	pkJoinColumns={ @PrimaryKeyJoinColumn(name="id_order", referencedColumnName="id") },
 	uniqueConstraints={ @UniqueConstraint(columnNames="id_user") }
@@ -30,7 +30,7 @@ public @Data class OrderModel {
 
 	@Id
 	@Column(name="id")
-	@GeneratedValue(generator="orders-sequence-generator", strategy=GenerationType.SEQUENCE)
+	@GeneratedValue(generator="user-details-sequence-generator", strategy=GenerationType.SEQUENCE)
 	private Long id;
 	
 	@Column(name="order_details")

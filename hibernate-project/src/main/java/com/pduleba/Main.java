@@ -91,7 +91,7 @@ public class Main {
 		OrderModel order = null;
 		for (int i = 0; i < 3; i++) {
 			order = new OrderModel();
-			order.setOrderDetails(worker.generateString(10, 2));
+			order.setUserDetails(worker.generateString(10, 2));
 			order.setUser(user);
 //			user.getOrders().add(order);
 		}
@@ -104,7 +104,7 @@ public class Main {
 		user.setName(worker.generateString(16, 16));
 
 		OrderModel order = new OrderModel();
-		order.setOrderDetails(worker.generateString(10, 2));
+		order.setUserDetails(worker.generateString(10, 2));
 		order.setUser(user);
 //		user.getOrders().add(order);
 

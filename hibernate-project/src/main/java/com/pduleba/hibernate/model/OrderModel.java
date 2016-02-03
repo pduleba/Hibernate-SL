@@ -33,8 +33,8 @@ public @Data class OrderModel {
 	@GeneratedValue(generator="user-details-sequence-generator", strategy=GenerationType.SEQUENCE)
 	private Long id;
 	
-	@Column(name="order_details")
-	private String orderDetails;
+	@Column(name="user_details")
+	private String userDetails;
 
 	@ManyToOne(fetch=FetchType.EAGER, cascade=CascadeType.ALL)
 	@JoinColumn(table="t_user2orders", name="id_user", referencedColumnName="id")

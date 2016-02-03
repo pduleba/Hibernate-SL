@@ -37,7 +37,7 @@ public @Data class UserModel {
 	@Column(name="DATE_ID")
 	private String dateId;
 
-	@OneToMany(mappedBy="pk.user", cascade = CascadeType.ALL, fetch = FetchType.EAGER)
+	@OneToMany(mappedBy="user", cascade = CascadeType.ALL, fetch = FetchType.EAGER)
 	private Collection<User2QuestionModel> questions = new LinkedHashSet<>();
 
 	public void addQuestion(QuestionModel question, boolean accepted) {

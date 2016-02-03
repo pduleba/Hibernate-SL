@@ -6,18 +6,16 @@ import javax.persistence.Column;
 import javax.persistence.EmbeddedId;
 import javax.persistence.Entity;
 import javax.persistence.JoinColumn;
+import javax.persistence.ManyToOne;
+import javax.persistence.MapsId;
 import javax.persistence.Table;
-import javax.persistence.Transient;
 
 import lombok.Data;
 
 @Entity
 @Table(name = "T_USER2QUESTION_ANSWER")
-@AssociationOverrides({
-    @AssociationOverride(name = "pk.user",
-        joinColumns = @JoinColumn(name = "ID_USER")),
-    @AssociationOverride(name = "pk.question",
-        joinColumns = @JoinColumn(name = "ID_QUESTION")) })
+@AssociationOverrides({ @AssociationOverride(name = "pk.user", joinColumns = @JoinColumn(name = "ID_USER") ),
+		@AssociationOverride(name = "pk.question", joinColumns = @JoinColumn(name = "ID_QUESTION") ) })
 public @Data class User2QuestionModel {
 
 	@EmbeddedId
@@ -26,21 +24,14 @@ public @Data class User2QuestionModel {
 	@Column(name = "ACCEPTED")
 	private Boolean accepted;
 
-	@Transient
-	public UserModel getUser() {
-		return pk.getUser();
-	}
+	@ManyToOne
+	@MapsId("userId")
+	@JoinColumn(name = "USER_ID")
+	private UserModel user;
 
-	public void setUser(UserModel user) {
-		pk.setUser(user);
-	}
+	@ManyToOne
+	@MapsId("questionId")
+	@JoinColumn(name = "QUESTION_ID")
+	private QuestionModel question;
 
-	@Transient
-	public QuestionModel getQuestion() {
-		return pk.getQuestion();
-	}
-
-	public void setQuestion(QuestionModel question) {
-		pk.setQuestion(question);
-	}
 }

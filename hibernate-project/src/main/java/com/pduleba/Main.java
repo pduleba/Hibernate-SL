@@ -1,4 +1,4 @@
-package com.pduleba.hibernate;
+package com.pduleba;
 
 import java.util.List;
 
@@ -21,9 +21,6 @@ public class Main {
 
 	public static void main(String[] args) {
 		new Main().run();
-	}
-
-	public Main() {
 	}
 
 	private void run() {

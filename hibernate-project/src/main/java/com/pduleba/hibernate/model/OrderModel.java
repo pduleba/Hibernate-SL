@@ -20,9 +20,9 @@ import lombok.EqualsAndHashCode;
 
 @Entity
 @Table(name="T_USER_DETAILS")
-@SequenceGenerator(name="user-details-sequence-generator", sequenceName="ORDERS_SEQ", initialValue=1, allocationSize=1)
+@SequenceGenerator(name="user-details-sequence-generator", sequenceName="USER_DETAILS_SEQ", initialValue=1, allocationSize=1)
 @SecondaryTable(name = "t_user2orders", 
-	pkJoinColumns={ @PrimaryKeyJoinColumn(name="id_order", referencedColumnName="id") },
+	pkJoinColumns={ @PrimaryKeyJoinColumn(name="id_user_details", referencedColumnName="id") },
 	uniqueConstraints={ @UniqueConstraint(columnNames="id_user") }
 )
 @EqualsAndHashCode(exclude="user")

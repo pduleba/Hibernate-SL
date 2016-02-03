@@ -35,11 +35,6 @@ public class Main {
 	
 			LOG.info("######## PRODUCT CRUDS ######## ");
 			executeProductsCRUD();
-			try {
-				Thread.sleep(1000);
-			} catch (InterruptedException e) {
-				LOG.error("Thread.sleep() problem :: {}", e.getMessage(), e);
-			}
 			LOG.info("######## ORDER CRUDS ######## ");
 			executeOrdersCRUD();
 		}

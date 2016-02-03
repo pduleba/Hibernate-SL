@@ -19,19 +19,19 @@ import lombok.Data;
 public @Data class User2QuestionModel {
 
 	@EmbeddedId
-	private User2QuestionID pk = new User2QuestionID();
+	private User2QuestionID id = new User2QuestionID();
 
 	@Column(name = "ACCEPTED")
 	private Boolean accepted;
 
 	@ManyToOne
 	@MapsId("userId")
-	@JoinColumn(name = "USER_ID")
+	@JoinColumn(name = "userId", referencedColumnName = "id")
 	private UserModel user;
 
 	@ManyToOne
 	@MapsId("questionId")
-	@JoinColumn(name = "QUESTION_ID")
+	@JoinColumn(name = "questionId", referencedColumnName = "id")
 	private QuestionModel question;
 
 }

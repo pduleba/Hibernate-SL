@@ -45,6 +45,7 @@ public @Data class UserModel {
 		
 		u2q.setUser(this);
 		u2q.setQuestion(question);
+		u2q.setAccepted(accepted);
 		
 		question.getUsers().add(u2q);
 		questions.add(u2q);

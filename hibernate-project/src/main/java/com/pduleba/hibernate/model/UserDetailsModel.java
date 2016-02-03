@@ -26,7 +26,7 @@ import lombok.EqualsAndHashCode;
 	uniqueConstraints={ @UniqueConstraint(columnNames="id_user") }
 )
 @EqualsAndHashCode(exclude="user")
-public @Data class OrderModel {
+public @Data class UserDetailsModel {
 
 	@Id
 	@Column(name="id")

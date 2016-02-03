@@ -11,7 +11,7 @@ import org.hibernate.Hibernate;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
-import com.pduleba.hibernate.model.OrderModel;
+import com.pduleba.hibernate.model.UserDetailsModel;
 import com.pduleba.hibernate.model.UserModel;
 
 class Worker {
@@ -28,36 +28,36 @@ class Worker {
 
 			for (UserModel u : allUsers) {
 				displayUser(++userIndex, u, true);
-//				showOrders(u.getOrders(), false);
+//				showUserDetailss(u.getUserDetailss(), false);
 			}
 		}
 	}
 
-	void showOrders(Collection<OrderModel> orders, boolean showUsers) {
-		if (BooleanUtils.isFalse(Hibernate.isInitialized(orders))) {
-			LOG.info("Orders NOT INITIALIZED");
-		} else if (Objects.isNull(orders) || orders.isEmpty()) {
-			LOG.info("Orders NOT FOUND");
+	void showUserDetailss(Collection<UserDetailsModel> userDetailss, boolean showUsers) {
+		if (BooleanUtils.isFalse(Hibernate.isInitialized(userDetailss))) {
+			LOG.info("UserDetailss NOT INITIALIZED");
+		} else if (Objects.isNull(userDetailss) || userDetailss.isEmpty()) {
+			LOG.info("UserDetailss NOT FOUND");
 		} else {
-			int orderIndex = 0;
-			if (Hibernate.isInitialized(orders)) {
-				for (OrderModel o : orders) {
-					++orderIndex;
-					LOG.info("#> order index {}", orderIndex);
+			int userDetailsIndex = 0;
+			if (Hibernate.isInitialized(userDetailss)) {
+				for (UserDetailsModel o : userDetailss) {
+					++userDetailsIndex;
+					LOG.info("#> userDetails index {}", userDetailsIndex);
 					LOG.info("ORDER_MODEL :: id = {}, details = {}", o.getId(), o.getUserDetails());
 					if (showUsers) {
-//						displayUser(orderIndex, o.getOwner(), false);
+//						displayUser(userDetailsIndex, o.getOwner(), false);
 					}
 				}
 			} else {
-				LOG.info("Orders not initalized");
+				LOG.info("UserDetailss not initalized");
 			}
 		}
 	}
 
 	private void displayUser(int userIndex, UserModel u, boolean showIndex) {
 		if (BooleanUtils.isFalse(Hibernate.isInitialized(u))) {
-			LOG.info("Orders NOT INITIALIZED");
+			LOG.info("UserDetailss NOT INITIALIZED");
 		} else if (Objects.nonNull(u)) {
 			if (showIndex) {
 				LOG.info("# user index {}", userIndex);

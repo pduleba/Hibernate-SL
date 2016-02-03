@@ -2,7 +2,7 @@ package com.pduleba.spring.controller;
 
 import java.util.List;
 
-import com.pduleba.hibernate.model.OrderModel;
+import com.pduleba.hibernate.model.UserDetailsModel;
 import com.pduleba.hibernate.model.UserModel;
 
 public interface SpringController {
@@ -11,8 +11,8 @@ public interface SpringController {
 	List<UserModel> getAllUsers();
 	void removeUsers(List<UserModel> users);
 
-	void saveOrder(OrderModel order);
-	List<OrderModel> getAllOrders();
-	void removeOrders(List<OrderModel> orders);
+	void saveUserDetails(UserDetailsModel order);
+	List<UserDetailsModel> getAllUserDetailss();
+	void removeUserDetailss(List<UserDetailsModel> orders);
 
 }

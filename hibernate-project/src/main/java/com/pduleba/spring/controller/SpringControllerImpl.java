@@ -8,10 +8,9 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.stereotype.Component;
 
-import com.pduleba.hibernate.model.OrderModel;
+import com.pduleba.hibernate.model.UserDetailsModel;
 import com.pduleba.hibernate.model.UserModel;
 import com.pduleba.spring.services.CategoryService;
-import com.pduleba.spring.services.OrderService;
 import com.pduleba.spring.services.ProductService;
 import com.pduleba.spring.services.UserDetailsService;
 import com.pduleba.spring.services.UserService;
@@ -25,8 +24,6 @@ public class SpringControllerImpl implements SpringController {
 	private UserDetailsService userDetailsService;
 	@Autowired
 	private UserService userService;
-	@Autowired
-	private OrderService orderService;
 	@Autowired
 	private ProductService productService;
 	@Autowired
@@ -53,19 +50,19 @@ public class SpringControllerImpl implements SpringController {
 	}
 
 	@Override
-	public void saveOrder(OrderModel order) {
-		orderService.saveOrder(order);
+	public void saveUserDetails(UserDetailsModel user) {
+		userDetailsService.saveUserDetails(user);
 	}
 
 	@Override
-	public List<OrderModel> getAllOrders() {
-		return orderService.getAllOrders();
+	public List<UserDetailsModel> getAllUserDetailss() {
+		return userDetailsService.getAllUserDetailss();
 	}
 
 	@Override
-	public void removeOrders(List<OrderModel> orders) {
+	public void removeUserDetailss(List<UserDetailsModel> users) {
 		if (deleteEnabled) {
-			this.orderService.removeAll(orders);
+			this.userDetailsService.removeAll(users);
 		}
 	}
 	

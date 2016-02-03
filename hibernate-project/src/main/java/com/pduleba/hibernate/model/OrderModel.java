@@ -17,7 +17,7 @@ import lombok.EqualsAndHashCode;
 
 @Entity
 @Table(name="T_ORDERS")
-@SequenceGenerator(name="orders-sequence-generator", sequenceName="ORDERS_SEQ", initialValue=0, allocationSize=1)
+@SequenceGenerator(name="orders-sequence-generator", sequenceName="ORDERS_SEQ", initialValue=1, allocationSize=1)
 @EqualsAndHashCode(exclude="owner")
 public @Data class OrderModel {
 

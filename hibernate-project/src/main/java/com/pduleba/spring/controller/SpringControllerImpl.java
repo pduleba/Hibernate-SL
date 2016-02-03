@@ -28,7 +28,7 @@ public class SpringControllerImpl implements SpringController {
 	private ProductService productService;
 	@Autowired
 	private CategoryService categoryService;
-	
+
 	@Value(value="${application.remove.enabled}")
 	private boolean deleteEnabled = true;
 	

@@ -1,4 +1,4 @@
-package com.pduleba.hibernate;
+package com.pduleba;
 
 import java.util.List;
 

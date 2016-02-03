@@ -13,7 +13,6 @@ import javax.persistence.PrimaryKeyJoinColumn;
 import javax.persistence.SecondaryTable;
 import javax.persistence.SequenceGenerator;
 import javax.persistence.Table;
-import javax.persistence.UniqueConstraint;
 
 import lombok.Data;
 import lombok.EqualsAndHashCode;
@@ -22,8 +21,7 @@ import lombok.EqualsAndHashCode;
 @Table(name="T_ORDERS")
 @SequenceGenerator(name="orders-sequence-generator", sequenceName="ORDERS_SEQ", initialValue=1, allocationSize=1)
 @SecondaryTable(name = "t_user2orders", 
-	pkJoinColumns={ @PrimaryKeyJoinColumn(name="id_order", referencedColumnName="id") },
-	uniqueConstraints={ @UniqueConstraint(columnNames="id_user") }
+	pkJoinColumns={ @PrimaryKeyJoinColumn(name="id_order", referencedColumnName="id") }
 )
 @EqualsAndHashCode(exclude="user")
 public @Data class OrderModel {

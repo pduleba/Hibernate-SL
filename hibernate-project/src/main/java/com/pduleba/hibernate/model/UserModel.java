@@ -26,7 +26,7 @@ public @Data class UserModel {
 	@Id
 	@Column(name = "id")
 	@GeneratedValue(generator="users-sequence-generator", strategy = SEQUENCE)
-	@SequenceGenerator(name="users-sequence-generator", allocationSize = 1, sequenceName = "USERS_SEQ")
+	@SequenceGenerator(name="users-sequence-generator", sequenceName = "USERS_SEQ", allocationSize = 1, initialValue = 1)
 	private Long id;
 
 	@Column(name = "create_date")
@@ -52,6 +52,4 @@ public @Data class UserModel {
 
 	@OneToOne(fetch=EAGER, mappedBy="assignedTo", cascade=ALL)
 	private UserDetailsModel userDetails;
-	
-//	private List<OrderModel> orders;
 }

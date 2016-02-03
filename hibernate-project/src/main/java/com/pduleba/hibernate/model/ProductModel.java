@@ -9,12 +9,10 @@ import javax.persistence.SequenceGenerator;
 import javax.persistence.Table;
 
 import lombok.Data;
-import lombok.EqualsAndHashCode;
 
 @Entity
 @Table(name = "T_PRODUCTS")
 @SequenceGenerator(name = "products-sequence-generator", sequenceName = "PRODUCTS_SEQ", initialValue = 1, allocationSize = 1)
-@EqualsAndHashCode(exclude="orders")
 public @Data class ProductModel {
 
 	@Id

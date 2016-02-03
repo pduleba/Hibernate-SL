@@ -52,6 +52,4 @@ public @Data class UserModel {
 
 	@OneToOne(fetch=EAGER, mappedBy="assignedTo", cascade=CascadeType.ALL)
 	private UserDetailsModel userDetails;
-	
-//	private List<OrderModel> orders;
 }

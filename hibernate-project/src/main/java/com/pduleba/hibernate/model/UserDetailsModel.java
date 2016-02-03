@@ -21,7 +21,7 @@ import lombok.EqualsAndHashCode;
 @Entity
 @Table(name="T_USER_DETAILS")
 @SequenceGenerator(name="user-details-sequence-generator", sequenceName="USER_DETAILS_SEQ", initialValue=1, allocationSize=1)
-@SecondaryTable(name = "t_user2orders", 
+@SecondaryTable(name = "t_user2user_details", 
 	pkJoinColumns={ @PrimaryKeyJoinColumn(name="id_user_details", referencedColumnName="id") },
 	uniqueConstraints={ @UniqueConstraint(columnNames="id_user") }
 )
@@ -37,7 +37,7 @@ public @Data class UserDetailsModel {
 	private String userDetails;
 
 	@ManyToOne(fetch=FetchType.EAGER, cascade=CascadeType.ALL)
-	@JoinColumn(table="t_user2orders", name="id_user", referencedColumnName="id")
+	@JoinColumn(table="t_user2user_details", name="id_user", referencedColumnName="id")
 	private UserModel user;
 
 }

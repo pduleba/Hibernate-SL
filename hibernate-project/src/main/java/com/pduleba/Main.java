@@ -1,4 +1,4 @@
-package com.pduleba.hibernate;
+package com.pduleba;
 
 import java.math.BigInteger;
 import java.security.SecureRandom;
@@ -7,7 +7,7 @@ import java.util.Objects;
 
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
-import org.springframework.context.ApplicationContext;
+import org.springframework.context.ConfigurableApplicationContext;
 import org.springframework.context.annotation.AnnotationConfigApplicationContext;
 
 import com.pduleba.configuration.SpringConfiguration;
@@ -23,12 +23,15 @@ public class Main {
 	private SpringController controller;
 	
 	public static void main(String[] args) {
-		new Main().run();
+		new Main().execute();
 	}
 
-	public Main() {
-		ApplicationContext ctx = new AnnotationConfigApplicationContext(SpringConfiguration.class);
-		this.controller = ctx.getBean(SpringController.class);
+	public void execute() {
+		try (ConfigurableApplicationContext ctx = new AnnotationConfigApplicationContext(SpringConfiguration.class)) {
+			this.controller = ctx.getBean(SpringController.class);
+			
+			run();
+		}
 	}
 	
 	private void run() {
@@ -38,7 +41,7 @@ public class Main {
 		LOG.info(" ----- CREATE complete ----- ");
 		List<UserModel> allUsers = getAllUsers();
 		LOG.info(" ----- READ complete ----- ");
-//		removeAllUsers(allUsers);
+		removeAllUsers(allUsers);
 		LOG.info(" ----- DELETE complete ----- ");
 		getAllUsers();
 		LOG.info(" ----- READ complete ----- ");

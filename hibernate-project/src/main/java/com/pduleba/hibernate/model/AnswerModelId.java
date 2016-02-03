@@ -8,7 +8,7 @@ public @Data class AnswerModelId implements Serializable {
 
 	private static final long serialVersionUID = -99297205410693493L;
 
-	private Long questionId;
+	private QuestionModel question;
 	
-	private Long userId;
+	private UserModel user;
 }

@@ -35,16 +35,14 @@ public @Data class UserModel {
 	@Column(name="DATE_ID")
 	private String dateId;
 
-	@OneToMany(mappedBy="question", cascade = CascadeType.ALL, fetch = FetchType.EAGER) // field of @IdClass 
+	@OneToMany(mappedBy="question", cascade = CascadeType.ALL, fetch = FetchType.LAZY) // field of @IdClass 
 	private Collection<AnswerModel> answers = new LinkedHashSet<>();
 
 	public void addQuestion(QuestionModel question, boolean accepted) {
 		AnswerModel answer = new AnswerModel();
 		
 		answer.setQuestion(question);
-		answer.setQuestionId(question.getId());
 		answer.setUser(this);
-		answer.setUserId(this.getId());
 		answer.setAccepted(accepted);
 		
 		this.answers.add(answer);

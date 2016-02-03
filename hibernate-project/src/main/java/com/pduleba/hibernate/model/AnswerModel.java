@@ -4,7 +4,6 @@ import java.io.Serializable;
 
 import javax.persistence.Column;
 import javax.persistence.Entity;
-import javax.persistence.ForeignKey;
 import javax.persistence.Id;
 import javax.persistence.IdClass;
 import javax.persistence.ManyToOne;
@@ -23,11 +22,11 @@ public @Data class AnswerModel implements Serializable {
 	private static final long serialVersionUID = 9109371155760306697L;
 
 	@Id
-	@Column(name = "ID_QUESTION")
+//	@Column(name = "ID_QUESTION")
 	private Long questionId;
 
 	@Id
-	@Column(name = "ID_USER")
+//	@Column(name = "ID_USER")
 	private Long userId;
 
 	@Column(name = "ACCEPTED")
@@ -35,7 +34,7 @@ public @Data class AnswerModel implements Serializable {
 
 	@ManyToOne
 //	@JoinColumn(name = "userId", updatable = false, insertable = false, referencedColumnName = "id", foreignKey = @ForeignKey(name = "FK_U2Q_USERS"))
-	@PrimaryKeyJoinColumn(name = "userId", referencedColumnName = "id", foreignKey = @ForeignKey(name = "FK_U2Q_USERS"))
+	@PrimaryKeyJoinColumn(name = "ID_USER", referencedColumnName = "id")
 	/*
 	 * if this JPA model doesn't create a table for the "T_USER2QUESTION_ANSWER" entity,
 	 * please comment out the @PrimaryKeyJoinColumn, and use the ff:
@@ -48,7 +47,7 @@ public @Data class AnswerModel implements Serializable {
 
 	@ManyToOne
 //	@JoinColumn(name = "questionId", updatable = false, insertable = false, referencedColumnName = "id", foreignKey = @ForeignKey(name = "FK_U2Q_QUESTIONS"))
-	@PrimaryKeyJoinColumn(name = "questionId", referencedColumnName = "id", foreignKey = @ForeignKey(name = "FK_U2Q_QUESTIONS"))
+	@PrimaryKeyJoinColumn(name = "ID_QUESTION", referencedColumnName = "id")
 	/*
 	 * the same goes here: if this JPA model doesn't create a table for the
 	 * "T_USER2QUESTION_ANSWER" entity, please comment out the @PrimaryKeyJoinColumn, and use

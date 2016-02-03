@@ -44,7 +44,7 @@ class Worker {
 				for (UserDetailsModel o : userDetailss) {
 					++userDetailsIndex;
 					LOG.info("#> userDetails index {}", userDetailsIndex);
-					LOG.info("ORDER_MODEL :: id = {}, details = {}", o.getId(), o.getUserDetails());
+					LOG.info("USER_DETAILS_MODEL :: id = {}, details = {}", o.getId(), o.getUserDetails());
 					if (showUsers) {
 //						displayUser(userDetailsIndex, o.getOwner(), false);
 					}

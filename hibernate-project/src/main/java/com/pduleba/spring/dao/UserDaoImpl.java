@@ -27,13 +27,7 @@ public class UserDaoImpl extends HibernateDaoSupport implements UserDao {
 	
 	@Override
 	public List<UserModel> getAllUsers() {
-		
-		List<UserModel> allUsers = getHibernateTemplate().loadAll(UserModel.class);
-//		for (UserModel um : allUsers) {
-//			Hibernate.initialize(um.getOrders());
-//		}
-
-		return allUsers;
+		return getHibernateTemplate().loadAll(UserModel.class);
 	}
 	
 	@Override

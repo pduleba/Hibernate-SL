@@ -31,7 +31,7 @@ public class Main {
 	
 			LOG.info("######## USER CRUDS ######## ");
 			executeUsersCRUD();
-			LOG.info("######## ORDER CRUDS ######## ");
+			LOG.info("######## USER DETAILS CRUDS ######## ");
 			executeUserDetailssCRUD();
 		}
 	}

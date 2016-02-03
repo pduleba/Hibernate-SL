@@ -25,7 +25,7 @@ public class UserDetailsServiceImpl implements UserDetailsService {
 	}
 	
 	@Override
-	public void saveUserDetails(UserDetailsModel order) {
-		userDetailsDao.saveUserDetails(order);
+	public void saveUserDetails(UserDetailsModel user) {
+		userDetailsDao.saveUserDetails(user);
 	}
 }

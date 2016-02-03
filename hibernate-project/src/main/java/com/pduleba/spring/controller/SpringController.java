@@ -11,8 +11,8 @@ public interface SpringController {
 	List<UserModel> getAllUsers();
 	void removeUsers(List<UserModel> users);
 
-	void saveUserDetails(UserDetailsModel order);
+	void saveUserDetails(UserDetailsModel user);
 	List<UserDetailsModel> getAllUserDetailss();
-	void removeUserDetailss(List<UserDetailsModel> orders);
+	void removeUserDetailss(List<UserDetailsModel> users);
 
 }

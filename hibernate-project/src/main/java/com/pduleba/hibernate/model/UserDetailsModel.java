@@ -11,6 +11,7 @@ import javax.persistence.JoinColumn;
 import javax.persistence.JoinTable;
 import javax.persistence.OneToOne;
 import javax.persistence.Table;
+import javax.persistence.UniqueConstraint;
 
 import org.hibernate.annotations.GenericGenerator;
 import org.hibernate.annotations.Parameter;
@@ -41,7 +42,8 @@ public @Data class UserDetailsModel {
 	@OneToOne(fetch=FetchType.EAGER)
 	@JoinTable(name="T_USER2USER_DETAILS", 
 		joinColumns=@JoinColumn(name="id_user", referencedColumnName="id"),
-		inverseJoinColumns=@JoinColumn(name="id_user_details", referencedColumnName="id")
+		inverseJoinColumns=@JoinColumn(name="id_user_details", referencedColumnName="id"),
+		uniqueConstraints = @UniqueConstraint(columnNames = "id_user_details")
 	)
 	private UserModel assignedTo;
 	

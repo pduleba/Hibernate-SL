@@ -5,9 +5,11 @@ import javax.persistence.Entity;
 import javax.persistence.Id;
 import javax.persistence.Table;
 
+import lombok.Data;
+
 @Entity
 @Table(name = "T_USER_DETAILS")
-public class UserDetailsModel {
+public @Data class UserDetailsModel {
 
 	@Id
 	@Column(name = "id")
@@ -15,21 +17,5 @@ public class UserDetailsModel {
 
 	@Column(name = "details")
 	private String details;
-
-	public Long getId() {
-		return id;
-	}
-
-	public void setId(Long id) {
-		this.id = id;
-	}
-
-	public String getDetails() {
-		return details;
-	}
-
-	public void setDetails(String details) {
-		this.details = details;
-	}
 
 }

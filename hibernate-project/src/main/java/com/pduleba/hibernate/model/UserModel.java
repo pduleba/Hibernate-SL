@@ -34,7 +34,7 @@ public @Data class UserModel {
 	private String name;
 
 	@OneToMany(cascade = CascadeType.ALL, fetch = FetchType.EAGER, mappedBy="user")
-	@MapKey(name = "orderType")  // mapping key
+	@MapKey(name = "orderType")  // Primary Key - default
 	private Map<OrderType, OrderModel> orders = new HashMap<>();
 
 	@Override

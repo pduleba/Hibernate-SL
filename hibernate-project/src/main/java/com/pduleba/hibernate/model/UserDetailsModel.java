@@ -1,5 +1,7 @@
 package com.pduleba.hibernate.model;
 
+import static javax.persistence.GenerationType.SEQUENCE;
+
 import java.sql.Timestamp;
 
 import javax.persistence.Column;
@@ -11,26 +13,24 @@ import javax.persistence.JoinColumn;
 import javax.persistence.OneToOne;
 import javax.persistence.PrimaryKeyJoinColumn;
 import javax.persistence.SecondaryTable;
+import javax.persistence.SequenceGenerator;
 import javax.persistence.Table;
-
-import org.hibernate.annotations.GenericGenerator;
-import org.hibernate.annotations.Parameter;
+import javax.persistence.UniqueConstraint;
 
 import lombok.Data;
 
 @Entity
 @Table(name="T_USER_DETAILS")
 @SecondaryTable(name="T_USER2USER_DETAILS", 
-	pkJoinColumns=@PrimaryKeyJoinColumn(name="ID_USER_DETAILS", referencedColumnName="id")
+	pkJoinColumns=@PrimaryKeyJoinColumn(name="ID_USER_DETAILS", referencedColumnName="id"),
+	uniqueConstraints = @UniqueConstraint(columnNames = "ID_USER")
 )
 public @Data class UserDetailsModel {
 
 	@Id
 	@Column(name = "id")
-	@GeneratedValue(generator="roles-sequence-generator")
-	@GenericGenerator(name="roles-sequence-generator", strategy="foreign", parameters=
-		@Parameter(name = "property", value = "assignedTo")
-	)
+	@GeneratedValue(generator="users-details-sequence-generator", strategy = SEQUENCE)
+	@SequenceGenerator(name="users-details-sequence-generator", allocationSize = 1, sequenceName = "USERS_SEQ")
 	private Long id;
 
 	@Column(name = "create_date")

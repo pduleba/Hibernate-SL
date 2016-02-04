@@ -13,11 +13,12 @@ import javax.persistence.JoinColumn;
 import javax.persistence.OneToOne;
 import javax.persistence.SequenceGenerator;
 import javax.persistence.Table;
+import javax.persistence.UniqueConstraint;
 
 import lombok.Data;
 
 @Entity
-@Table(name="T_USER_DETAILS")
+@Table(name="T_USER_DETAILS", uniqueConstraints = @UniqueConstraint(columnNames = "ID_USER"))
 public @Data class UserDetailsModel {
 
 	@Id

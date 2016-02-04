@@ -33,7 +33,7 @@ public @Data class UserModel {
 	@JoinTable(name="T_USER2USER_DETAILS", 
 		joinColumns=@JoinColumn(name="id_user_details", referencedColumnName="id"),
 		inverseJoinColumns=@JoinColumn(name="id_user", referencedColumnName="id"),
-		uniqueConstraints = @UniqueConstraint(columnNames = "id_user_details")
+		uniqueConstraints = @UniqueConstraint(columnNames = "id_user")
 	)
 	private UserDetailsModel userDetails;
 

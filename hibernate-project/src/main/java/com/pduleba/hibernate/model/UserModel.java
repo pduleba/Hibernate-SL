@@ -27,7 +27,7 @@ public @Data class UserModel {
 	@Column(name = "name")
 	private String name;
 
-	@OneToOne(fetch = FetchType.LAZY, cascade = CascadeType.ALL)
+	@OneToOne(cascade = CascadeType.ALL, optional = false, fetch = FetchType.EAGER, orphanRemoval = true)
 	@PrimaryKeyJoinColumn
 	private UserDetailsModel userDetails;
 

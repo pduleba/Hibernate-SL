@@ -9,6 +9,7 @@ import org.springframework.context.annotation.AnnotationConfigApplicationContext
 
 import com.pduleba.configuration.SpringConfiguration;
 import com.pduleba.hibernate.model.OrderModel;
+import com.pduleba.hibernate.model.OrderType;
 import com.pduleba.hibernate.model.UserModel;
 import com.pduleba.spring.controller.SpringController;
 
@@ -92,11 +93,12 @@ public class Main {
 		user.setName(worker.generateString(16, 16));
 
 		OrderModel order = null;
-		for (int i = 0; i < 3; i++) {
+		for (OrderType orderType : OrderType.values()) {
 			order = new OrderModel();
 			order.setOrderDetails(worker.generateString(10, 2));
+			order.setOrderType(orderType);
 			order.setUser(user);
-			user.getOrders().put(user.getId(), order);
+			user.getOrders().put(order.getOrderType(), order);
 		}
 
 		this.controller.saveUser(user);
@@ -108,8 +110,9 @@ public class Main {
 
 		OrderModel order = new OrderModel();
 		order.setOrderDetails(worker.generateString(10, 2));
+		order.setOrderType(OrderType.ADDITIONAL);
 		order.setUser(user);
-		user.getOrders().put(user.getId(), order);
+		user.getOrders().put(order.getOrderType(), order);
 
 		this.controller.saveOrder(order);
 	}

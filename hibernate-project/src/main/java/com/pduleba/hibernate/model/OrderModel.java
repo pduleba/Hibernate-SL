@@ -9,33 +9,31 @@ import javax.persistence.GenerationType;
 import javax.persistence.Id;
 import javax.persistence.JoinColumn;
 import javax.persistence.ManyToOne;
-import javax.persistence.PrimaryKeyJoinColumn;
-import javax.persistence.SecondaryTable;
 import javax.persistence.SequenceGenerator;
 import javax.persistence.Table;
 
 import lombok.Data;
-import lombok.EqualsAndHashCode;
 
 @Entity
 @Table(name="T_ORDERS")
-@SequenceGenerator(name="orders-sequence-generator", sequenceName="ORDERS_SEQ", initialValue=1, allocationSize=1)
-@SecondaryTable(name = "t_user2orders", 
-	pkJoinColumns={ @PrimaryKeyJoinColumn(name="id_order", referencedColumnName="id") }
-)
-@EqualsAndHashCode(exclude="user")
 public @Data class OrderModel {
 
 	@Id
 	@Column(name="id")
 	@GeneratedValue(generator="orders-sequence-generator", strategy=GenerationType.SEQUENCE)
+	@SequenceGenerator(name="orders-sequence-generator", sequenceName="ORDERS_SEQ", initialValue=1, allocationSize=1)
 	private Long id;
 	
 	@Column(name="order_details")
 	private String orderDetails;
 
 	@ManyToOne(fetch=FetchType.EAGER, cascade=CascadeType.ALL)
-	@JoinColumn(table="t_user2orders", name="id_user", referencedColumnName="id")
+	@JoinColumn(name="id_user", referencedColumnName="id")
 	private UserModel user;
 
+	@Override
+	public String toString() {
+		return "OrderModel [id=" + id + ", user=" + user + "]";
+	}	
+	
 }

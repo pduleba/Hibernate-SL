@@ -2,8 +2,9 @@ package com.pduleba;
 
 import java.math.BigInteger;
 import java.security.SecureRandom;
-import java.util.Collection;
 import java.util.List;
+import java.util.Map;
+import java.util.Map.Entry;
 import java.util.Objects;
 
 import org.apache.commons.lang3.BooleanUtils;
@@ -11,7 +12,6 @@ import org.hibernate.Hibernate;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
-import com.pduleba.hibernate.model.OrderModel;
 import com.pduleba.hibernate.model.UserModel;
 
 class Worker {
@@ -33,7 +33,7 @@ class Worker {
 		}
 	}
 
-	void showOrders(Collection<OrderModel> orders, boolean showUsers) {
+	void showOrders(List<?> orders, boolean showUsers) {
 		if (BooleanUtils.isFalse(Hibernate.isInitialized(orders))) {
 			LOG.info("Orders NOT INITIALIZED");
 		} else if (Objects.isNull(orders) || orders.isEmpty()) {
@@ -41,10 +41,29 @@ class Worker {
 		} else {
 			int orderIndex = 0;
 			if (Hibernate.isInitialized(orders)) {
-				for (OrderModel o : orders) {
+				for (Object o : orders) {
 					++orderIndex;
 					LOG.info("#> order index {}", orderIndex);
-					LOG.info("ORDER_MODEL :: id = {}, details = {}", o.getId(), o.getOrderDetails());
+					LOG.info("ORDER_MODEL :: order = {}", o);
+				}
+			} else {
+				LOG.info("Orders not initalized");
+			}
+		}
+	}
+	
+	void showOrders(Map<?, ?> orders, boolean showUsers) {
+		if (BooleanUtils.isFalse(Hibernate.isInitialized(orders))) {
+			LOG.info("Orders NOT INITIALIZED");
+		} else if (Objects.isNull(orders) || orders.isEmpty()) {
+			LOG.info("Orders NOT FOUND");
+		} else {
+			int orderIndex = 0;
+			if (Hibernate.isInitialized(orders)) {
+				for (Entry<? ,?> e : orders.entrySet()) {
+					++orderIndex;
+					LOG.info("#> order index {}", orderIndex);
+					LOG.info("ORDER_MODEL :: key = {}, value = {}", e.getKey(), e.getValue());
 					if (showUsers) {
 //						displayUser(orderIndex, o.getOwner(), false);
 					}

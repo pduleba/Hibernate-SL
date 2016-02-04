@@ -1,7 +1,7 @@
 package com.pduleba.hibernate.model;
 
-import java.util.Collection;
-import java.util.LinkedHashSet;
+import java.util.HashMap;
+import java.util.Map;
 
 import javax.persistence.CascadeType;
 import javax.persistence.Column;
@@ -10,6 +10,7 @@ import javax.persistence.FetchType;
 import javax.persistence.GeneratedValue;
 import javax.persistence.GenerationType;
 import javax.persistence.Id;
+import javax.persistence.MapKey;
 import javax.persistence.OneToMany;
 import javax.persistence.SequenceGenerator;
 import javax.persistence.Table;
@@ -33,6 +34,11 @@ public @Data class UserModel {
 	private String name;
 
 	@OneToMany(cascade = CascadeType.ALL, fetch = FetchType.EAGER, mappedBy="user")
-	private Collection<OrderModel> orders = new LinkedHashSet<>();
+	@MapKey  // map key is primary key
+	private Map<Long, OrderModel> orders = new HashMap<>();
 
+	@Override
+	public String toString() {
+		return "UserModel [id=" + id + ", name=" + name + "]";
+	}	
 }

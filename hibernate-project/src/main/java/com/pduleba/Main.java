@@ -96,7 +96,7 @@ public class Main {
 			order = new OrderModel();
 			order.setOrderDetails(worker.generateString(10, 2));
 			order.setUser(user);
-			user.getOrders().add(order);
+			user.getOrders().put(user.getId(), order);
 		}
 
 		this.controller.saveUser(user);
@@ -109,7 +109,7 @@ public class Main {
 		OrderModel order = new OrderModel();
 		order.setOrderDetails(worker.generateString(10, 2));
 		order.setUser(user);
-		user.getOrders().add(order);
+		user.getOrders().put(user.getId(), order);
 
 		this.controller.saveOrder(order);
 	}

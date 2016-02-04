@@ -1,7 +1,9 @@
 package com.pduleba.hibernate.model;
 
+import javax.persistence.CascadeType;
 import javax.persistence.Column;
 import javax.persistence.Entity;
+import javax.persistence.FetchType;
 import javax.persistence.GeneratedValue;
 import javax.persistence.GenerationType;
 import javax.persistence.Id;
@@ -21,11 +23,11 @@ public @Data class UserModel {
 	@GeneratedValue(generator = "users-sequence-generator", strategy = GenerationType.SEQUENCE)
 	@SequenceGenerator(name = "users-sequence-generator", sequenceName = "USERS_SEQ", initialValue = 1, allocationSize = 1)
 	private Long id;
-	
+
 	@Column(name = "name")
 	private String name;
-	
-	@OneToOne
+
+	@OneToOne(fetch = FetchType.LAZY, cascade = CascadeType.ALL)
 	@PrimaryKeyJoinColumn
 	private UserDetailsModel userDetails;
 

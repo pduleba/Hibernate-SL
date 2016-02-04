@@ -12,9 +12,10 @@ import javax.persistence.JoinColumn;
 import javax.persistence.OneToOne;
 import javax.persistence.SequenceGenerator;
 import javax.persistence.Table;
+import javax.persistence.UniqueConstraint;
 
 @Entity
-@Table(name = "T_USERS")
+@Table(name = "T_USERS", uniqueConstraints = @UniqueConstraint(columnNames = "id_user_details"))
 public class UserModel {
 
 	private Long id;

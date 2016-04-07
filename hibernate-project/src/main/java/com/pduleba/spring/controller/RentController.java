@@ -32,22 +32,30 @@ public class RentController {
 
 	private User employee;
 	
+
+	public void execute() {
+		initialize();
+		doAdd();
+	}
+	
 	public void initialize(){
-		long terminalId = 1;
+		long terminalId = 0;
 		long customerId = 1;
-		long employeeId = 1;
+		long employeeId = 2;
 		
 		terminal = terminalService.getTerminalById(terminalId);
 		customer = userService.getUserById(customerId);
 		employee = userService.getUserById(employeeId);
 	}
 	
-	public void execute(){
-		Rent rent = Rent.builder().price(2.0D).date("2000-01-01 12:00:00").hours(1).build();
+	public void doAdd(){
+		Rent rent = Rent.builder().price(2.0D).date("12:00:00").hours(1).build();
 		
 		rent.setTerminal(terminal);
 		rent.setCustomer(customer);
 		rent.setEmployee(employee);
+		
+		LOGGER.info("---------------------- FINAL ADD");
 		
 		rentService.addRent(rent);
 	}

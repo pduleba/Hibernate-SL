@@ -22,9 +22,9 @@ public class MainControllerImpl implements MainController {
 
 	@Override
 	public void execute() {
-//		rentController.execute();
 		List<Address> allAddress = addressService.getAllAddress();
 		
 		LOG.debug("Address count :: " + allAddress.size());
+		rentController.execute();
 	}
 }

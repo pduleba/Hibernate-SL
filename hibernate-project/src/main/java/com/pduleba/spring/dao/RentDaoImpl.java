@@ -10,6 +10,9 @@ import org.springframework.stereotype.Repository;
 
 import com.pduleba.hibernate.model.Rent;
 
+import lombok.Data;
+
+@Data
 @Repository
 public class RentDaoImpl implements RentDao {
 

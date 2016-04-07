@@ -51,13 +51,9 @@ public class RentController {
 	public void doAdd(){
 		Rent rent = Rent.builder().price(2.0D).date("12:00:00").hours(1).build();
 		
-		rent.setTerminal(terminal);
-		rent.setCustomer(customer);
-		rent.setEmployee(employee);
-		
 		LOGGER.info("---------------------- FINAL ADD");
 		
-		rentService.addRent(rent);
+		rentService.addRent(rent, terminal, customer, employee);
 	}
 
 }

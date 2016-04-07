@@ -4,28 +4,29 @@ import java.io.IOException;
 import java.text.MessageFormat;
 import java.util.Properties;
 
-import javax.persistence.EntityManagerFactory;
 import javax.sql.DataSource;
 
-import org.apache.commons.dbcp2.BasicDataSource;
+import org.hibernate.SessionFactory;
+import org.hsqldb.util.DatabaseManagerSwing;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.beans.factory.config.MethodInvokingFactoryBean;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.ComponentScan;
 import org.springframework.context.annotation.Configuration;
+import org.springframework.context.annotation.DependsOn;
 import org.springframework.context.annotation.PropertySource;
 import org.springframework.context.support.PropertySourcesPlaceholderConfigurer;
 import org.springframework.core.env.Environment;
 import org.springframework.core.io.ClassPathResource;
 import org.springframework.core.io.Resource;
-import org.springframework.orm.hibernate5.SpringSessionContext;
-import org.springframework.orm.jpa.JpaTransactionManager;
-import org.springframework.orm.jpa.LocalContainerEntityManagerFactoryBean;
-import org.springframework.orm.jpa.support.SharedEntityManagerBean;
-import org.springframework.orm.jpa.vendor.HibernateJpaSessionFactoryBean;
-import org.springframework.orm.jpa.vendor.HibernateJpaVendorAdapter;
+import org.springframework.jdbc.datasource.embedded.EmbeddedDatabaseBuilder;
+import org.springframework.jdbc.datasource.embedded.EmbeddedDatabaseType;
+import org.springframework.orm.hibernate5.HibernateTransactionManager;
+import org.springframework.orm.hibernate5.LocalSessionFactoryBean;
+import org.springframework.transaction.PlatformTransactionManager;
 import org.springframework.transaction.annotation.EnableTransactionManagement;
 
-import com.pduleba.hibernate.model.CarModel;
+import com.pduleba.hibernate.model.Rent;
 import com.pduleba.spring.ApplicationInitializationPackageMarker;
 
 @Configuration
@@ -34,6 +35,7 @@ import com.pduleba.spring.ApplicationInitializationPackageMarker;
 @EnableTransactionManagement
 public class SpringConfiguration implements ApplicationPropertiesConfiguration {
 	
+	private static final String DATA_SOURCE_ID = "dataSource";
 	@Autowired
 	private Environment env;
 
@@ -43,52 +45,49 @@ public class SpringConfiguration implements ApplicationPropertiesConfiguration {
 	    propertySourcesPlaceholderConfigurer.setEnvironment(environment);
 	    return propertySourcesPlaceholderConfigurer;
 	}
-	
-	@Bean DataSource dataSource() {
-		BasicDataSource dataSource = new BasicDataSource();
-		
-		dataSource.setDriverClassName(env.getProperty(KEY_DATASOURCE_DRIVER_CLASS));
-		dataSource.setUrl(env.getProperty(KEY_DATASOURCE_URL));
-		dataSource.setUsername(env.getProperty(KEY_DATASOURCE_USERNAME));
-		dataSource.setPassword(env.getProperty(KEY_DATASOURCE_PASSWORD));
-		
-		return dataSource;
-	}
-	
-	// EntityManagerFactory by dataSource
-	@Bean LocalContainerEntityManagerFactoryBean entityManagerFactory(DataSource dataSource) throws IOException {
-		LocalContainerEntityManagerFactoryBean entityManagerFactory = new LocalContainerEntityManagerFactoryBean();
-		entityManagerFactory.setDataSource(dataSource);
-		entityManagerFactory.setPackagesToScan(CarModel.class.getPackage().getName());
-        entityManagerFactory.setJpaProperties(getHibernateProperties());
-        entityManagerFactory.setJpaVendorAdapter(new HibernateJpaVendorAdapter());
-        
-		return entityManagerFactory;
-	}
 
-	// SessionFactory by EntityManagerFactory
-	@Bean public HibernateJpaSessionFactoryBean getSessionFactory(EntityManagerFactory emf) {
-		HibernateJpaSessionFactoryBean factory = new HibernateJpaSessionFactoryBean();
-		factory.setEntityManagerFactory(emf);
-
-		return factory;
+	@Bean(name=DATA_SOURCE_ID)
+	public DataSource db() {
+	    EmbeddedDatabaseBuilder builder = new EmbeddedDatabaseBuilder();
+	    builder.setType(EmbeddedDatabaseType.HSQL);
+	    builder.addScript("classpath:sql/dbScript.sql");
+	    builder.addScript("classpath:sql/dbRecordsInitialization.sql");
+	    
+	    return builder.build();
 	}
 	
-	// EntityManager by EntityMangerFactory
-	@Bean SharedEntityManagerBean entityManager(EntityManagerFactory emf) {
-		SharedEntityManagerBean entityManager = new SharedEntityManagerBean();
-		entityManager.setEntityManagerFactory(emf);
+	@Bean
+	@DependsOn(value = DATA_SOURCE_ID)
+	public MethodInvokingFactoryBean databaseManagerSwing() {
+	    MethodInvokingFactoryBean methodInvokingFactoryBean = new MethodInvokingFactoryBean();
+	    methodInvokingFactoryBean.setTargetClass(DatabaseManagerSwing.class);
+	    methodInvokingFactoryBean.setTargetMethod("main");
+		methodInvokingFactoryBean.setArguments(
+				new Object[] { 
+						"--url", 
+						env.getProperty(KEY_DATASOURCE_URL), 
+						"--user", 
+						env.getProperty(KEY_DATASOURCE_USERNAME), 
+						"--password", 
+						env.getProperty(KEY_DATASOURCE_PASSWORD) });
+	    
+	    return methodInvokingFactoryBean; 
+	}
+	
+	@Bean 
+	@Autowired LocalSessionFactoryBean sessionFactory(DataSource dataSource) throws IOException {
+		LocalSessionFactoryBean sessionFactory = new LocalSessionFactoryBean();
 		
-		return entityManager;
+		sessionFactory.setDataSource(dataSource);
+		sessionFactory.setPackagesToScan(Rent.class.getPackage().getName());
+		sessionFactory.setHibernateProperties(getHibernateProperties());
+		
+		return sessionFactory;
 	}
 
-	// TransactionManager by EntityManagerFactory 
-	@Bean JpaTransactionManager jpaTransactionManager(EntityManagerFactory emf, DataSource dataSource) {
-		JpaTransactionManager jpaTransactionManager = new JpaTransactionManager();
-		jpaTransactionManager.setEntityManagerFactory(emf);
-		jpaTransactionManager.setDataSource(dataSource);
-		
-		return jpaTransactionManager;
+	@Bean 
+	@Autowired PlatformTransactionManager transactionManager(SessionFactory sessionFactory) {
+		return new HibernateTransactionManager(sessionFactory);
 	}
 	
 	private Properties getHibernateProperties() throws IOException {
@@ -97,8 +96,6 @@ public class SpringConfiguration implements ApplicationPropertiesConfiguration {
 		
 		if (resource.isReadable()) {
 			prop.load(resource.getInputStream());
-			// TRICK !!!
-	        prop.put("hibernate.current_session_context_class", SpringSessionContext.class.getName()); 
 		} else {
 			throw new IllegalStateException(MessageFormat.format("{0} not readable", resource.getFilename()));
 		}

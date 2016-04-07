@@ -1,0 +1,71 @@
+package com.pduleba.spring.dao;
+
+import java.util.List;
+
+import org.hibernate.Query;
+import org.hibernate.SessionFactory;
+import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.stereotype.Component;
+
+import com.pduleba.hibernate.model.News;
+import com.pduleba.hibernate.model.User;
+
+@Component("newsDao")
+public class NewsDaoImpl implements NewsDao {
+
+	@Autowired
+	private SessionFactory sessionFactory;
+	
+	@Override
+	public void addNews(News news) {
+		sessionFactory.getCurrentSession().save(news);
+	}
+
+	@Override
+	public void deleteNews(News news) {
+		news = (News) sessionFactory.getCurrentSession().get(News.class, news.getIdNews());
+		sessionFactory.getCurrentSession().delete(news);
+		
+	}
+
+	@SuppressWarnings("unchecked")
+	@Override
+	public List<News> getAllNews() {
+		return sessionFactory.getCurrentSession().getNamedQuery("get.All.News").list();
+	}
+
+	@Override
+	public News getNewsById(long id) {
+		return (News) sessionFactory.getCurrentSession().get(News.class, id);
+	}
+
+	@Override
+	public void updateNews(News news) {
+		sessionFactory.getCurrentSession().update(news);
+	}
+
+	@Override
+	public void deleteAllNews() {
+		for(News news : getAllNews() ) {
+			deleteNews(news);
+		}
+	}
+
+	@SuppressWarnings("unchecked")
+	@Override
+	public User getUserByNewsId(long id) {
+		try{
+			User user = null;
+			Query query = sessionFactory.getCurrentSession().getNamedQuery("get.User.By.News.Id");
+			query.setLong(0, id);
+			List<User> results = query.list();
+			if (!results.isEmpty()) {
+				user = results.get(0);
+			}
+			return user;
+		} catch (Exception e) {
+			return null;
+		}
+	}
+
+}
